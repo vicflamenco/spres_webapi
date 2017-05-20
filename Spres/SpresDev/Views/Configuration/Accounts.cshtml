@@ -1,0 +1,540 @@
+﻿@{
+    ViewBag.Title = "Cuentas contables";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<style>
+    #name{
+        margin-left: 46px;
+        width: 230px;
+    }
+    #source_wrapper {
+        margin-top: -25px;
+        margin-left: 108px;
+        width: 230px;
+    }
+    #expenseType_wrapper {
+        margin-top: -25px;
+        margin-left: 108px;
+        width: 230px;
+    }
+    #formule_wrapper{
+        margin-top: -25px;
+        margin-left: 108px;
+        width: 230px;
+    }
+    #premisseType_wrapper{
+        margin-top: -25px;
+        margin-left: 108px;
+        width: 230px;
+    }
+
+    #premiseContainer{
+            margin-top: -20px;
+            margin-bottom: 20px;
+    }
+
+    #accountsConfiguration{
+         margin-top: 20px;
+
+    }
+</style>
+
+<div id="gridAccounts"></div>
+<div id="accountsConfiguration" style="display:none">
+    <div>
+        <label>Nombre: </label>
+        <input id="name"/>
+        <input id="accountId" hidden></div>
+        <input id="idABS" hidden/>
+    <br />
+    <div>
+        <label>Fuente: </label>
+        <input id="source"/>
+    </div>
+    <br />
+    <div>
+        <label>Tipo de gasto: </label>
+        <input id="expenseType"/>
+    </div>
+    <br />
+    <div id="formuleContainer" style="display:none">
+        <label>Fórmula: </label>
+        <input id="formule"/>
+    </div>
+    <br />
+    <div id="premiseContainer" style="display:none">
+        <label>Tipo premisa: </label>
+        <input id="premisseType"/>
+    </div>
+    <br />
+    <div>
+        <button class="btn btn-primary" id="accept">Aceptar</button>
+        <button class="btn btn-primary" id="acceptPut" style="display:none">Aceptar</button>
+        <button class="btn btn-primary" id="cancel">Cancelar</button>
+    </div>
+    <br />
+
+</div>
+
+<script type="text/javascript">
+
+    var columns = [
+        { field: "Id", isPrimaryKey: true, visible: false },
+        { field: "Code", headerText: 'Código', textAlign: ej.TextAlign.Left, width: 100 },
+        { field: "Name", headerText: 'Descripción', textAlign: ej.TextAlign.Left, width: 310 },
+        { field: "TypeDescription", headerText: 'Tipo', textAlign: ej.TextAlign.Left, width: 100 },
+        { field: "PackagesDescription", headerText: 'Paquete', textAlign: ej.TextAlign.Left, width: 170}
+    ];   
+    
+    var columnsChild = [
+        { field: "Id", isPrimaryKey: true, visible: false },
+        { field: "Code", headerText: 'Código', textAlign: ej.TextAlign.Left, width: 70 },
+        { field: "Name", headerText: 'Descripción', textAlign: ej.TextAlign.Left, width: 310 },
+        { field: "TypeDescription", headerText: 'Tipo', textAlign: ej.TextAlign.Left, width: 200 },
+        { field: "PackagesDescription", headerText: 'Paquete', textAlign: ej.TextAlign.Left, width: 170 }
+    ];
+
+    var editSubAccountsButtons = {
+        headerText: "",
+        commands: [{ type: "Configuration", buttonOptions: { contentType: "imageonly", prefixIcon: "glyphicon glyphicon-cog", click: "configurationClick" }, cssClass: "glyphicon-briefcase", htmlAttributes: { id: "btnbenefits" } }
+        ],
+        isUnbound: true,
+        width: 130
+    };
+
+
+    var dataModel = [];
+
+    function setRelationLevel(data, level) {
+        if (typeof level !== "undefined") {
+            data["Relation" + level] = data.ParentId;
+        }
+
+        if (typeof level === "undefined") {
+            level = 0;
+        }
+        else {
+            level++;
+        }
+
+        data["level"] = level;
+        data["Relation" + level] = data.Id;
+
+        if (!dataModel[level]) {
+            dataModel[level] = [];
+        }
+        dataModel[level].push(data);
+
+        if (data.Children.length > 0) {            
+            for (var i = 0; i < data.Children.length; i++) {
+                setRelationLevel(data.Children[i], level);
+            }
+        }
+    }    
+
+    $(function () {
+
+        var url = getUrl("/api/Accounts");
+
+        var dataManager = ej.DataManager({
+            url: url,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        dataManager.executeQuery(ej.Query()).done(function (data) {
+            data.result.result;
+            for (var i = 0; i < data.result.length; i++) {
+                setRelationLevel(data.result[i]);
+            }
+
+            var principalChild;
+
+            if (dataModel.length > 1) {
+                principalChild = {
+                    dataSource: dataModel[1],
+                    queryString: "Relation0",
+                    allowPaging: true,
+                    columns: columnsChild,
+                    width: 770
+                }
+                var currentChild = principalChild;
+                for (var i = 2; i < dataModel.length; i++) {
+                    currentChild.childGrid = {
+                        dataSource: dataModel[i],
+                        queryString: "Relation" + (i - 1),
+                        allowPaging: true,
+                        columns: columnsChild
+                    }
+                    currentChild = currentChild.childGrid;
+                }
+            }
+
+            var permissions = JSON.parse(sessionStorage.permissions);
+            for (var ac = 0; ac < permissions.length; ac++) {
+
+                var permission = permissions[ac];
+                if (permission.Option == "Catalogs") {
+                    if (permission.Edit) {
+                        columnsChild.push(editSubAccountsButtons);
+                    }
+                }
+
+            }
+
+            $("#gridAccounts").ejGrid({
+                dataSource: dataModel[0],
+                childGrid: principalChild,
+                allowPaging: true,
+                allowScrolling: true,
+                pageSettings: { pageSize: 9 },
+                toolbarSettings: { showToolbar: true, toolbarItems: [ej.Grid.ToolBarItems.Search] },
+                columns: columns,
+                height: 320
+            });
+        });
+
+    });
+       
+
+    function configurationClick() {
+
+        
+        var grid = this.element.closest(".e-grid").ejGrid("instance");
+        var index = this.element.closest("tr").index();
+        var record = grid.getCurrentViewData()[index];
+        $('#gridAccounts').hide();
+        $('#accountsConfiguration').show();
+        $('#name').val(record.Name);
+        $('#accountId').val(record.Id);
+        var id = record.Id
+        var premiseTypeId;
+        var premiseTypeName;
+        var expenseTypeId;
+        var urlAccountBudgetSources = getUrl("/api/AccountBudgetSources/" + id);
+
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            method: "GET",
+            url: urlAccountBudgetSources,
+            dataType: 'json',
+        }).done(function (data) {
+            if (data.Count == 0) {
+                $('#formuleContainer').hide();
+                $('#premiseContainer').hide();
+                $('#acceptPut').hide();
+                $('#accept').show();
+                $('#idABS').val("");
+            } else {
+                $('#acceptPut').show();
+                $('#accept').hide();
+                $('#name').val(data.Items[0].Name);
+                $('#accountId').val(data.Items[0].AccountId);
+                $('#source').val(data.Items[0].Source);
+                expenseTypeId = data.Items[0].ExpenseType
+                $('#idABS').val(data.Items[0].Id);
+                $('#formule').val(data.Items[0].Formule);
+
+                if (expenseTypeId == 0) {
+                    $('#expenseType').val('None');
+                    $('#formuleContainer').hide();
+                    $('#premiseContainer').hide();
+                } else if (expenseTypeId == 1) {
+                    expenseType.selectItemByText('Formule');
+                    $('#formuleContainer').show();
+                    $('#premiseContainer').hide();
+
+                } else if (expenseTypeId == 2) {
+                    expenseType.selectItemByText('Premise');
+                    $('#formuleContainer').hide();
+                    $('#premiseContainer').show();
+                    premiseTypeId = data.Items[0].PremiseType.Id;
+                    premiseTypeName = data.Items[0].PremiseType.Name;
+                    $('#premisseType').val(premiseTypeName);
+                } else {
+                    alert('Debe elegir un tipo de gasto');
+                    $('#formuleContainer').hide();
+                    $('#premiseContainer').hide();
+                }
+            }
+        }).fail(function (e) {
+            if (e.responseJSON.ExceptionType == "System.InvalidOperationException") {
+                alert(e);
+            } else {
+                alert('Error:' + e.responseText);
+            }
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    }
+
+    $('#cancel').click(function () {
+        $('#gridAccounts').show();
+        $('#accountsConfiguration').hide();
+        $('#name').val("");
+        $('#accountId').val("");
+        $('#source').val("");
+        $('#expenseType').val("");
+        $('#formule').val("");
+        $('#premisseType').val("");
+        
+    });
+
+    var urlSources = getUrl("/api/Sources");
+    var source = $('#source').ejDropDownList({
+        watermarkText: "Elija tipo de fuente",
+        dataSource: ej.DataManager({ url: urlSources, adaptor: new ej.WebApiAdaptor() }),
+        fields: { text: "Name", value: "Id" },
+        change: "onChangeSource",
+        value: 0
+    }).data("ejDropDownList");
+
+
+    var urlExpenseType = getUrl("/api/ExpenseTypes/Types");
+    var expenseType = $('#expenseType').ejDropDownList({
+        watermarkText: "Elija tipo de gasto",
+        watermarkText: "Elija tipo de premisa",
+        dataSource: ej.DataManager({ url: urlExpenseType, adaptor: new ej.WebApiAdaptor() }),
+        fields: { text: "Name", value: "Id" },
+        watermarkText: "Seleccione el tipo de gasto",
+        change: "onChangeExpenseType",
+        value: 0
+    }).data("ejDropDownList");
+
+
+    var urlFormule = getUrl("/api/Formules");
+    var formule = $('#formule').ejDropDownList({
+        watermarkText: "Elija fórmula",
+        dataSource: ej.DataManager({ url: urlFormule, adaptor: new ej.WebApiAdaptor() }),
+        fields: { text: "Name", value: "Id" },
+        watermarkText: "Seleccione una fórmula",
+        change: "onChangeFormule",
+        value: 0
+    }).data("ejDropDownList");
+
+    
+    var urlPremiseType = getUrl("/api/PremiseTypes");
+    var premiseType = $('#premisseType').ejDropDownList({
+        watermarkText: "Elija tipo de premisa",
+        dataSource: ej.DataManager({ url: urlPremiseType, adaptor: new ej.WebApiAdaptor() }),
+        fields: { text: "Name", value: "Id" },
+        watermarkText: "Seleccione el tipo de premisa",
+        change: "onChangePremiseType",
+        value: 0
+    }).data("ejDropDownList");
+
+    function onChangePremiseType(args) {
+
+    }
+
+    function onChangeExpenseType() {
+        if (expenseType.getValue() == "Formule") {
+            $('#formuleContainer').show();
+            $('#premiseContainer').hide();
+        } else if (expenseType.getValue() == "Premise") {
+            $('#formuleContainer').hide();
+            $('#premiseContainer').show();
+        } else if (expenseType.getValue() == "None") {
+            $('#formuleContainer').hide();
+            $('#premiseContainer').hide();
+        }
+    }
+
+    function onChangeFormule() {
+    }
+
+    function onChangeSource() {
+    }
+
+    //botón aceptar
+    $('#accept').click(function () {
+        var name = $('#name').val();
+        var accoutnId = $('#accountId').val();
+        var sources = source.getValue();
+        var expensesType = expenseType.selectedIndexValue;
+        var formules = formule.getValue();
+        var premise = premiseType.getSelectedValue();
+        var urlABSPost = getUrl("/api/AccountBudgetSources/");
+        if (name == "") {
+            alert('Debe ingresar un nombre');
+        } else if (expensesType == null ) {
+            alert('Debe seleccionar un tipo de gasto');
+        } else if (expensesType == 0) {
+
+            ej.WaitingPopup.showDefault();
+            $.ajax({
+                    method: "POST",
+                    url: urlABSPost,
+                    data: {
+                
+                        Name: name,
+                        Source:sources,
+                        Formule: formules,
+                        AccountId: accoutnId,
+                        ExpenseType: expensesType,
+                        PremiseTypeId:premise
+                    }
+                }).done(function (e) {
+                    $('#gridAccounts').show();
+                    $('#accountsConfiguration').hide();
+                }).fail(function (jHXR, textStatus, err) {
+                    console.log('Error:' + jHXR.responseText);
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+        } else if (expensesType == 1) {
+            if (formules == "") {
+                alert('Debe seleccionar una fórmula');
+            } else {
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                        method: "POST",
+                        url: urlABSPost,
+                        data: {
+                
+                            Name: name,
+                            Source:sources,
+                            Formule: formules,
+                            AccountId: accoutnId,
+                            ExpenseType: expensesType,
+                            PremiseTypeId:premise
+                        }
+
+                    }).done(function (e) {
+            
+                        $('#gridAccounts').show();
+                        $('#accountsConfiguration').hide();
+            
+                    }).fail(function (jHXR, textStatus, err) {
+                        console.log('Error:' + jHXR.responseText);
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+            }
+        } else if (expensesType == 2) {
+            if (premise == "") {
+                alert('Debe seleccionar una premisa');
+            } else {
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                        method: "POST",
+                        url: urlABSPost,
+                        data: {
+                
+                            Name: name,
+                            Source:sources,
+                            Formule: formules,
+                            AccountId: accoutnId,
+                            ExpenseType: expensesType,
+                            PremiseTypeId:premise
+                        }
+
+                    }).done(function (e) {
+            
+                        $('#gridAccounts').show();
+                        $('#accountsConfiguration').hide();
+            
+                    }).fail(function (jHXR, textStatus, err) {
+                        console.log('Error:' + jHXR.responseText);
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+            }
+        }
+    });
+
+    $('#acceptPut').click(function () {
+        var name = $('#name').val();
+        var accoutnId = $('#accountId').val();
+        var sources = source.getValue();
+        var expensesType = expenseType.selectedIndexValue;
+        var formules = formule.getValue();
+        var premise = premiseType.getSelectedValue();
+        var id = $('#idABS').val();
+        var urlABSPut = getUrl("/api/AccountBudgetSources/");
+        if (name == "") {
+            alert('Debe ingresar un nombre');
+        }  else if (expensesType == null) {
+            alert('Debe seleccionar un tipo de gasto');
+        } else if (expensesType == 0) {
+            ej.WaitingPopup.showDefault();
+            $.ajax({
+                method: "PUT",
+                url: urlABSPut,
+                data: {
+
+                    Id: id,
+                    Name: name,
+                    Source: sources,
+                    Formule: formules,
+                    AccountId: accoutnId,
+                    ExpenseType: expensesType,
+                    PremiseTypeId: premise
+                }
+            }).done(function (e) {
+                $('#gridAccounts').show();
+                $('#accountsConfiguration').hide();
+            }).fail(function (jHXR, textStatus, err) {
+                alert('Error:' + jHXR.responseText);
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+        } else if (expensesType == 1) {
+            if (formules == "") {
+                alert('Debe seleccionar una fórmula');
+            } else {
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    method: "PUT",
+                    url: urlABSPut,
+                    data: {
+
+                        Id: id,
+                        Name: name,
+                        Source: sources,
+                        Formule: formules,
+                        AccountId: accoutnId,
+                        ExpenseType: expensesType,
+                        PremiseTypeId: premise
+                    }
+
+                }).done(function (e) {
+                    $('#gridAccounts').show();
+                    $('#accountsConfiguration').hide();
+                }).fail(function (jHXR, textStatus, err) {
+                    console.log('Error:' + jHXR.responseText);
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        } else if (expensesType == 2) {
+            if (premise == "") {
+                alert('Debe seleccionar una premisa');
+            } else {
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    method: "PUT",
+                    url: urlABSPut,
+                    data: {
+
+                        Id: id,
+                        Name: name,
+                        Source: sources,
+                        Formule: formules,
+                        AccountId: accoutnId,
+                        ExpenseType: expensesType,
+                        PremiseTypeId: premise
+                    }
+                }).done(function (e) {
+                    $('#gridAccounts').show();
+                    $('#accountsConfiguration').hide();
+                }).fail(function (jHXR, textStatus, err) {
+                    console.log('Error:' + jHXR.responseText);
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        }
+    });
+</script>
+

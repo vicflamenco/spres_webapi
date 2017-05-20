@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpresCore", "SpresCore\SpresCore.csproj", "{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}"
+EndProject
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "SpresModeling", "SpresModeling\SpresModeling.modelproj", "{D0AE228C-B0A3-4665-82B6-354C16382F2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpresModelingLib", "SpresModelingLib\SpresModelingLib.csproj", "{8DDCFE8C-A180-4786-A222-48CA64663665}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpresDev", "SpresDev\SpresDev.csproj", "{2C97734D-84E0-441F-8D6F-35B6C0343199}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpresUtp", "SpresUtp\SpresUtp.csproj", "{5C40E9E2-DF0F-4333-A18C-53CEB319DCD8}"
+EndProject
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "SpresReports", "SpresReports\SpresReports.rptproj", "{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://grupobabelsv.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = SpresCore\\SpresCore.csproj
+		SccProjectName1 = SpresCore
+		SccLocalPath1 = SpresCore
+		SccProjectUniqueName2 = SpresModeling\\SpresModeling.modelproj
+		SccProjectName2 = SpresModeling
+		SccLocalPath2 = SpresModeling
+		SccProjectUniqueName3 = SpresModelingLib\\SpresModelingLib.csproj
+		SccProjectName3 = SpresModelingLib
+		SccLocalPath3 = SpresModelingLib
+		SccProjectUniqueName4 = SpresDev\\SpresDev.csproj
+		SccProjectName4 = SpresDev
+		SccLocalPath4 = SpresDev
+		SccProjectUniqueName5 = SpresUtp\\SpresUtp.csproj
+		SccProjectName5 = SpresUtp
+		SccLocalPath5 = SpresUtp
+		SccProjectUniqueName6 = SpresReports\\SpresReports.rptproj
+		SccProjectName6 = SpresReports
+		SccLocalPath6 = SpresReports
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0AE228C-B0A3-4665-82B6-354C16382F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0AE228C-B0A3-4665-82B6-354C16382F2A}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0AE228C-B0A3-4665-82B6-354C16382F2A}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{D0AE228C-B0A3-4665-82B6-354C16382F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DDCFE8C-A180-4786-A222-48CA64663665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DDCFE8C-A180-4786-A222-48CA64663665}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DDCFE8C-A180-4786-A222-48CA64663665}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{8DDCFE8C-A180-4786-A222-48CA64663665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C97734D-84E0-441F-8D6F-35B6C0343199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C97734D-84E0-441F-8D6F-35B6C0343199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C97734D-84E0-441F-8D6F-35B6C0343199}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C97734D-84E0-441F-8D6F-35B6C0343199}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{2C97734D-84E0-441F-8D6F-35B6C0343199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C97734D-84E0-441F-8D6F-35B6C0343199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C40E9E2-DF0F-4333-A18C-53CEB319DCD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C40E9E2-DF0F-4333-A18C-53CEB319DCD8}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C40E9E2-DF0F-4333-A18C-53CEB319DCD8}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{5C40E9E2-DF0F-4333-A18C-53CEB319DCD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.Debug|Any CPU.ActiveCfg = Debug
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.Debug|Any CPU.Build.0 = Debug
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.Debug|Any CPU.Deploy.0 = Debug
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.DebugLocal|Any CPU.ActiveCfg = DebugLocal
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.DebugLocal|Any CPU.Build.0 = DebugLocal
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.Release|Any CPU.ActiveCfg = Release
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.Release|Any CPU.Build.0 = Release
+		{6D7C2F82-1508-4CA4-859A-9578C3E7D15B}.Release|Any CPU.Deploy.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,414 @@
+﻿@{
+    ViewBag.Title = "Premises";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<style type="text/css">
+    .dynamicForm {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .ParametersContainer > div {
+        display: inline-block;
+    }
+
+    .ParametersContainer #divCopyPremiseButtonContainer {
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    .addMarginTop {
+        margin-top: 15px;
+    }
+    .addMarginLeft {
+        margin-left: 35px;
+    }
+</style>
+
+<div class="form-horizontal">
+
+    <div class="ParametersContainer">
+
+        <div>
+            <label>Región</label>
+            <input type="text" id="Company" />
+        </div>
+
+        <div class="addMarginLeft">
+            <label>Año fiscal</label>
+            <input type="text" id="FiscalYear" />
+        </div>
+    </div>
+
+    <div class="ParametersContainer addMarginTop">
+        <div>
+            <label>Tipo de premisa</label>
+            <input type="text" id="PremiseType" />
+        </div>
+
+        <div id="divCopyPremiseButtonContainer" class="addMarginLeft">
+            <input type="button" class="btn" style="width: 250px;" value="Copiar premisas" id="btnCopyPremises" />
+        </div>    
+    </div>
+
+    <div id="SelectedPremise" style="display: none">
+        <h4><strong>Premisa: </strong><span id="Premise"></span></h4>
+    </div>
+</div>
+
+<div>
+    <div id="PremisesGridContainer" class="addMarginTop">
+        <div id="PremisesGrid">
+        </div>
+    </div>
+
+    <div id="PremiseDetailContainer" class="PremiseDetailContainer" style="display: none;overflow:auto;height:500px">
+        <div id="PremiseDetail">
+            <div id="Detail">
+            </div>
+            <div id="ButtonGroup" style="margin-left: 75px" class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="button" class="btn btn-primary" id="btnSave" value="Aceptar" premise="0" />
+                    <input type="button" class="btn btn-primary" id="btnCancel" value="Cancelar" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var urlPremises = getUrl("/api/Premises");
+    var dataManager = ej.DataManager({
+        url: urlPremises,
+        adaptor: new ej.WebApiAdaptor()
+    });
+
+    function onChange(args) {
+        if (fiscalYear.getSelectedValue() != "" && companyList.getSelectedValue() != "" && premiseType.getSelectedValue() != "") {
+            $("#PremisesGrid").ejGrid("instance").refreshContent();
+            $("#PremisesGrid_add").removeClass("e-disable");
+        }
+        else {
+            $("#PremisesGrid_add").addClass("e-disable");
+        }
+    };
+
+    function onCheckChangeMonth(args) {
+
+        var periodicity = $("#PeriodicityType").ejDropDownList("instance");
+        var selectedArray = args.model.selectedItems;
+        var array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        var values = [];
+        var value = selectedArray.length;
+
+        $.each(array, function (i, el) {
+            if ($.inArray(el, selectedArray) === -1) values.push(el);
+        });
+
+        if (args.isChecked) {
+            switch (periodicity.getSelectedValue()) {
+
+                case "Bimonthly":
+                    if (value == 6) {
+                        this.disableItemsByIndices(values);
+                    }
+                    break;
+                case "Monthly":
+                    this.enableItemsByIndices(array);
+                    break;
+                case "Annual":
+                    if (value == 1) {
+                        this.disableItemsByIndices(values);
+                    }
+                    break;
+                case "Quaterly":
+                    if (value == 4) {
+                        this.disableItemsByIndices(values);
+                    }
+                    break;
+                case "Biannual":
+                    if (value == 2) {
+                        this.disableItemsByIndices(values);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        else {
+            this.enableItemsByIndices(array);
+        }
+    };
+
+    function onChangePeriodicity(args) {
+
+        console.log(args.value);
+        
+        var month = $("#Month").ejDropDownList("instance");
+        month.unCheckAll();
+        month.enable();
+
+        switch (args.value) {
+            case "Monthly":
+                month.checkAll();
+                month.disable();
+                break;
+            case "Bimonthly":
+                month.selectItemsByIndices([1, 3, 5, 7, 9, 11]);
+                break;
+            case "Annual":
+                month.selectItemsByIndices([5]);
+                break;
+            case "Quaterly":
+                month.selectItemsByIndices([2, 5, 8, 11]);
+                break;
+            case "Biannual":
+                month.selectItemsByIndices([5, 10]);
+                break;
+            default:
+                break;
+        }
+    };
+
+    function configurationClick() {
+
+        var grid = $("#PremisesGrid").ejGrid("instance");
+        var index = this.element.closest("tr").index();
+        var dataItem = grid.getCurrentViewData()[index];
+        var companyPremisse = companyList.option("value");
+        var url = getUrl("/api/Rendering/" + dataItem.Id + "/" + companyPremisse);
+        
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            method: "POST",
+            url: url
+        }).done(function (html) {
+            fiscalYear.disable();
+            premiseType.disable();
+            companyList.disable();
+            $("#Premise").text(dataItem.Name);
+            var detail = $("#Detail");
+            $("#PremisesGridContainer").hide();
+            $(".ParametersContainer").hide();
+            $("#PremiseDetailContainer").show();
+            $("#SelectedPremise").show();
+            detail.empty();
+            detail.append(html);
+
+            var element = "DynamicForm" + dataItem.Id;
+            var vm = {
+                onChangePeriodicity: onChangePeriodicity,
+                onCheckChangeMonth: onCheckChangeMonth
+            }
+            ko.applyBindings(vm, document.getElementById(element));
+            $("#btnSave").attr("premise", dataItem.Id);
+
+            $("#PeriodicityType_wrapper").parent().css("display","inline-block");
+            $("#Month_wrapper").parent().css("display", "inline-block");
+
+            //var periodicity = $("#PeriodicityType");
+
+            //if (periodicity.length) {
+            //    var periodicityObj = periodicity.data("ejDropDownList");
+            //    var value = periodicityObj.getSelectedValue();
+            //    periodicityObj.selectItemByValue(value);
+            //}
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    $("#btnSave").click(function () {
+        var premiseId = $(this).attr("premise");
+        var data = $("#DynamicForm" + premiseId).find("input:not([role='combobox']):not([name='hiddenEle'])").serializeArray();
+
+        var urlUpdateExpense = getUrl('/api/UpdateExpense/' + premiseId);
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            method: 'POST',
+            url: urlUpdateExpense,
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json'
+        }).done(function (result) {
+            if (result) {
+                Finish();
+            }
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    });
+
+    $("#btnCancel").click(function () {
+        Finish();
+    });
+
+    $("#btnCopyPremises").click(function () {
+
+        var fiscalObj = $("#FiscalYear").data("ejDropDownList"); 
+        var companyObj = $("#Company").data("ejDropDownList");
+        var premiseTypeObj = $("#PremiseType").data("ejDropDownList");
+
+        var fiscal = fiscalObj.getSelectedValue();
+        var company = companyObj.getSelectedValue();
+        var premiseType = premiseTypeObj.getSelectedValue();
+        var premiseTypeName = premiseTypeObj.option("text");
+
+        if (fiscal && company && premiseType) {
+
+            var text = "Las premisas de tipo " + premiseTypeName + " para el período actual (" + fiscal + ") se eliminarán y se copiarán las premisas";
+            text += " de tipo " + premiseTypeName + " creadas para el período de presupuestación anterior (" + (fiscal - 1) + "). ¿Desea continuar?";
+
+            if (confirm(text)) {
+                var urlPremisesCopy = getUrl("/api/Premises/Copy/" + fiscal + "/" + company + "/" + premiseType);
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    url: urlPremisesCopy,
+                    method: "POST"
+                }).done(function (data) {
+                    if (data) {
+                        $("#PremisesGrid").data("ejGrid").refreshContent();
+                        alert("Las premisas de tipo " + premiseTypeName + " para el período de presupuestación " + (fiscal - 1) +
+                            " se copiaron satisfactoriamente para el período actual (" + fiscal + ")");
+                    } else {
+                        alert("No se encontraron premisas de tipo "
+                            + premiseTypeName + " para el período de presupuestación anterior (" + (fiscal - 1) + ")");
+                    }
+                }).fail(function (jqXHR, textStatus, errThrown) {
+                    console.log(jqXHR.responseJSON);
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+
+        } else {
+            alert("Seleccione una región, un año fiscal y un tipo de premisa.");
+        }
+    });
+
+    function Finish() {
+        fiscalYear.enable();
+        premiseType.enable();
+        companyList.enable();
+        $("#SelectedPremise").hide();
+        $("#Detail").empty();
+        $("#Premise").val("");
+        $("#PremisesGridContainer").show();
+        $("#PremiseDetailContainer").hide();
+        $(".ParametersContainer").show();
+    };
+
+    var urlProgrammings = getUrl("/api/Programmings");
+
+    var fiscalYear = $('#FiscalYear').ejDropDownList({
+        dataSource: ej.DataManager({ url: urlProgrammings, adaptor: new ej.WebApiAdaptor() }),
+        fields: { text: "FiscalYear", value: "FiscalYear" },
+        width: "250px",
+        watermarkText: "Seleccione un año fiscal",
+        value: 0,
+        change: "onChange"
+    }).data("ejDropDownList");
+
+
+    var urlPremiseType = getUrl("/api/PremiseTypes");
+
+    var premiseType = $("#PremiseType").ejDropDownList({
+        dataSource: ej.DataManager({ url: urlPremiseType, adaptor: new ej.WebApiAdaptor() }),
+        fields: { text: "Name", value: "Id" },
+        width: "380px",
+        watermarkText: "Seleccione el tipo de premisa",
+        change: "onChange",
+        value: 0
+    }).data("ejDropDownList");
+
+    var urlCompanies = getUrl("/api/Companies");
+
+    var companyList = $("#Company").ejDropDownList({
+        dataSource: ej.DataManager({ url: urlCompanies, adaptor: new ej.WebApiAdaptor() }),
+        fields: { text: "Name", value: "Id" },
+        watermarkText: "Seleccione región",
+        change: "onChange",
+        width: "380px",
+        value: 0
+    }).data("ejDropDownList");
+
+    $(function () {
+
+        var columnsPremisesPopUp = [
+                { field: "Id", isPrimaryKey: true, visible: false },
+                { field: "Name", headerText: "Nombre", width: 220, textAlign: ej.TextAlign.Left, validationRules: { required: true } },
+                { field: "CompanyId", visible: false },
+                { field: "PremiseTypeId", visible: false },
+                { field: "FiscalYear", visible: false },
+                { field: "Expenses", visible: false },
+                
+        ];
+
+        var editPremisesButtons = {
+            headerText: "",
+            commands: [{ type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                    { type: ej.Grid.UnboundType.Delete, buttonOptions: { contentType: "imageonly", prefixIcon: "e-delete" } },
+                    { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                    { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } },
+                    { type: "Configuration", buttonOptions: { contentType: "imageonly", click: "configurationClick", prefixIcon: "glyphicon glyphicon-cog" } }],
+            isUnbound: true,
+            width: 100
+        };
+        var permissions = JSON.parse(sessionStorage.permissions);
+        var premisesToolItems = [];
+        for (var pre = 0; pre < permissions.length; pre++) {
+
+            var permission = permissions[pre];
+            if (permission.Option == "Configuration") {
+                if (permission.Edit) {
+                    columnsPremisesPopUp.push(editPremisesButtons);
+                    premisesToolItems = [ej.Grid.ToolBarItems.Add];
+                } else {
+                    $('#btnCopyPremises').hide();
+                }
+            }
+
+        }
+
+        $("#PremisesGrid").ejGrid({
+            dataSource: dataManager,
+            pageSettings: { pageSize: 10 },
+            query: new ej.Query().addParams("company", 0).addParams("type", 0).addParams("year", 0),
+            endAdd: function (args) {
+                this.refreshContent();
+            },
+            actionBegin: function (args) {
+                if (args.requestType != undefined) {
+                    var query = new ej.Query().addParams("company", companyList.getSelectedValue()).addParams("type", premiseType.getSelectedValue()).addParams("year", fiscalYear.getSelectedValue());
+                    this.option("query", query);
+                }
+                if (args.requestType == "delete") {
+                    if (!confirm("¿Desea eliminar la premisa seleccionada?")) {
+                        args.cancel = true;
+                    }
+                } else if (args.requestType == "save") {
+                    var dataItem = args.data;
+                    dataItem.FiscalYear = fiscalYear.getSelectedValue();
+                    dataItem.PremiseTypeId = premiseType.getSelectedValue();
+                    dataItem.companyId = companyList.getSelectedValue();
+                };
+            },
+            actionFailure: function (args) {
+                if (args.error.status == 404) {
+                    alert("No se pudo crear la premisa debido a que no existe un período fiscal creado para la región y el año seleccionados");
+                } else {
+                    alert("Ocurrió un error al intentar crear la premisa");
+                }
+                
+            },
+            columns: columnsPremisesPopUp,
+            locale: "es-ES",
+            editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: true },
+            toolbarSettings: { showToolbar: true, toolbarItems: premisesToolItems },
+            allowPaging: true,
+            pageSettings: { pageSize: 4 }
+        });
+    });
+</script>

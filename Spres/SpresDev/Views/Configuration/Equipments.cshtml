@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Equipments";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<div id="gridEquipments"></div>
+
+<script type="text/javascript">
+
+    function createEquipmentsGrid(editPermission) {
+
+        var columnsEquipmentsPopUp = [
+                { field: "Id", isPrimaryKey: true, visible: false },
+                { field: "Name", headerText: 'Nombre del equipo', validationRules: { validateLength: [5, 100] } },
+
+        ];
+
+        var editEquipmentsButtons = {
+            headerText: "",
+            commands: [
+                { type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                { type: ej.Grid.UnboundType.Delete, buttonOptions: { contentType: "imageonly", prefixIcon: "e-delete" } },
+                { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } }
+            ],
+            isUnbound: true,
+            width: 150
+        };
+
+
+        var equipmentsToolItems = [ej.Grid.ToolBarItems.Search];
+        if (editPermission) {
+            equipmentsToolItems = [ej.Grid.ToolBarItems.Add, ej.Grid.ToolBarItems.Search];
+            columnsEquipmentsPopUp.push(editEquipmentsButtons);
+        }
+
+        var urlEquipments = getUrl("/api/Equipments");
+        var dataManager = ej.DataManager({
+            url: urlEquipments,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        $("#gridEquipments").ejGrid({
+            dataSource: dataManager,
+            columns: columnsEquipmentsPopUp,
+            allowPaging: true,
+            allowScrolling: true,
+            pageSettings: { pageSize: 6 },
+            editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: true },
+            toolbarSettings: { showToolbar: true, toolbarItems: equipmentsToolItems },
+            endAdd: function () {
+                this.refreshContent();
+            },
+            actionBegin: equipmentsActionBegin
+        });
+    };
+
+
+
+    function equipmentsActionBegin(args) {
+        var request = args.requestType;
+        if (request == "delete") {
+            if (!confirm("¿Desea eliminar el equipo de protección individual seleccionado?")) {
+                args.cancel = true;
+            }
+        }
+    };
+
+    
+
+    $(function () {
+
+        $.validator.addMethod("validateLength", function (value, element, params) {
+            return element.value.length >= params[0] && element.value.length <= params[1];
+        }, "El nombre del equipo debe contener entre 5 y 100 caracteres.");
+
+        viewEquipmentsPermissions();
+    });
+
+  
+
+
+    function viewEquipmentsPermissions() {
+        var permissions = JSON.parse(sessionStorage.permissions);
+        
+        for (k = 0; k < permissions.length; k++) {
+
+            var permission = permissions[k];
+            
+            if (permission.Option == "Catalogs") {
+                createEquipmentsGrid(permission.Edit);
+            }
+
+        }
+    };
+</script>

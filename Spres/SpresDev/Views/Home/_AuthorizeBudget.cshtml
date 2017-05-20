@@ -1,0 +1,126 @@
+﻿<div>
+    <div id="contentDiv">
+        <p id="BudgetTotalText">
+            
+        </p>
+        <p>
+            <div><strong>Estado</strong></div><input id="budgetStatusList" />
+        </p>
+        <p>
+            <input id="btnOkAuthorizeBudget" type="button" class="btn" value="Guardar" />
+            <input id="btnCancelAuthorizeBudget" type="button" class="btn" value="Cancelar" />
+        </p>
+    </div>
+    <div id="resultDiv">
+        <p id="resultText">
+
+        </p>
+        <input id="btnCloseAuthorizeBudget" type="button" class="btn" value="Cerrar" />
+    </div>
+</div>
+
+<script>
+
+    function closeDialog(){
+        var dialog = $("#authorizeBudgetDialog").data("ejDialog");
+        dialog.close();
+    };
+
+    function showResult(text) {
+        $("#resultText").text(text);
+        $("#resultDiv").show();
+        $("#contentDiv").hide();
+    };
+
+    function toggleAuthorizeBudgetButtons(disable) {
+        $("#btnOkAuthorizeBudget").prop("disabled", disable);
+        $("#btnCancelAuthorizeBudget").prop("disabled", disable);
+    };
+
+    $(function () {
+
+        $("#resultDiv").hide();
+        $("#contentDiv").hide();
+        toggleAuthorizeBudgetButtons(true);
+
+        var urlBudgetsTotal = getUrl("/api/Budgets/Total/" + getCostCenterId() + "/" + getFiscalYear() + "/" + getCompanyId());
+        $.ajax({
+            method: "GET",
+            url: urlBudgetsTotal
+        }).done(function (result) {
+    console.log(result);
+            if (result.HasAuthorization) {
+
+                getBudgetIsAuthorized();
+
+                var statuses = [{ Id: 2, Name: "Autorizado" }];
+
+                if (!result.Reviewed) {
+                    statuses.push({ Id: 1, Name: "Revisado" });
+                }
+
+                $("#budgetStatusList").ejDropDownList({
+                    dataSource: statuses,
+                    fields: { text: "Name", value: "Id" },
+                    watermarkText: "Seleccione un estado",
+                    width: "200"
+                });
+
+                $("#BudgetTotalText").html("El centro de costo cierra con un total de <strong>" + result.Total.replace("$","") + "</strong>.");
+                toggleAuthorizeBudgetButtons(false);
+                $("#contentDiv").show();
+
+            } else {
+                showResult("El responsable del centro de costo aún no ha enviado una solicitud de revisión de presupuesto.");
+            }
+            
+
+        }).fail(function (jqXHR, textStatus, errThrown) {
+
+            if (jqXHR.status == 404) {
+                showResult("El presupuesto del centro de costo seleccionado aún no ha sido creado.");
+            } else {
+                console.log(jqXHR);
+            }
+        });
+
+        $("#btnOkAuthorizeBudget").click(function () {
+
+            var status = $("#budgetStatusList").ejDropDownList("instance").getSelectedValue();
+
+            if (status == "") {
+                alert("Seleccione un estado para el presupuesto");
+            } else {
+
+                toggleAuthorizeBudgetButtons(true);
+
+                var urlBudgets = "/api/budgets?costCenterId=" + getCostCenterId() + "&fiscalYear=" + getFiscalYear() + "&companyId=" + getCompanyId() + "&status=" + status;
+            
+                ej.WaitingPopup.showDefault();
+
+                $.ajax({
+                    method: "PUT",
+                    url: getUrl(urlBudgets)
+                }).done(function (data) {
+                    getBudgetIsAuthorized();
+                    showResult("El presupuesto modificó satisfactoriamente.");
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                    console.log(jqXHR);
+                    if (jqXHR.status == 400) {
+                        showResult("El responsable del centro de costo aún no ha enviado una solicitud de revisión de presupuesto.");
+                    } else {
+                        showResult("Ocurrió un error al intentar modificar el presupuesto.");
+                    }
+                    
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        });
+
+        $("#btnCancelAuthorizeBudget").click(closeDialog);
+        $("#btnCloseAuthorizeBudget").click(closeDialog);
+    });
+
+</script>

@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<useCaseModelRoot xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/dsltools/SimpleShapesModel" xmlns:dm10="http://schemas.microsoft.com/dsltools/LogicalClassDesigner" dslVersion="1.0.0.0" Id="4a88bd98-36aa-44de-88f5-6882cbb2fc2f" name="Operational Structure" linkedPackageId="660e7e67-db7d-44c6-b4e2-290f5a8047f1" xmlns="http://schemas.microsoft.com/dsltools/UseCaseModel">
+  <appliedStereotypesInternal>
+    <stereotypeInstance Id="b568a681-1895-415b-bb7f-0ff8cd3ef0b1" name="namespace" profile="CSharpProfile">
+      <elementDefinition Id="d984857c-ef98-4692-a576-b8824dbf7520" />
+      <propertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="f45f63d1-1f3e-4ccd-999e-517ec96dfb1a">
+          <propertyInstance Id="1117207a-3a83-4402-8039-22f9b86887fa" name="BaseName">
+            <elementDefinition Id="84511006-fdde-47fc-9c19-8948f96a6036" />
+          </propertyInstance>
+          <elementDefinition Id="ffae5f1d-ea76-4aa4-af57-616f73b018d5" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="2b7a7870-dffd-4c9d-a590-b8ada3d2aa24">
+          <propertyInstance Id="0f3c89f1-eaf7-4ed9-be9a-8fff0aba55e8" name="ClrAttributes">
+            <elementDefinition Id="02dc29b9-b5a4-4931-8850-565882a7e5d1" />
+          </propertyInstance>
+          <elementDefinition Id="46b10534-e0e7-4e61-a4f7-f86687736e7d" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="3e6b18cf-233b-49e5-b2b7-da15d7360eb8">
+          <propertyInstance Id="8a2803d6-08a7-4e6c-a001-69f9fec86c3f" name="Usings">
+            <elementDefinition Id="8f0b4bdc-1632-4269-91ad-8e7427988c2f" />
+          </propertyInstance>
+          <elementDefinition Id="a66e9510-2dea-480e-a918-f4aa31bd45ab" />
+        </stereotypeInstanceHasPropertyInstances>
+      </propertyInstances>
+    </stereotypeInstance>
+    <stereotypeInstance Id="95523787-da85-4268-874f-a446d87f5637" name="TextTemplateBindings" profile="TextTemplateBindings">
+      <elementDefinition Id="b369bb33-1d33-4b4e-91dd-673269746937" />
+      <propertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="515a72ae-2456-4192-9922-860c5d1d6bf4">
+          <propertyInstance Id="8dde8a86-a7a1-4a68-b5d4-ae7e186f00ac" name="Alias" value="ClassTemplate|EnumTemplate|InterfaceTemplate|StructTemplate">
+            <elementDefinition Id="630b4711-2a4c-44f4-8404-5e6ab8f5cd29" />
+          </propertyInstance>
+          <elementDefinition Id="9fa25398-a223-47ac-a409-8a555fadee78" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="9076f18e-ab74-4c67-94d2-05f01ce3d54f">
+          <propertyInstance Id="55bd31ac-051f-4cdf-8b33-52f71629db56" name="TemplateFilePath" value="ClassTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4|EnumTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\EnumTemplate.t4|InterfaceTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4|StructTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4">
+            <elementDefinition Id="348cb439-18b6-4042-ade2-890c67674429" />
+          </propertyInstance>
+          <elementDefinition Id="3a54c967-6ac0-4903-860f-c5c69e21a4d1" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="5f72dcc9-d592-4bec-94f1-2bf6593ad687">
+          <propertyInstance Id="393362e6-cbae-4789-9a0d-085b3ed72530" name="ProjectPath" value="ClassTemplate=..\SpresModelingLib\SpresModelingLib.csproj|EnumTemplate=..\SpresModelingLib\SpresModelingLib.csproj|InterfaceTemplate=..\SpresModelingLib\SpresModelingLib.csproj|StructTemplate=..\SpresModelingLib\SpresModelingLib.csproj">
+            <elementDefinition Id="e37b5537-b3fb-45d3-bc8b-a6ff788c4d60" />
+          </propertyInstance>
+          <elementDefinition Id="c9161f57-4103-43bf-bed7-3597ad60cf1e" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="da9b5590-e6fc-4a6d-a4bf-cb3437411102">
+          <propertyInstance Id="eaae4bd8-9573-43b2-a3a6-2c10c2011289" name="TargetDirectory" value="ClassTemplate=GeneratedCode\{PackageStructure}|EnumTemplate=GeneratedCode\{PackageStructure}|InterfaceTemplate=GeneratedCode\{PackageStructure}|StructTemplate=GeneratedCode\{PackageStructure}">
+            <elementDefinition Id="2f76adc3-ed8c-46ea-ab59-1a5f244621eb" />
+          </propertyInstance>
+          <elementDefinition Id="f1cfd122-c783-402a-abba-f29df1ca1b57" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="5136fdc9-959e-4e5d-b5a7-9a2d1dd2c107">
+          <propertyInstance Id="05e16298-9d9b-4935-8797-c231b0cbf06e" name="TargetName" value="ClassTemplate={Name}|EnumTemplate={Name}|InterfaceTemplate={Name}|StructTemplate={Name}">
+            <elementDefinition Id="bad8ea9e-5ef4-4c5a-959a-af6e2932f786" />
+          </propertyInstance>
+          <elementDefinition Id="fd325a3f-6038-42bc-8384-d73118e20697" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="17398e3c-c623-490e-92ab-3ec550c9f754">
+          <propertyInstance Id="30024f81-3426-413e-bb76-3e06d9be0186" name="Overwrite" value="ClassTemplate=True|EnumTemplate=True|InterfaceTemplate=True|StructTemplate=True">
+            <elementDefinition Id="9df555e5-5d44-4984-aa56-9ac51060aa7c" />
+          </propertyInstance>
+          <elementDefinition Id="f7022e07-bd88-4e35-910d-0e10b654de27" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="e678c766-d3fd-4561-acd6-2a49248b717c">
+          <propertyInstance Id="49236d20-b208-4a2c-a11f-109a374a42bb" name="Parameters">
+            <elementDefinition Id="356f1017-1d3e-4f65-9840-11e723df0cef" />
+          </propertyInstance>
+          <elementDefinition Id="8a4ba4eb-5275-40ba-885e-8b6b2bff46f3" />
+        </stereotypeInstanceHasPropertyInstances>
+      </propertyInstances>
+    </stereotypeInstance>
+  </appliedStereotypesInternal>
+  <packagedElements>
+    <useCaseModelRootHasTypes>
+      <subsystem Id="94cb9f7f-5f27-40e8-8074-570600e93e0c" name="Configuration" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="00e11ce5-f133-4947-8fd0-130b8f9408f4" />
+      </subsystem>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <subsystem Id="f0fdbd95-f279-44b6-9d92-d970358db0ee" name="Processes" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="2b0440bd-2105-4d72-9a08-84d8b02f6a4d" />
+      </subsystem>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <subsystem Id="81a1454c-5dfb-408c-af48-8184aa54e496" name="Reporting" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="f8e396bb-b0a3-44d8-a838-ecb5e7df5ce6" />
+      </subsystem>
+    </useCaseModelRootHasTypes>
+    <packageHasNamedElement>
+      <useCase Id="128396fa-c1e0-475e-9d3f-cc95e5af4eb8" name="Catalog Maintenance" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="b61558af-95ce-4acc-9e5b-9788477f60db" />
+        <subjects>
+          <subsystemMoniker Id="94cb9f7f-5f27-40e8-8074-570600e93e0c" LastKnownName="Configuration" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="53e71dca-6da1-4775-91cc-b17bde13eaf3" name="Catalog Importation" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="a4aa86fe-f19a-40a8-abdf-fcdbe32bf591" />
+        <subjects>
+          <subsystemMoniker Id="94cb9f7f-5f27-40e8-8074-570600e93e0c" LastKnownName="Configuration" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="8237d713-1a3a-41f0-b4e8-04d22283ffe2" name="Premise Configuration" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="ab33e02a-d4a4-4659-8c7a-604c42143afa" />
+        <subjects>
+          <subsystemMoniker Id="94cb9f7f-5f27-40e8-8074-570600e93e0c" LastKnownName="Configuration" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="63e33ade-e865-43f0-b667-0be4e92b307d" name="Budgeting" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="5d7bce0d-5aa1-4fa0-9c71-5eacd143357f" />
+        <subjects>
+          <subsystemMoniker Id="f0fdbd95-f279-44b6-9d92-d970358db0ee" LastKnownName="Processes" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="285ac794-fcc5-4391-abcc-08ae0af2f7cb" name="Budget Authorization" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="8c5dea5b-d311-48de-bb5c-b8e55e51dd77" />
+        <subjects>
+          <subsystemMoniker Id="f0fdbd95-f279-44b6-9d92-d970358db0ee" LastKnownName="Processes" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="4cd9f3a7-00ed-4bee-ab63-b3f42264ea56" name="Consolidation" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="73348d8f-7750-4637-a24e-2f4d8039494b" />
+        <subjects>
+          <subsystemMoniker Id="f0fdbd95-f279-44b6-9d92-d970358db0ee" LastKnownName="Processes" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="bdb08082-2b76-4811-9f70-44c7642d335f" name="Data Importing" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="7cad7c9b-4cb7-458d-98e4-dc767c880d17" />
+        <subjects>
+          <subsystemMoniker Id="81a1454c-5dfb-408c-af48-8184aa54e496" LastKnownName="Reporting" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <useCaseModelRootHasTypes>
+      <subsystem Id="6a726279-a244-4484-ad1c-0368011a67ea" name="Security" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="5139adb3-99f8-4afe-bd25-38b363f3a411" />
+      </subsystem>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <actor Id="3b05db8c-ce22-4b8e-826e-df3f132649c0" name="Administrator" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="d1050302-d835-468a-9ece-b5b1b4cd790a" />
+        <targetEnds>
+          <association Id="55c219a2-b249-4b93-8b4d-30fe2b7af436" isDerived="false" sourceEndRoleName="Administrator" targetEndRoleName="User Administration" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="0407361f-e7d6-4a0c-9edc-b2495c031580" LastKnownName="User Administration" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="291190ee-3632-4804-a1e5-e342a970ff06" name="Administrator" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="57b28b46-6abf-4181-a8f4-7256b27b23e0" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b5c5b57a-9070-4745-8a47-7587be0b1eb8" name="User Administration" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="187ad348-e977-4501-804c-3fac6133a03c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="3df7219b-5427-4d64-b7cd-4d44b2bf799f" />
+          </association>
+          <association Id="62947bbd-ac25-470e-8499-157bae723b3d" isDerived="false" sourceEndRoleName="Administrator" targetEndRoleName="Role Administration" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="aa793bc9-4b37-4196-9be2-dcd25972ab10" LastKnownName="Role Administration" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="5e6bf988-0202-4838-b6f6-f52aec001251" name="Administrator" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="1e970417-1c7a-4e97-a6d1-bd798a7dd27d" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="68173401-d216-4e6e-b8f0-d2fbfc6dd958" name="Role Administration" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="b08f6855-8d4b-44c3-9158-a166d882ad79" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="f79ad12e-c539-4a1d-9863-6087285e8dd9" />
+          </association>
+          <association Id="631c6eb7-3a71-4f8c-915f-11311d866f60" isDerived="false" sourceEndRoleName="Administrator" targetEndRoleName="Permission Assignment" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="7dfc595b-68a2-4e92-a53d-6152a1913c99" LastKnownName="Permission Assignment" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="aaa23e80-9096-48fa-8b94-eb71c58da446" name="Administrator" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="c29b6749-dff2-4c42-baba-85cb36789703" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="d996c0a1-6938-45eb-8ece-70e5f5a2ee25" name="Permission Assignment" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="1f1fbddb-2e53-42f9-acb0-118541aac9b4" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="d2b71b8d-fce0-4dc0-be5c-039a04316d5c" />
+          </association>
+          <association Id="7d41437f-9c4c-448c-b505-c7521504cf64" isDerived="false" sourceEndRoleName="Administrator" targetEndRoleName="Auditing" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="3d52d58f-8d32-4e6f-8d98-f4450eebcb28" LastKnownName="Auditing" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="5dde17db-8213-4878-9442-5ff9bc1abc1c" name="Administrator" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="8b6bbdbf-e9f1-44f7-bc61-98e1305edaac" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b5a66876-1422-4b03-a67e-1699bcc21037" name="Auditing" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="c41c4a48-f855-45ef-b0c1-cf0adc7b7d66" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="eb08da4d-c7a5-4e8a-82bf-1b63dbb594cb" />
+          </association>
+        </targetEnds>
+      </actor>
+    </useCaseModelRootHasTypes>
+    <packageHasNamedElement>
+      <useCase Id="0407361f-e7d6-4a0c-9edc-b2495c031580" name="User Administration" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="208705f6-658e-4969-b981-22e0054dbdb3" />
+        <subjects>
+          <subsystemMoniker Id="6a726279-a244-4484-ad1c-0368011a67ea" LastKnownName="Security" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <useCaseModelRootHasTypes>
+      <useCase Id="aa793bc9-4b37-4196-9be2-dcd25972ab10" name="Role Administration" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="ff62a758-e32c-4598-97cf-ff12f979b42a" />
+        <subjects>
+          <subsystemMoniker Id="6a726279-a244-4484-ad1c-0368011a67ea" LastKnownName="Security" />
+        </subjects>
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <packageHasNamedElement>
+      <useCase Id="7dfc595b-68a2-4e92-a53d-6152a1913c99" name="Permission Assignment" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="b7549f2e-de98-4996-aec7-1d7fa44f6228" />
+        <subjects>
+          <subsystemMoniker Id="6a726279-a244-4484-ad1c-0368011a67ea" LastKnownName="Security" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <useCaseModelRootHasTypes>
+      <actor Id="eb4632f0-cdcd-4d6d-b2e9-b0ca5f8b8e8a" name="OBZ Responsible" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="58bc9e58-93ad-4bbf-b6a1-a95bb1f4f338" />
+        <targetEnds>
+          <association Id="b7ca5ebc-8499-4f60-9a41-ff0eb9474918" isDerived="false" sourceEndRoleName="OBZ Responsible" targetEndRoleName="Catalog Maintenance" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="128396fa-c1e0-475e-9d3f-cc95e5af4eb8" LastKnownName="Catalog Maintenance" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="c2b5fa9c-221c-4b57-bf1c-64f138fd2862" name="OBZ Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="e2c98309-883e-484c-9903-4a33772167be" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="c42354b7-9d8c-4a1b-ab63-81aa56d5668f" name="Catalog Maintenance" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="879a507b-221e-4de7-8c0b-09bbc3005030" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="0aca2c38-745e-4126-9a65-a1d0d40a9c1f" />
+          </association>
+          <association Id="f0e621df-6cdf-4165-9592-58fd9d6e735d" isDerived="false" sourceEndRoleName="OBZ Responsible" targetEndRoleName="Catalog Importation" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="53e71dca-6da1-4775-91cc-b17bde13eaf3" LastKnownName="Catalog Importation" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="17f45995-88a9-4634-9689-455d17769882" name="OBZ Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="e158ee2e-9921-4737-b304-c74f92b26ee7" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b76a30c5-2a03-415a-90d3-623e9b23838f" name="Catalog Importation" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="e9dd8953-f54e-4079-8616-80e3b70a9490" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="e1d148e6-bc76-4c10-904b-5338a9eea875" />
+          </association>
+          <association Id="2353da8c-a1e0-4791-b9f6-b5c295316d72" isDerived="false" sourceEndRoleName="OBZ Responsible" targetEndRoleName="Premise Configuration" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="8237d713-1a3a-41f0-b4e8-04d22283ffe2" LastKnownName="Premise Configuration" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="555b8897-65d7-417f-9cc0-c2edaf5c5e45" name="OBZ Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="fb602d65-3be8-44fd-aad1-87c80a4ec62e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="36263904-b4f9-480a-b107-8b1dc218ed0b" name="Premise Configuration" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="48abf70a-d8cc-492c-ba4e-6ac3fcde796e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="ccee204e-8417-4504-8785-8a61cc925111" />
+          </association>
+          <association Id="a74fd6d1-4f1a-4eca-874e-c91c48877dcf" isDerived="false" sourceEndRoleName="OBZ Responsible" targetEndRoleName="Consolidation" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="4cd9f3a7-00ed-4bee-ab63-b3f42264ea56" LastKnownName="Consolidation" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b216394a-e234-4fba-85df-bc591a33dc1c" name="OBZ Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="58edc32c-fcf3-4216-9de8-9c8825a0655c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="855ba0a8-ae28-4800-b9f0-c06d4e9303f1" name="Consolidation" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="9daa4cbe-3864-4a6c-bef4-50a471b6d62a" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="0f5be2f8-8adc-4588-9a89-352d2122dead" />
+          </association>
+          <association Id="37a53e4d-628d-4d24-a542-4277ee1581c4" isDerived="false" sourceEndRoleName="OBZ Responsible" targetEndRoleName="Budgeting" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="63e33ade-e865-43f0-b667-0be4e92b307d" LastKnownName="Budgeting" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="17e39e05-7850-4aad-a018-1f3e88049c45" name="OBZ Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="52b703c0-e254-4e70-96a0-c494a01c84fb" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="32c932cb-51d4-41d4-9640-cf0e061eebce" name="Budgeting" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="5382de31-45af-43c2-bd63-2225f22e45d8" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="3e3a09d2-7c7f-4d9a-8e92-21a4f0220a78" />
+          </association>
+        </targetEnds>
+      </actor>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <actor Id="1fe6ddc3-f5ca-4e8c-8c8f-96fed47632c1" name="Financial Officer" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="cfe20327-6fdf-47fc-9925-f9b875043fa7" />
+        <targetEnds>
+          <association Id="9af0ca87-fe72-4c83-b482-99a9bf87374e" isDerived="false" sourceEndRoleName="Financial Officer" targetEndRoleName="Data Analysis" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="5e931da6-b48c-4f6b-bd37-511f17ac6a19" LastKnownName="Data Analysis" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="cb796c12-c53c-470d-be3c-1911f15387e9" name="Financial Officer" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="e70c2d65-3d05-45f4-81af-805b26d631f3" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="f6e8a0a5-920f-49af-b9c8-fe39cd277d5d" name="Data Analysis" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="5b0ba488-8e15-4e2f-a097-e03a34ca34a4" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="03ee462e-ca29-489f-842d-f1783b7efad7" />
+          </association>
+          <association Id="ca65b566-eb78-4c98-981d-ea7fcc9f6dfa" isDerived="false" sourceEndRoleName="Financial Officer" targetEndRoleName="Budget Authorization" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="285ac794-fcc5-4391-abcc-08ae0af2f7cb" LastKnownName="Budget Authorization" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="f6607211-a7b6-40c4-8d54-30c10cf2a6d3" name="Financial Officer" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="1a735b0e-02ba-40b6-8fae-8f9be5225e33" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="9b8a3ca7-2770-4fc3-aa37-b6820c6c91a5" name="Budget Authorization" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="b7c0b346-0fdc-4ea6-aa12-4e5c2d0e36f1" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="4a7e3f8b-a888-49c5-b734-ec7c01b96c56" />
+          </association>
+        </targetEnds>
+      </actor>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <actor Id="e9f57c8a-c081-435a-be1c-74cde81fd8e2" name="CdC Responsible" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="8f1322ef-1809-48db-98a9-7748afa27966" />
+        <targetEnds>
+          <association Id="f92cf62f-874a-4305-8e08-ed0400f20316" isDerived="false" sourceEndRoleName="CdC Responsible" targetEndRoleName="Budgeting" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="63e33ade-e865-43f0-b667-0be4e92b307d" LastKnownName="Budgeting" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="4626b80a-bca3-4bda-b69c-98f473f76090" name="CdC Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="bb4177c4-2c13-492f-9ae9-89985c7c0e78" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="54e38979-7abe-422e-8466-06f91b91bff1" name="Budgeting" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="e36d1d8b-3861-49c3-9515-1814a4bb2d60" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="d6c0bcca-5e10-4bab-98b0-9d7de7be931c" />
+          </association>
+          <association Id="aea5a645-3445-4b44-b083-c094bc7bbd69" isDerived="false" sourceEndRoleName="CdC Responsible" targetEndRoleName="Data Importing" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="bdb08082-2b76-4811-9f70-44c7642d335f" LastKnownName="Data Importing" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="46509eed-483c-426b-81a0-ef3fbf573f2b" name="CdC Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="edbd50f9-a5e9-44ed-8cee-de01f3c16cab" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="0d57bdde-9a86-48e6-b3bd-404dc6d0595e" name="Data Importing" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="48950684-5e04-45a1-8fc4-1c4a679c1b5c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="b0d9da61-83d1-4e34-987e-5184aa270c66" />
+          </association>
+          <association Id="0587a787-2e53-47cb-a4e6-ecd6c16ee9b2" isDerived="false" sourceEndRoleName="CdC Responsible" targetEndRoleName="Data Analysis" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="5e931da6-b48c-4f6b-bd37-511f17ac6a19" LastKnownName="Data Analysis" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="cfea08bd-787e-4d38-b9e2-01acfa7d1b17" name="CdC Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="630512c4-ad6d-4946-be48-a557f53f57c3" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="d7af8ede-4900-4eb7-9a69-e6311ea8e693" name="Data Analysis" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="35c765ec-f7a0-4e0e-a06c-5c908dc400e7" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="2a91c3aa-9ea1-4443-a162-bd5b126cdcd9" />
+          </association>
+        </targetEnds>
+      </actor>
+    </useCaseModelRootHasTypes>
+    <packageHasNamedElement>
+      <useCase Id="5e931da6-b48c-4f6b-bd37-511f17ac6a19" name="Data Analysis" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="03bd3654-8bd9-48f5-bd75-5bac4f811b8d" />
+        <subjects>
+          <subsystemMoniker Id="81a1454c-5dfb-408c-af48-8184aa54e496" LastKnownName="Reporting" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="3d52d58f-8d32-4e6f-8d98-f4450eebcb28" name="Auditing" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="17816dcd-b478-4df4-ad4b-2965b0966074" />
+        <subjects>
+          <subsystemMoniker Id="6a726279-a244-4484-ad1c-0368011a67ea" LastKnownName="Security" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase Id="22b981db-e4c9-43d7-a252-b845cd2c443c" name="Benefits Administration" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="b6f6f6c3-7c29-47c8-9da1-a55efc9108e2" />
+        <extendedCases>
+          <extend Id="d87b9add-7cec-48eb-bec4-7f0f374c93ec">
+            <useCaseMoniker Id="8237d713-1a3a-41f0-b4e8-04d22283ffe2" LastKnownName="Premise Configuration" />
+            <elementDefinition Id="1206a65c-e4b2-43db-8eba-361f393e7661" />
+          </extend>
+        </extendedCases>
+        <subjects>
+          <subsystemMoniker Id="94cb9f7f-5f27-40e8-8074-570600e93e0c" LastKnownName="Configuration" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <useCaseModelRootHasTypes>
+      <actor Id="df58fa1a-7325-452a-a865-88b347efa34b" name="People Responsible" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="ecdb5737-54b2-40b7-aa4c-7778f49e5cc2" />
+        <generalsInternal>
+          <generalization Id="7a252a7b-2ddb-4fe6-be24-9ed94c5cfd40" isSubstitutable="false">
+            <actorMoniker Id="e9f57c8a-c081-435a-be1c-74cde81fd8e2" LastKnownName="CdC Responsible" />
+            <elementDefinition Id="5c3e8e9a-5bef-45b2-9ef3-4030f0fce7dc" />
+          </generalization>
+        </generalsInternal>
+        <targetEnds>
+          <association Id="295d9ad4-e967-448f-a47b-60c004c0c313" isDerived="false" sourceEndRoleName="People Responsible" targetEndRoleName="Business Benefits" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="22b981db-e4c9-43d7-a252-b845cd2c443c" LastKnownName="Benefits Administration" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="60a3a634-d67e-4d5a-9f3e-577c360e0135" name="People Responsible" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="c0c598fc-4ae5-4fbc-b92b-a47033e47e28" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="8d56ff15-98b7-4478-a662-aa9b2f14a584" name="Business Benefits" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="5f7871be-021f-4b66-83ce-96d3d3524010" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="d24967ba-4402-4555-b62c-b85e7e45caae" />
+          </association>
+        </targetEnds>
+      </actor>
+    </useCaseModelRootHasTypes>
+  </packagedElements>
+  <package Id="660e7e67-db7d-44c6-b4e2-290f5a8047f1" name="SpresModeling">
+    <elementDefinition Id="0904205e-27c9-4a80-8a94-ba8f0c6a0d93" />
+    <profileInstances>
+      <packageHasProfileInstances Id="e3b72d06-b5fb-4868-ae8f-3193280d8cc0">
+        <profileInstance Id="c7903e0e-bfae-483d-92ed-a36b3cc30828" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="e920ea39-776d-425f-9d08-b64b42da605d">
+        <profileInstance Id="104959e8-f1f7-49a9-90b9-b9e4382fb7cd" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="6ccd38b1-38a4-44b6-8f27-8795ad2abe77">
+        <profileInstance Id="1e0970ea-0153-45c4-8ce7-058585c064fe" name="CSharpProfile">
+          <elementDefinition Id="61aaf588-2cd7-49d5-b797-ec8ed5735872" />
+        </profileInstance>
+        <elementDefinition Id="17591a6d-a127-4e71-ad50-c87112f0207a" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="b6dffab0-843f-4e55-97d4-e8b9901350ce">
+        <profileInstance Id="05565802-d9aa-4866-a5b1-50a4d76a3e01" name="TextTemplateBindings">
+          <elementDefinition Id="94b9379e-18e5-4c39-ac4e-0c68a981bf94" />
+        </profileInstance>
+        <elementDefinition Id="6603fe77-15a9-4604-826e-4943e6848c94" />
+      </packageHasProfileInstances>
+    </profileInstances>
+  </package>
+</useCaseModelRoot>

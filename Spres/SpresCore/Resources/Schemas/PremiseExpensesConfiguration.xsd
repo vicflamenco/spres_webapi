@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PremiseExpensesConfiguration"
+    targetNamespace="http://tempuri.org/PremiseDetail.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/PremiseDetail.xsd"
+    xmlns:mstns="http://tempuri.org/PremiseDetail.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="Premise">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Expense" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>                            
+                            <xs:element name="Constraints" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Constraint" minOccurs="1" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="Month" minOccurs="0" maxOccurs="12"></xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="Type" use="required" type="ConstraintType"></xs:attribute>
+                                                <xs:attribute name="Periodicity" use="optional" type="PeriodicityType"></xs:attribute>                                                                                                
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Variables">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Variable" minOccurs="1" maxOccurs="unbounded">
+                                            <xs:complexType mixed="true">
+                                                <xs:attribute name="Name"></xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>                            
+                        </xs:sequence>
+                        <xs:attribute name="Id" type="xs:int"></xs:attribute>
+                    </xs:complexType>                    
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="ConstraintType">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Frecuency"></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="PeriodicityType">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Annual"></xs:enumeration>
+            <xs:enumeration value="Monthly"></xs:enumeration>
+            <xs:enumeration value="Bimonthly"></xs:enumeration>
+            <xs:enumeration value="Quaterly"></xs:enumeration>
+            <xs:enumeration value="Biannual"></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

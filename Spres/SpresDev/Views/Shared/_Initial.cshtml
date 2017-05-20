@@ -1,0 +1,36 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema de administración de presupuesto - LivSmart</title>
+    <meta name="viewport" content="width=device-width" />
+
+    <script>
+        localStorage.setItem("SpresAppUrl", "@Url.Action("Index", "Home").Replace("/Index", "").Replace("Home", "")")
+    </script>
+
+    <script src="@Url.Content("~/Scripts/jquery-2.1.0.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/knockout-3.1.0.js")"></script>
+    <script src="@Url.Content("~/Scripts/ej/ej.web.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/spres.js")"></script>
+    <script src="@Url.Content("~/Scripts/spres.storeAjax.js")"></script>
+    <script src="@Url.Content("~/Scripts/spres.storeModel.js")"></script>
+    <script src="@Url.Content("~/Scripts/spres.storeCommonController.js")"></script>    
+            
+    <link href="@Url.Content("~/Content/ejThemes/default-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/spres.css")" rel="stylesheet" />
+
+    @RenderSection("Header", false)
+    
+</head>
+<body>    
+
+    @RenderBody()
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿<div>
+    <p>
+        ¿Desea eliminar la línea de presupuestación seleccionada?
+    </p>
+
+    <p>
+        <input id="btnOkDeleteLine" type="button" class="btn" value="Si" />
+        <input id="btnCancelDeleteLine" type="button" class="btn" value="No" />
+    </p>
+</div>
+
+<script>
+    $(function () {
+        
+        $("#btnOkDeleteLine").click(function () {
+
+            $('#btnOkDeleteLine').prop("disabled", true);
+            $('#btnCancelDeleteLine').prop("disabled", true);
+
+            $('.e-grid').each(function () {
+
+                var gridObj = $(this).data("ejGrid");
+                var selectedRowsLength = gridObj.selectedRowsIndexes.length;
+
+                if (selectedRowsLength > 0)
+                {
+                    if (sessionStorage.subLineId) {
+                        var urlBudgetLines = getUrl("/api/budgetlines/" + sessionStorage.subLineId);
+                        $.ajax({
+                            method: "DELETE",
+                            url: urlBudgetLines
+                        }).done(function () {
+
+                            loadBudgetSheets();
+                            //var selectedRow = gridObj.selectedRowsIndexes[0];
+
+                            //if (selectedRow != undefined)
+                            //    gridObj.model.dataSource.splice(selectedRow, 1);
+
+                            //gridObj.refreshContent();
+
+
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            alert("No se eliminó la línea: " + jqXHR.responseText);
+                        }).always(function () {
+
+                            sessionStorage.removeItem('lineId');
+                            sessionStorage.removeItem('subLineId');
+                            $("#deleteLineDialog").data("ejDialog").close();
+
+                        });
+                    } else {
+
+                        //var selectedRow = gridObj.selectedRowsIndexes[0];
+
+                        //if (selectedRow != undefined)
+                        //    gridObj.model.dataSource.splice(selectedRow, 1);
+
+                        //gridObj.refreshContent();
+                    }
+                }
+            });
+        });
+
+        $("#btnCancelDeleteLine").click(function () {
+            $("#deleteLineDialog").data("ejDialog").close();
+        });
+    });
+
+</script>

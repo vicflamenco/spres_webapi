@@ -1,0 +1,573 @@
+﻿
+@{
+    ViewBag.Title = "Packages";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<div>
+    <div>
+        <div>
+            <h5><strong>Paquete</strong></h5>
+        </div>
+
+        <div>
+            <input type="text" id="packagesList" />
+        </div>
+        
+        <input type="text" id="newPackage" placeholder="Nombre del nuevo paquete" style="display: none;" class="form-control" />
+        <div id="humanResources" style="display:none;">
+            <input type="checkbox" id="chkHR" value="HR" />
+            <span>
+                Recursos humanos
+            </span>
+        </div>
+
+        <div id="PackageCatalogButtons">
+
+            <div id="btnsEditPkg" class="btn-group">
+                <button id="addPkg" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+                <button id="edtPkg" style="" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                </button>
+                <button id="dltPkg" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div id="btnsAddPkg" class="btn-group" >
+                <button id="confirmPkg" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+                <button id="confirmEdtPkg" type="button" class="btn btn-default" aria-label="Left Align" style="display:none">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+                <button id="cancelPkg" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+                <button id="cancelEdtPkg" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+            </div>
+
+        </div>
+        <div id="managerDiv">
+            <div id="managerLabel"><label>Gestor del paquete</label></div>
+            <div><input type="text" id="managerList" /></div>
+        </div>
+            <div>
+                <span id="ctaAsoc"><label>Asociar cuentas contables al paquete</label></span>
+                <div id="accList" class="control">
+                    <input type="text" id="accountList" />
+                </div>
+                <div id="Grid"></div>
+            </div> 
+        </div>
+    </div>
+
+<input value="" id="packageId" disabled hidden/>
+
+<style>
+
+    #PackageCatalogButtons{
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    #newPackage {
+        width: 500px;
+        display: inline-block;
+    }
+
+    #humanResources{
+        display: inline-block;
+    }
+
+    label {
+        margin-top: 5px;
+    }
+
+    #Grid {
+        margin-top: 10px;
+    }
+
+</style>
+
+<script type="text/javascript">
+
+    function rebindHRCheckBox(id) {
+
+        var checkbox = $("#chkHR");
+
+        if (id == "") {
+            checkbox.removeAttr("checked");
+        } else {
+
+            ej.WaitingPopup.showDefault();
+            $.ajax({
+                url: getUrl("/api/Packages/" + id),
+                method: "GET"
+            }).done(function (data) {
+                if (data.HR) {
+                    checkbox.prop("checked", "true");
+                } else {
+                    checkbox.removeAttr("checked");
+                }
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+        }
+    };
+
+    function rebindPackageAccounts(id) {
+
+        var urlPackagesAccountsTrue = getUrl("/api/PackageAccounts/" + id + "?attacheds=true");
+        var dataManager = ej.DataManager({
+            url: urlPackagesAccountsTrue,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        ej.WaitingPopup.showDefault();
+        dataManager.executeQuery(ej.Query()).done(function (e) {
+            $("#Grid").ejGrid("instance").option("dataSource", e.result);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    function rebindAccounts(pkgId) {
+        var urlPackagesAccountsFalse = getUrl("/api/PackageAccounts/" + pkgId + "?attacheds=false");
+        var dataMangerPackagesFiltered = ej.DataManager({
+            url: urlPackagesAccountsFalse,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        ej.WaitingPopup.showDefault();
+        dataMangerPackagesFiltered.executeQuery(ej.Query()).done(function (e) {
+            $("#accountList").ejAutocomplete("instance").option("dataSource", e.result);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    $(function () {
+        document.getElementById("edtPkg").disabled = true;
+        document.getElementById("dltPkg").disabled = true;
+        $('#btnsAddPkg').hide();
+        $('#accountList').ejAutocomplete({ enabled: false });
+        $('#managerList').ejDropDownList({enabled: false});
+
+        viewPackagePermissions();
+
+        $('#addPkg').click(function () {
+            $('#btnsEditPkg').hide();
+            $('#packagesList_wrapper').hide();
+            $('#btnsAddPkg').show();
+            $('#confirmPkg').show();
+            $('#confirmEdtPkg').hide();
+            $('#newPackage').show();
+            $('#humanResources').show();
+            $('#newPackage').val("");
+            $('#cancelEdtPkg').show();
+            $('#cancelPkg').hide();
+            $('#accountList').ejAutocomplete({ enabled: false });
+            $('#managerList').ejDropDownList({ enabled: false });
+            $("#Grid").ejGrid({
+                dataSource: []
+            });
+            $("#chkHR").removeAttr("checked");
+        });
+        
+        $('#cancelPkg').click(function () {
+            $('#btnsEditPkg').show();
+            $('#packagesList_wrapper').show();
+            $('#btnsAddPkg').hide();
+            $('#newPackage').hide();
+            $('#humanResources').hide();
+            $('#accountList').ejAutocomplete({ enabled: true });
+            $('#managerList').ejDropDownList({ enabled: true });
+            var DropDownListObj = $("#packagesList").data("ejDropDownList");
+            rebindHRCheckBox(DropDownListObj.getSelectedValue());
+        });
+
+        $('#confirmPkg').click(function () {
+            var pkgName = document.getElementById('newPackage').value;
+            var newId;
+            var urlPackages = getUrl("/api/Packages/");
+            if ($('#newPackage').val() == "") {
+                alert("Digite un nombre para el paquete");
+            } else {
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    method: "POST",
+                    url: urlPackages,
+                    data: {
+                        Id: "0",
+                        Name: pkgName,
+                        HR: document.getElementById("chkHR").checked
+                    }
+                }).done(function (e) {
+                    newId = e.Id;
+                    $('#btnsEditPkg').show();
+                    $('#packagesList_wrapper').show();
+                    $('#btnsAddPkg').hide();
+                    $('#newPackage').hide();
+                    $('#humanResources').hide();
+
+                    var dataMangerPackages = ej.DataManager({
+                        url: urlPackages,
+                        adaptor: new ej.WebApiAdaptor()
+                    });
+                    ej.WaitingPopup.showDefault();
+                    dataMangerPackages.executeQuery(ej.Query()).done(function (e) {
+
+                       $("#packagesList").ejDropDownList("instance").setModel({ dataSource: e.result });
+                       $('#newPackage').hide();
+                       $('#humanResources').hide();
+                       $('#packagesList').show();
+                       $('#btnsEditPkg').show();
+                       $('#btnsAddPkg').hide();
+                       $('#packagesList_wrapper').show();
+                       $("#packagesList").ejDropDownList("instance").selectItemByValue(newId);
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+                }).fail(function (jqXHR) {
+                    alert(jqXHR.responseJSON.Message);
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        });
+
+        $('#edtPkg').click(function () {
+            $('#newPackage').val($("#packagesList").ejDropDownList("instance").getValue());
+            $('#btnsEditPkg').hide();
+            $('#packagesList_wrapper').hide();
+            $('#btnsAddPkg').show();
+            $('#newPackage').show();
+            $('#humanResources').show();
+            $('#confirmEdtPkg').show();
+            $('#confirmPkg').hide();
+            $('#cancelEdtPkg').hide();
+            $('#cancelPkg').show();
+            $('#managerList').ejDropDownList({ enabled: false });
+        });
+
+        $('#confirmEdtPkg').click(function () {
+            var pkgNameEdited = $('#newPackage').val();
+            var pkgValEdited = $("#packagesList").ejDropDownList("instance").getSelectedValue();
+            var pkgEmployeeId = $("#managerList").data("ejDropDownList").getSelectedValue();
+            var urlPackagesPut = getUrl("/api/Packages/" + pkgValEdited);
+
+            ej.WaitingPopup.showDefault();
+            $.ajax({
+                method: "PUT",
+                url: urlPackagesPut,
+                data: {
+                    Id: pkgValEdited,
+                    Name: pkgNameEdited,
+                    EmployeeId: pkgEmployeeId,
+                    HR: document.getElementById("chkHR").checked
+                }
+            }).done(function () {
+
+                var url = getUrl("/api/Packages");
+                var dataMangerPackages = ej.DataManager({
+                    url: url,
+                    adaptor: new ej.WebApiAdaptor()
+                });
+
+                ej.WaitingPopup.showDefault();
+                dataMangerPackages.executeQuery(ej.Query()).done(function (e) {
+                   $("#packagesList").ejDropDownList("instance").setModel({ dataSource: e.result });
+                   $('#newPackage').hide();
+                   $('#humanResources').hide();
+                   $('#packagesList').show();
+                   $('#btnsEditPkg').show();
+                   $('#btnsAddPkg').hide();
+                   $('#packagesList_wrapper').show();
+                   $("#packagesList").ejDropDownList("instance").setSelectedValue(pkgValEdited)
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+
+            }).fail(function (jqXHR) {
+                alert(jqXHR.responseJSON.Message);
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+            
+        });
+        
+        $('#cancelEdtPkg').click(function () {
+            
+            $('#btnsEditPkg').show();
+            $('#packagesList_wrapper').show();
+            $('#btnsAddPkg').hide();
+            $('#newPackage').hide();
+            $('#humanResources').hide();
+            $('#accountList').ejAutocomplete({ disabled: true });
+            $('#managerList').ejDropDownList({ enabled: false });
+            var DropDownListObj = $("#packagesList").data("ejDropDownList");
+            DropDownListObj.clearText();
+            rebindHRCheckBox(DropDownListObj.getSelectedValue());
+            document.getElementById("edtPkg").disabled = true;
+            document.getElementById("dltPkg").disabled = true;
+            
+        });
+
+        $('#dltPkg').click(function () {
+            var pkgVal = $("#packagesList").ejDropDownList("instance").getSelectedValue();
+            var urlPackageDelete = getUrl("/api/Packages/" + pkgVal);
+            if (confirm("¿Desea eliminar este paquete?") == true) {
+
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    method: "DELETE",
+                    url: urlPackageDelete
+                }).done(function () {
+                    var url = getUrl("/api/Packages");
+                    var dataMangerPackages = ej.DataManager({
+                        url: url,
+                        adaptor: new ej.WebApiAdaptor()
+                    });
+
+                    ej.WaitingPopup.showDefault();
+                    dataMangerPackages.executeQuery(ej.Query()).done(function (e) {
+                       $("#packagesList").ejDropDownList("instance").setModel({ dataSource: e.result });
+                       $("#packagesList").ejDropDownList("instance").setSelectedValue("");
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+                }).fail(function (e) {
+                    if (e.responseJSON.ExceptionType == "System.InvalidOperationException") {
+                        alert("Debe desvincular las cuentas asociadas antes de poder eliminar el paquete");
+                    } else {
+                        alert(e.responseJSON.Message);
+                    }
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        });
+
+        $('#accountList').ejAutocomplete({
+            dataSource: [],
+            fields: { text: "Display", key: "Id" },
+            filterType: ej.filterType.Contains,
+            width: 665,
+            watermarkText: "Seleccione cuenta contable a asociar",
+            select: "onSelectAccount",
+        });
+    });
+
+    var urlpackages = getUrl("/api/Packages/");
+    var dataMangerPackages = ej.DataManager({
+        url: urlpackages,
+        adaptor: new ej.WebApiAdaptor()
+    });
+   
+     $('#packagesList').ejDropDownList({
+        dataSource: dataMangerPackages,
+        fields: { text: "Name", value: "Id" },
+        watermarkText:"Seleccione paquete",
+        change: packageListChange,
+        width: 665
+     });
+
+     var urlEmp = getUrl("/api/Users");
+     var dataManagerEmployees = ej.DataManager({
+         url: urlEmp,
+         adaptor: new ej.WebApiAdaptor()
+     });
+     $("#managerList").ejDropDownList({
+         dataSource: dataManagerEmployees,
+         fields: { text: "Name", value: "Id" },
+         watermarkText: "Seleccione gestor de paquete",
+         width: 665,
+         enableFilterSearch: true,
+         filterType: ej.filterType.Contains,
+         select: onSelectManager
+     });
+
+     function packageListChange(sender) {
+         rebindPackageAccounts(sender.value);
+         rebindHRCheckBox(sender.value);
+         document.getElementById("edtPkg").disabled = false;
+         document.getElementById("dltPkg").disabled = false;
+         $('#packageId').val(sender.value);
+         var permissions = JSON.parse(sessionStorage.permissions);
+         for (i = 0; i < permissions.length; i++) {
+
+             var permission = permissions[i];
+             if (permission.Option == "Catalogs") {
+                 if (permission.Edit) {
+                     $('#accountList').ejAutocomplete({ enabled: true });
+                     $('#managerList').ejDropDownList({ enabled: true });
+                     
+                 } else {
+                     $('#accountList').ejAutocomplete({ enabled: false });
+                     $('#managerList').ejDropDownList({ enabled: false });
+                 }
+             }
+         }
+
+         var urlDtPackagesFiltered = getUrl("/api/PackageAccounts/" + $('#packageId').val() + "?attacheds=false");
+         var dataMangerPackagesFiltered = ej.DataManager({
+             url: urlDtPackagesFiltered,
+             adaptor: new ej.WebApiAdaptor()
+         });
+
+         ej.WaitingPopup.showDefault();
+         dataMangerPackagesFiltered.executeQuery(ej.Query()).done(function (e) {
+            $("#accountList").ejAutocomplete("instance").option("dataSource", e.result);
+         }).always(function () {
+             ej.WaitingPopup.hideDefault();
+         });
+
+         var urlDtPackageManager = getUrl("/api/Packages/" + sender.value);
+         var dataMangerPackagesManager = ej.DataManager({
+             url: urlDtPackageManager,
+             adaptor: new ej.WebApiAdaptor()
+         });
+
+         ej.WaitingPopup.showDefault();
+
+         dataMangerPackagesManager.executeQuery(ej.Query()).done(function (e) {
+            $('#managerList').ejDropDownList("instance").setSelectedValue(e.result.ManagerId);
+         }).always(function () {
+             ej.WaitingPopup.hideDefault();
+         });
+
+     };
+
+     function onClickDesasociar(args) {
+         var pkgVal = $("#packagesList").ejDropDownList("instance").getSelectedValue();
+         var grid = $("#Grid").ejGrid("instance");
+         var index = this.element.closest("tr").index();
+         var record = grid.getCurrentViewData()[index];
+
+         var urlPackageDelete = getUrl("/api/PackageAccounts/" + pkgVal + "/" + record.Id);
+         if (confirm("¿Desea desvincular esta cuenta del paquete?")) {
+
+             ej.WaitingPopup.showDefault();
+             $.ajax(urlPackageDelete, {
+                type: "DELETE"
+            }).done(function () {
+                rebindPackageAccounts($("#packagesList").ejDropDownList("instance").getSelectedValue());
+                rebindAccounts($("#packagesList").ejDropDownList("instance").getSelectedValue());
+            }).fail(function (jqXHR) {
+                console.log(jqXHR);
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+        }
+    };
+
+    function onSelectAccount(args) {
+        var pkgVal = $("#packagesList").ejDropDownList("instance").getSelectedValue();
+        var ctaVal = args.key;
+
+        var urlPackageAccountPost = getUrl("/api/PackageAccounts/" + pkgVal + "/" + ctaVal);
+
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            method: "POST",
+            url: urlPackageAccountPost
+        }).done(function () {
+            rebindPackageAccounts(pkgVal);
+            rebindAccounts(pkgVal);
+            $('#accountList').val("");
+        }).fail(function (jHXR, textStatus, err) {
+            alert(jHXR.responseJSON.Message);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+
+    };
+
+    function onSelectManager(args) {
+        var pkgVal = $("#packagesList").ejDropDownList("instance").getSelectedValue();
+        var managerVal = args.value;
+
+        var urlPackagePut = getUrl("/api/Packages/" + pkgVal + "?managerId=" + managerVal);
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            method: "PUT",
+            url: urlPackagePut
+        }).done(function () {
+
+        }).fail(function (jHXR, textStatus, err) {
+            alert(jHXR.responseJSON.Message);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+
+    };
+
+    function createPackagesGrid(editPermission) {
+
+
+        var columnsPackagesPopUp = [
+            { field: "Id", isPrimaryKey: true, visible: false },
+            { field: "Display", headerText: "Código y nombre", width: 100, textAlign: ej.TextAlign.Left }
+        ];
+
+        var editPackagesButtons = {
+            headerText: "Desvincular cuenta",
+            commands: [
+                {
+                    type: "details",
+                    buttonOptions: {
+                        contentType: "imageonly",
+                        prefixIcon: "e-cancel",
+                        width: "50",
+                        click: "onClickDesasociar"
+                    }
+                }
+            ],
+            isUnbound: true,
+            textAlign: ej.TextAlign.Center,
+            width: 50
+        };
+
+        var packagesToolItems = [ej.Grid.ToolBarItems.Search];
+        if (editPermission) {
+            columnsPackagesPopUp.push(editPackagesButtons);
+            packagesToolItems = [ej.Grid.ToolBarItems.Search];
+            $('#PackageCatalogButtons').show();
+            $('#ctaAsoc').show();
+            $('#accList').show();
+        } else {
+            $('#PackageCatalogButtons').hide();
+            document.getElementById('managerList_wrapper').disabled = true;
+            $('#ctaAsoc').hide();
+            $('#accList').hide();
+        }
+
+        $("#Grid").ejGrid({
+            dataSource: [],
+            allowScrolling: true,
+            allowSearching: true,
+            allowPaging: true,
+            toolbarSettings: { showToolbar: true, toolbarItems: packagesToolItems },
+            pageSettings: { pageSize: 3 },
+            width: 665,
+            columns: columnsPackagesPopUp
+        });
+    };
+
+    function viewPackagePermissions() {
+        var permissions = JSON.parse(sessionStorage.permissions);
+
+        for (i = 0; i < permissions.length; i++) {
+
+            var permission = permissions[i];
+            if (permission.Option == "Catalogs") {
+                createPackagesGrid(permission.Edit);
+            }
+        }
+    };
+    
+</script>

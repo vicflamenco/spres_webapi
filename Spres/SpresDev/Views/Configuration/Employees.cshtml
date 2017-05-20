@@ -1,0 +1,399 @@
+﻿
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    .e-grid .e-gridheader {
+        border-bottom-color: rgb(0, 48, 135);
+    }
+     .company {
+        display: flex;
+    }
+
+    .companyDropDown{
+        margin-left: 20px;
+    }
+
+    #gridEmployees{
+        margin-top: 20px;
+    }
+
+    #seccionListados > div {
+        display: inline-block;
+    }
+
+    #countBenefits {
+        text-align: right;
+    }
+
+    #btnBackContainer {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+
+</style>
+<div id="employeesList">
+    <div class="company">
+        <h5><strong>Región</strong></h5>
+        <div class="companyDropDown"><input type="text" id="companyList" /></div>
+    </div>
+    <div id="gridEmployees"></div>
+</div>
+
+<div id="benefits" style="display:none">
+    
+    <div>
+
+        <div id="seccionCabecera">
+            
+            <div class="ctrllabel" id="equ">
+                Asignación de beneficios para: <strong id="employeeSelected"></strong>
+                <p>(Seleccione un beneficio disponible y arrástrelo hacia beneficios asignados)</p>
+            </div>
+
+        </div>
+
+        <div id="seccionListados">
+
+            <div id="listadoDisponibles">
+                <p><strong>Beneficios disponibles</strong></p>
+                <div>
+                    <ul id="selectBenefit"></ul>
+                </div>
+            </div>
+
+            <div id="listadoAsignados">
+                <p><strong>Beneficios asignados</strong></p>
+                <div>
+                    <ul id="selectedBenefit"></ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="seccionPie">
+
+            <div id="countBenefits">
+
+            </div>
+
+            <div id="btnBackContainer">
+                <input class="btn btn-primary" type="button" value="Regresar" onclick="back()" />
+            </div>
+
+            <input id="idGridCurrent" value="" disabled hidden />
+
+        </div>
+
+    </div>
+    
+</div>
+
+
+<script type="text/javascript">
+
+    function employeesGridActionBegin(args) {
+        
+        if (args.requestType == "save") {
+            var dataItem = args.data;
+            dataItem.companyId = $('#companyList').ejDropDownList("instance").getSelectedValue();
+            var id = dataItem.Id;
+            var code = dataItem.Code;
+            var name = dataItem.Name;
+
+            if (id == "") {
+                var urlEmployee = getUrl("/api/Employees");
+                $.ajax({
+                    method: "GET",
+                    url: urlEmployee,
+                    data: { name: name, code: code}
+                }).done(function (data) {
+                    if (data) {
+                        args.cancel = true;
+                        alert("El código de empleado o el nombre de empleado ya existe.");
+                    }
+                });
+            }
+        }
+
+        if (args.requestType == "beginedit") {
+            $('#benefitsCommandButton').hide();
+        }
+    };
+
+    var dataManager = ej.DataManager({
+        url: getUrl("/api/Employees"),
+        adaptor: new ej.WebApiAdaptor()
+    });
+
+    function rebindEmployees(id) {
+        $("#gridEmployees").ejGrid("instance").option("query", new ej.Query().addParams("companyId", id));
+        $("#gridEmployees").ejGrid("instance").option("dataSource", dataManager);
+    };
+
+    $(function () {
+
+        var urlCompanies = getUrl("/api/Companies");
+        var dataMangerCompany = ej.DataManager({
+            url: urlCompanies,
+            adaptor: new ej.WebApiAdaptor(),
+        });
+
+        $('#companyList').ejDropDownList({
+            dataSource: dataMangerCompany,
+            fields: { text: "Name", value: "Id" },
+            watermarkText: "Seleccione región",
+            change: companiesListChange,
+            width: "300"
+        });
+
+        $('#selectedBenefit').ejListBox({
+            dataSource: [],
+            fields: { text: "Name" },
+            width: "550",
+            height: "275",
+            allowDragAndDrop: true,
+            itemDrop: function (args) {
+                var idEmployee = $('#idGridCurrent').val();
+                var idBenefit = args.items.data.Id;
+                var urlEmpBenefits = getUrl("/api/EmployeeBenefits/" + idEmployee + "/" + idBenefit);
+                $.ajax({
+                    method: "PUT",
+                    url: urlEmpBenefits
+                }).done(function () {
+                    countBenefits();
+                }).fail(function (e) {
+                    if (e.responseJSON.ExceptionType == "System.InvalidOperationException") {
+                        alert(e);
+                    } else {
+                        alert('Error:' + e.responseText);
+                    }
+                });
+            }
+        });
+
+        $('#selectBenefit').ejListBox({
+            allowDragAndDrop: true,
+            width: "550",
+            height: "275",
+            dataSource: [],
+            fields: { text: "Name" },
+
+            itemDrop: function (args) {
+
+                var idEmployee = $('#idGridCurrent').val();
+                var idBenefit = args.items.data.Id;
+                var urlEmpBenefits = getUrl("/api/EmployeeBenefits/" + idEmployee + "/" + idBenefit);
+                $.ajax({
+                    method: "POST",
+                    url: urlEmpBenefits
+                }).done(function () {
+                    countBenefits();
+                    
+                }).fail(function (e) {
+                    alert(e.responseJSON.Message);
+                });
+            }
+        });
+
+    });
+
+    function countBenefits() {
+        var urlBenefitsAssociated = getUrl("/api/EmployeeBenefits?employeeId=" + $('#idGridCurrent').val() + "&attached=true");
+        var dataMangerBenefitassociated = ej.DataManager({
+            url: urlBenefitsAssociated,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        dataMangerBenefitassociated.executeQuery(ej.Query()).done(function (e) {
+            $('#selectedBenefit').ejListBox("instance").option("dataSource", e.result);
+            $('#countBenefits').empty();
+            $('#countBenefits').append('<strong>' + e.result.length + ' beneficio(s) asiganado(s)<strong>');
+
+        });
+    };
+
+    function benefitsClick() {
+        
+        ej.WaitingPopup.showDefault();
+        $('#employeeSelected').empty();
+        
+        var grid = $('#gridEmployees').ejGrid("instance");
+        var index = this.element.closest("tr").index();
+        var record = grid.getCurrentViewData()[index];
+
+        $('#idGridCurrent').val(record.Id);
+        $('#employeeSelected').append(record.Name)
+        var urlEmpBenefitsFalse = getUrl("/api/EmployeeBenefits?employeeId=" + $('#idGridCurrent').val() + "&attached=false");
+        var urlEmpBenefitsTrue = getUrl("/api/EmployeeBenefits?employeeId=" + $('#idGridCurrent').val() + "&attached=true");
+        var dataMangerBenefit = ej.DataManager({
+            url: urlEmpBenefitsFalse,
+            adaptor: new ej.WebApiAdaptor()
+
+        });
+
+        dataMangerBenefit.executeQuery(ej.Query()).done(function (e) {
+            $('#selectBenefit').ejListBox("instance").option("dataSource", e.result);
+
+        });
+
+        var dataMangerBenefitassociated = ej.DataManager({
+            url: urlEmpBenefitsTrue,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        dataMangerBenefitassociated.executeQuery(ej.Query()).done(function (e) {
+            $('#selectedBenefit').ejListBox("instance").option("dataSource", e.result);
+            $('#countBenefits').empty();
+            $('#countBenefits').append('<strong>' + e.result.length + ' beneficio(s) asiganado(s)<strong>');
+
+            $('#benefits').show();
+            $('#employeesList').hide();
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    function companiesListChange(sender) {
+        
+        viewEmployeesPermissions(sender.value);
+    };
+
+    var dataPosition = [];
+    var dataCostCenters = [];
+
+    function createEmployeesGrid(editPermission, companyId){
+
+        var urlPositions = getUrl("/api/Positions?companyid=" + companyId);
+
+        var dataManagerPosition = ej.DataManager({
+            url: urlPositions,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        
+        var urlCostCenters = getUrl("/api/CostCenters?companyid=" + companyId + "&id=-1&allCostCenters=true");
+
+        var dataManagerCostCenters = ej.DataManager({
+            url: urlCostCenters,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        this.dataPosition = [];
+        this.dataCostCenters = [];
+
+        ej.WaitingPopup.showDefault();
+
+        dataManagerPosition.executeQuery(ej.Query()).done(function (e) {
+            for (var i = 0; i < e.result.length; i++) {
+                dataPosition.push({
+                    PositionId: e.result[i].Id,
+                    Name: e.result[i].Name
+                });
+            }
+            ej.WaitingPopup.showDefault();
+            dataManagerCostCenters.executeQuery(ej.Query()).done(function (e) {
+                for (var i = 0; i < e.result.length; i++) {
+                    dataCostCenters.push({
+                        CostCenterId: e.result[i].Id,
+                        Name: e.result[i].Name
+                    });
+                }
+
+                var columnsEmployeesPopup = [
+                    { field: "Id", isPrimaryKey: true, visible: false },
+                    { field: "Code", headerText: 'Código', width: 70, validationRules: { required: true, minlength: 3 } },
+                    { field: "Name", headerText: 'Nombre', validationRules: { required: true, minlength: 3 }, width: 240 },
+                    {
+                        field: "PositionId", headerText: 'Cargo', width: 180, editType: ej.Grid.EditingType.Dropdown, dataSource: dataPosition,
+                        foreignKeyValue: "Name", foreignKeyField: "PositionId"
+                    },
+                    { field: "UserId", headerText: 'Id de usuario', visible: false },
+                    {
+                        field: "CostCenterId", headerText: 'Centro de costo', width: 150, editType: ej.Grid.EditingType.Dropdown, dataSource: dataCostCenters,
+                        foreignKeyValue: "Name", foreignKeyField: "CostCenterId"
+                    },
+                    { field: "Salary", headerText: 'Salario', validationRules: { required: true, minlength: 1, number: true }, width: 65, textAlign: ej.TextAlign.Center, format: "{0:C}" },
+                    { field: "Variable", headerText: 'Salario variable', validationRules: { required: true, minlength: 1, number: true }, width: 100, textAlign: ej.TextAlign.Center, format: "{0:C}" },
+                    { field: "LifeInsurance", headerText: 'Seguro de vida', validationRules: { required: true, minlength: 1, number: true }, width: 115, textAlign: ej.TextAlign.Justify, format: "{0:C}" },
+                    { field: "Active", headerText: 'Activo', validationRules: {}, editType: ej.Grid.EditingType.Boolean, width: 60, textAlign: ej.TextAlign.Center },
+                    { field: "Responsabilities", headerText: 'Responsabilidad', visible: false }
+                ];
+
+                var editEmployeeButtons = {
+                    headerText: "Editar",
+                    commands: [{ type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                               { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                               { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } },
+                               {
+                                   type: "Benefits", buttonOptions:
+                                     {
+                                         contentType: "imageonly",
+                                         prefixIcon: "glyphicon glyphicon-heart",
+                                         click: "benefitsClick",
+                                         htmlAttributes: { id: "benefitsCommandButton" }
+                                     },
+                                   cssClass: "glyphicon-briefcase"
+                               },
+                    ],
+                    isUnbound: true,
+                    width: 135
+                };
+
+                var employeeToolItems = [ej.Grid.ToolBarItems.Search];
+                if (editPermission) {
+                    columnsEmployeesPopup.push(editEmployeeButtons);
+                    employeeToolItems = [ej.Grid.ToolBarItems.Add, ej.Grid.ToolBarItems.Search];
+                }
+
+                $("#gridEmployees").ejGrid({
+                    dataSource: [],
+                    allowPaging: true,
+                    allowSorting: true,
+                    allowSearching: true,
+                    allowScrolling: true,
+                    pageSettings: { pageSize: 5 },
+                    editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true },
+                    toolbarSettings: { showToolbar: true, toolbarItems: employeeToolItems },
+                    actionBegin: employeesGridActionBegin,
+                    actionFailure: function (args) {
+                        alert(args.error.responseJSON.Message);
+                        args.cancel = true;
+                    },
+                    endAdd: function () {
+                        this.refreshContent();
+                    },
+                    columns: columnsEmployeesPopup
+                });
+                rebindEmployees(companyId);
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    function back() {
+        $('#benefits').hide();
+        $('#employeesList').show();
+
+    };
+
+    function hideBenefitButton() {
+        $('#btnbenefits').hide();
+    };
+
+    function viewEmployeesPermissions(companyId) {
+        var permissions = JSON.parse(sessionStorage.permissions);
+
+        for (i = 0; i < permissions.length; i++) {
+
+            var permission = permissions[i];
+            if (permission.Option == "Catalogs") {
+                createEmployeesGrid(permission.Edit, companyId);
+            }
+        }
+    };
+
+</script>

@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "CostCenter";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<div>
+    
+</div>
+<div id="gridCostCenters"></div>
+
+<script type="text/javascript">
+
+    var editCostCenterColumnsAdded = false;
+    var dataModel = [];
+    var companiesModel = [];
+    var responsiblesModel = [];
+
+    var columnsCostCenterGrid = [
+        { field: "Id", isPrimaryKey: true, visible: false },
+        { field: "Code", headerText: "Código", textAlign: ej.TextAlign.Left, width: 85, allowEditing: false },
+        { field: "Name", headerText: "Nombre", textAlign: ej.TextAlign.Left, allowEditing: false, width: 95 },
+        { field: "CompanyId", headerText: "Región", dataSource: companiesModel, foreignKeyField: "CompanyId", foreignKeyValue: "Name", allowEditing: false, width: 95 },
+        { field: "ResponsibleGUID", headerText: "Responsable", editingType: ej.DropDownList, dataSource: responsiblesModel, foreignKeyField: "ResponsibleGUID", foreignKeyValue: "Name", allowEditing: true, width: 120 },
+        { field: "Mirror", headerText: "Espejo", textAlign: ej.TextAlign.Left, width: 85, validationRules: {minlength: 5 } }
+    ];
+
+    var editCostCentersButtons = {
+        headerText: "Editar",
+        commands: [{ type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                   { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                   { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } },
+                   { type: "Configuration", buttonOptions: { contentType: "imageonly", prefixIcon: "glyphicon glyphicon-remove", click: "detatchResponsibleClick" } }
+        ],
+        isUnbound: true,
+        width: 110
+    };
+
+    function editCostCenter(associate, id, guid, mirror) {
+
+        var espejoCECO = (mirror) ? mirror : "";
+        var urlCostcenterPut = getUrl("/api/CostCenters/" + id + "/" + guid + "/" + associate + "?mirror=" + espejoCECO);
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: urlCostcenterPut,
+            method: "PUT"
+        }).done(function (data) {
+            createCostCentersGrid();
+        }).fail(function (jqXHR) {
+            console.log(jqXHR);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    function saveCostCenter(args) {
+
+        if (args.requestType == "save") {
+            editCostCenter("true", args.data.Id, args.data.ResponsibleGUID, args.data.Mirror);
+        }
+        
+    };
+
+    function detatchResponsibleClick() {
+
+        var grid = this.element.closest(".e-grid").ejGrid("instance");
+        var index = this.element.closest("tr").index();
+        var record = grid.getCurrentViewData()[index];
+
+        if (record.ResponsibleGUID == null) {
+            alert("El centro de costos seleccionado no tiene un responsable asignado.");
+        } else {
+            var text = "¿Desea desvincular al responsable del centro de costos seleccionado?";
+            if (confirm(text)) {
+                editCostCenter("false", record.Id, record.ResponsibleGUID, record.Mirror);
+            }
+        }
+        
+    };
+
+    function createCostCentersGrid() {
+
+        var urlCostCenterDataManager = getUrl("/api/CostCenters/0?companyId=0&allCostCenters=true");
+        var dataManager = ej.DataManager({
+            url: urlCostCenterDataManager,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        var permissions = JSON.parse(sessionStorage.permissions);
+        for (var cc = 0; cc < permissions.length; cc++) {
+
+            var permission = permissions[cc];
+            if (permission.Option == "Catalogs") {
+                if (permission.Edit && !editCostCenterColumnsAdded) {
+                    columnsCostCenterGrid.push(editCostCentersButtons);
+                    editCostCenterColumnsAdded = true;
+                }
+            }
+        }
+        dataManager.executeQuery(ej.Query()).done(function (data) {
+
+            $("#gridCostCenters").ejGrid({
+                dataSource: data.result,
+                allowPaging: true,
+                editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: false, allowDeleting: false },
+                allowScrolling: true,
+                actionComplete: saveCostCenter,
+                pageSettings: { pageSize: 7 },
+                toolbarSettings: { showToolbar: true, toolbarItems: [ej.Grid.ToolBarItems.Search] },
+                columns: columnsCostCenterGrid
+            });
+        });
+    };
+
+    function populateResponsiblesAndCompaniesLists() {
+        var urlUser = getUrl("/api/Users");
+        var responsiblesDataManager = ej.DataManager({
+            url: urlUser,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        var urlCompanies = getUrl("/api/Companies");
+        var companyDataManager = ej.DataManager({
+            url: urlCompanies,
+            adaptop: new ej.WebApiAdaptor()
+        });
+
+        companyDataManager.executeQuery(ej.Query()).done(function (data) {
+
+            for (var i = 0; i < data.result.Items.length; i++) {
+                companiesModel.push({
+                    CompanyId: data.result.Items[i].Id,
+                    Name: data.result.Items[i].Name
+                });
+            }
+
+            responsiblesDataManager.executeQuery(ej.Query()).done(function (data2) {
+
+                for (var i = 0; i < data2.result.length; i++) {
+                    responsiblesModel.push({
+                        ResponsibleGUID: data2.result[i].Id,
+                        Name: data2.result[i].Name
+                    });
+                }
+                createCostCentersGrid();
+            });
+        });
+    };
+
+    $(function () {
+
+        populateResponsiblesAndCompaniesLists();
+    });
+</script>

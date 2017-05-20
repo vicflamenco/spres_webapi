@@ -1,0 +1,62 @@
+﻿<div>
+    <p id="informationDialogText" style="text-align:center;">
+    </p>
+    <hr />
+    <p style="text-align: center;">
+        <input type="button" id="btnCloseInformationDialog" class="btn" value="Cerrar" />
+    </p>
+</div>
+<style>
+    .e-title{
+        color:rgb(0, 48, 135);
+    }
+    .form-horizontal .control-label {
+            text-align: left !important;
+        }
+
+        .e-dialog>.e-header{
+                border-bottom: 3px solid rgb(0, 48, 135)!important;
+        }
+         .e-grid .e-gridheader {
+        border-bottom-color: rgb(0, 48, 135);
+    }
+        .e-pager .e-currentitem, .e-pager .e-currentitem:hover {
+            background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgb(0, 48, 135)),color-stop(100%,rgb(0, 48, 135)));
+        }
+
+        .e-grid tr.e-hover {
+            background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgb(196, 214, 0)),color-stop(100%,rgb(196, 214, 0)));
+        }
+
+        .e-btn.e-select:hover {
+            background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgb(0, 156, 222)),color-stop(100%,rgb(0, 156, 222)));
+        }
+
+        .btn:hover{
+            color: /*#000000 !important;*/rgb(0, 48, 135) !important;
+            background-color: rgb(192, 223, 22) !important;
+            border-color: rgb(192, 223, 22) !important;
+        }
+
+        .btn{
+            background-color: rgb(196, 214, 0) !important;
+            border-color: rgb(196, 214, 0) !important;
+            color: rgb(0, 48, 135) !important;
+        }
+
+        #informationDialogText{
+            color: rgb(0, 48, 135);
+        }
+</style>
+<script type="text/javascript">
+
+    $(function () {
+        $("#informationDialogText").text(sessionStorage.informationDialogText);
+        sessionStorage.removeItem("informationDialogText");
+    });
+
+    $("#btnCloseInformationDialog").click(function () {
+        $(this).closest(".e-dialog").data("ejDialog").close();
+    });
+
+</script>

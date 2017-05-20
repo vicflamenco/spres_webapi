@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PremiseBudgetDetail"
+    targetNamespace="http://tempuri.org/PremiseQuantityDetail.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/PremiseQuantityDetail.xsd"
+    xmlns:mstns="http://tempuri.org/PremiseQuantityDetail.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="ExpenseDetail">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Quantities" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Variable" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType mixed="true">
+                                    <xs:attribute name="Name"></xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>                        
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="Id"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

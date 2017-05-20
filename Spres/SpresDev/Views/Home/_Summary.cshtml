@@ -1,0 +1,196 @@
+﻿
+<div id="gridAccounts"></div>
+<style type="text/css">
+    .RowHeader, .Value, .e-grid .e-headercell {
+        font-size: 10px;
+        line-height: 10px;
+    }
+
+    .e-grid .e-columnheader {
+        line-height: 10px;
+    }
+
+    .e-grid .e-row {
+        line-height: 10px;
+    }
+
+    .e-grid .e-rowcell {
+        line-height: 12px;
+    }
+
+    html {
+        height: 100%;
+    }
+
+    body {
+        min-height: 100%;
+    }
+</style>
+<script type="text/javascript">
+
+    var fiscal = getFiscalYear();
+    var company = getCompanyId();
+    var costCenter = getCostCenterId();
+
+    $(function () {
+
+        var currency = getCurrencyId();
+
+        var url = "/api/Summaries/GetSummary/" + fiscal + "/" + company + "/" + costCenter + "/" + currency;
+
+        url = getUrl(url);
+        var dataManager = ej.DataManager({
+            url: url,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        dataManager.executeQuery(ej.Query()).done(function (data) {
+            var dataModel = data.result;
+
+            subChildGrid = {
+                dataSource: dataModel.SubChildrenLines,
+                queryString: "LevelTwoId",
+                allowPaging: false,
+                columns: subColumnsChild2,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader2,
+                allowSelection: true,
+                allowScrolling: false,
+                commonWidth: 85,
+                queryCellInfo: function (args) {
+                    var a = 3;
+                    var value = args.text.replace(",", "");
+                    var $element = $(args.cell);
+                    switch (args.column.headerText) {
+
+                        case "$":
+                            if (parseFloat(value) < 0)
+                                $element.css("color", "red").prepend("<img src='../Content/ejThemes/common-images/down.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img> ");
+                            else
+                                $element.css("color", "green").prepend("<img src='../Content/ejThemes/common-images/up.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img>");
+                            break;
+
+                        case "%":
+                            if (parseFloat(value) < 0)
+                                $element.css("color", "red").prepend("<img src='../Content/ejThemes/common-images/down.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img> ");
+                            else
+                                $element.css("color", "green").prepend("<img src='../Content/ejThemes/common-images/up.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img>");
+                            break;
+                    }
+                }
+
+            };
+
+            principalChild = {
+                dataSource: dataModel.ChildrenLines,
+                queryString: "LevelOneId",
+                allowPaging: false,
+                columns: subColumnsChild2,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader2,
+                allowSelection: true,
+                allowScrolling: false,
+                commonWidth: 85,
+                childGrid: subChildGrid,
+                queryCellInfo: function (args) {
+                    var a = 3;
+                    var value = args.text.replace(",", "");
+                    var $element = $(args.cell);
+                    switch (args.column.headerText) {
+
+                        case "$":
+                            if (parseFloat(value) < 0)
+                                $element.css("color", "red").prepend("<img src='../Content/ejThemes/common-images/down.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img> ");
+                            else
+                                $element.css("color", "green").prepend("<img src='../Content/ejThemes/common-images/up.png' height='15px' width='20x' style='padding-left:10px; float:right;' ></img>");
+                            break;
+
+                        case "%":
+                            if (parseFloat(value) < 0)
+                                $element.css("color", "red").prepend("<img src='../Content/ejThemes/common-images/down.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img> ");
+                            else
+                                $element.css("color", "green").prepend("<img src='../Content/ejThemes/common-images/up.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img>");
+                            break;
+                    }
+                }
+            };
+
+            $("#gridAccounts").ejGrid({
+                dataSource: dataModel.ParentLines,
+                childGrid: principalChild,
+                allowPaging: false,
+                columns: columns2,
+                commonWidth: 85,
+                allowScrolling: true,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader2,
+                isResponsive: true,
+                width: '98%',
+                queryCellInfo: function (args) {
+                    var a = 3;
+                    var value = args.text.replace(",", "");
+                    var $element = $(args.cell);
+                    switch (args.column.headerText) {
+
+                        case "$":
+                            if (parseFloat(value) < 0)
+                                $element.css("color", "red").prepend("<img src='../Content/ejThemes/common-images/down.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img> ");
+                            else
+                                $element.css("color", "green").prepend("<img src='../Content/ejThemes/common-images/up.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img>");
+                            break;
+
+                        case "%":
+                            if (parseFloat(value) < 0)
+                                $element.css("color", "red").prepend("<img src='../Content/ejThemes/common-images/down.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img> ");
+                            else
+                                $element.css("color", "green").prepend("<img src='../Content/ejThemes/common-images/up.png' height='15px' width='20px' style='padding-left:10px; float:right;' ></img>");
+                            break;
+                    }
+                }
+            });
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    });
+
+    var stackedHeader2 =
+    [
+        {
+            stackedHeaderColumns:
+            [
+                { headerText: "Variación total anual vs fcst", column: "VarTotalVSFrcstCoin,VarTotalVSFrcst", textAlign: ej.TextAlign.Center }
+                , { headerText: "Variación total anual vs real", column: "VarTotalVSPreviousRealCoin,VarTotalVSPreviousReal", textAlign: ej.TextAlign.Center }
+                , { headerText: "", column: "PreviousReal", textAlign: ej.TextAlign.Center }
+            ]
+        }
+    ];
+
+    var columns2 = [
+        { field: "Id", headerText: "Id", visible: false, isPrimaryKey: true },
+        { field: "Package", headerText: "Paquete", width: 200 },
+        { field: "CurrentTotal", headerText: "Total " + fiscal, format: "{0:n2}" },
+        { field: "PreviousForecast", headerText: "Forecast " + (fiscal - 1), format: "{0:n2}" },
+        { field: "VarTotalVSFrcstCoin", headerText: "Monto", textAlign: ej.TextAlign.Justify, format: "{0:n2}", textAlign: ej.TextAlign.Center },
+        { field: "VarTotalVSFrcst", headerText: "%", textAlign: ej.TextAlign.Justify, format: "{0:P}", textAlign: ej.TextAlign.Center },
+        { field: "PreviousReal", headerText: "Real " + (fiscal - 1), format: "{0:n2}" },
+        { field: "VarTotalVSPreviousRealCoin", headerText: "Monto", format: "{0:n2}", textAlign: ej.TextAlign.Center },
+        { field: "VarTotalVSPreviousReal", headerText: "%", format: "{0:P}", textAlign: ej.TextAlign.Center }
+    ];
+    var subColumnsChild2 = [
+        { field: "Id", headerText: "Id", visible: false, isPrimaryKey: true },
+        { field: "Code", headerText: "Código", width: 100 },
+        { field: "Description", headerText: "Descripción", width: 250 },
+        { field: "CurrentTotal", headerText: "Total " + fiscal, format: "{0:n2}" },
+        { field: "PreviousForecast", headerText: "Forecast " + (fiscal - 1), format: "{0:n2}" },
+        { field: "VarTotalVSFrcstCoin", headerText: "Monto", textAlign: ej.TextAlign.Justify, format: "{0:n2}", textAlign: ej.TextAlign.Center },
+        { field: "VarTotalVSFrcst", headerText: "%", textAlign: ej.TextAlign.Justify, format: "{0:P}", textAlign: ej.TextAlign.Center },
+        { field: "PreviousReal", headerText: "Real " + (fiscal - 1), format: "{0:n2}" },
+        { field: "VarTotalVSPreviousRealCoin", headerText: "Monto", format: "{0:n2}", textAlign: ej.TextAlign.Center },
+        { field: "VarTotalVSPreviousReal", headerText: "%", format: "{0:P}", textAlign: ej.TextAlign.Center }
+    ];
+
+    function refrescar() {
+        $("#gridAccounts").ejGrid("refreshContent", true);
+    };
+</script>
+

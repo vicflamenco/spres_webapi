@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "FilteredCostCenterView";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+
+<div id="treeView" class="expanded">
+
+</div>
+
+<script type="text/javascript">
+    var filteredCostCenters = [];
+    $(function () {
+        
+        //console.log("session: " + sessionStorage.getItem(filteredCostCenters));
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: getUrl("/api/CostCenters/GetAllCostCenters"),
+            method: "GET"
+        }).done(function (data) {
+
+            //console.log(data);
+
+            //for (var i = 0; i < data.length; i++) {
+            //    if (!data[i].Id) data[i].Id = 999999;
+            //    if (!data[i].ParentId === null) delete data[i].ParentId;
+            //    //if (!data[i].hasChild) delete data[i].hasChild;
+            //}
+
+            $("#treeView").ejTreeView(
+            {
+                height: 440,
+                fields: { id: "Id", parentId: "ParentId", text: "Name", hasChild: "hasChild", dataSource: data },
+                showCheckbox: true,
+                nodeCheck: function (args) {
+                    var idcc = args.id
+
+                    if (args.id == 9999999) {
+                        filteredCostCenters = [];
+                        sessionStorage.removeItem("filteredCostCenters");
+                        sessionStorage.setItem("filteredCostCenters", filteredCostCenters);
+                    } else if (args.id < 0) {
+                        var chkdNode = $("#treeView").ejTreeView("getCheckedNodes");
+                        filteredCostCenters = [];
+                        //console.log(chkdNode);
+                        for (var cn = 0; cn < chkdNode.length; cn++) {
+                            if (chkdNode[cn].id > 0) {
+                                console.log(chkdNode[cn].id);
+                                filteredCostCenters.push(chkdNode[cn].id);
+                                //console.log("array: " + filteredCostCenters);
+                                sessionStorage.setItem("filteredCostCenters", filteredCostCenters);
+                            }
+                        }
+                        //console.log(chkdNode);
+                        //console.log(chkdNode.length);
+                        //console.log("region");
+                    } else {
+                        filteredCostCenters.push(idcc);
+                        //console.log("array: " + filteredCostCenters);
+                        sessionStorage.setItem("filteredCostCenters", filteredCostCenters);
+                        //console.log("arrays---->" + sessionStorage.getItem("filteredCostCenters"));
+                        //console.log("------Session Storage------");
+                    }
+
+                    
+                },
+                nodeUncheck: function (args) {
+                    console.log(filteredCostCenters.length);
+                    console.log(filteredCostCenters);
+                    console.log("args--> " + args.id);
+                    var nodeChecked = $("#treeView").ejTreeView("getCheckedNodes");
+                    
+                    for (var nc = 0; nc < nodeChecked.length; nc++) {
+                        $("#treeView").ejTreeView("checkNode", nodeChecked[nc]);
+                        //sessionStorage.setItem("filteredCostCenters", filteredCostCenters);
+                    }
+
+                    if (args.id) {
+                        for (var nu = 0; nu <= filteredCostCenters.length; nu++) {
+
+                            if (args.id == filteredCostCenters[nu]) {
+                                delete filteredCostCenters[nu];
+                                filteredCostCenters.splice(nu, 1);
+                                sessionStorage.removeItem("filteredCostCenters");
+                                sessionStorage.setItem("filteredCostCenters", filteredCostCenters);
+                            }
+                        }
+                    }
+
+                    //if (args.id) {
+                    //    filteredCostCenters = [];
+                    //    sessionStorage.setItem("filteredCostCenters", filteredCostCenters);
+                    //} else {
+                    //    for (var nu = 0; nu <= filteredCostCenters.length; nu++) {
+
+                    //        if (args.id == filteredCostCenters[nu]) {
+                    //            delete filteredCostCenters[nu];
+                    //            filteredCostCenters.splice(nu, 1);
+                    //            sessionStorage.removeItem("filteredCostCenters");
+                    //            sessionStorage.setItem("filteredCostCenters", filteredCostCenters);
+                    //        }
+                    //    }
+                    //}
+                    console.log("session check: " + sessionStorage.getItem("filteredCostCenters"));
+                }
+            }
+            );
+
+            var sessionIdCC = sessionStorage.getItem("filteredCostCenters");
+            console.log("session: " + sessionIdCC);
+            if (sessionIdCC == "" || sessionIdCC == null) {
+                $("#treeView").ejTreeView("checkNode", 9999999);
+            } else {
+                var idcc = sessionStorage.getItem("filteredCostCenters").toString().split(",")
+                for (var secc = 0; secc < idcc.length; secc++) {
+                    if (idcc[secc] != " " && idcc[secc] != ",") {
+                        $("#treeView").ejTreeView("checkNode", idcc[secc]);
+                    }
+                    //console.log(idAcc[seAcc]);
+                }
+            }
+
+
+        }).fail(function (jqXHR, textStatus, errThrown) {
+            alert("Error");
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+
+
+
+
+
+
+    });
+</script>

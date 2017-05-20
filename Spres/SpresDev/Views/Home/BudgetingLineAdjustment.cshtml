@@ -1,0 +1,435 @@
+﻿<style type="text/css">
+
+    #monthsCollectionContainer {
+        width: 550px;
+        text-align: center;
+    }
+
+    #monthsLeftPanel {
+        display: inline-block;
+        width: 260px;
+    }
+
+    #monthsRightPanel {
+        display: inline-block;
+        width: 260px;
+    }
+
+    #informationCollectionContainer {
+        width: 500px;
+        text-align: center;
+    }
+
+    .informationContainer {
+        margin-bottom: 5px;
+    }
+
+    .monthLabel {
+        text-align: right;
+        width: 100px;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .monthInput {
+        display: inline-block;
+    }
+
+    .informationName {
+        text-align: right;
+        width: 140px;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .informationValue {
+        width: 140px;
+        display: inline-block;
+        text-align: left;
+    }
+
+    hr {
+        margin-top: 10px; 
+        margin-bottom: 10px;
+    }
+</style>
+
+<div>
+
+    <div>
+        <div style="display:inline-block;">
+            <label>
+                Línea presupuestaria: 
+            </label>
+        </div>
+        
+        <div style="display: inline-block;">
+            <span id="BudgetingLineDescription">
+
+            </span>
+        </div>
+    </div>
+
+    <hr />
+
+   <div id="contentContainer">
+
+       <div>
+           <label id="lblMonthlyAdjustment">Ajuste de presupuesto por mes</label>
+       </div>
+
+       <div id="monthsCollectionContainer">
+
+
+           <div id="monthsLeftPanel">
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Enero
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_1" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Febrero
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_2" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Marzo
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_3" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Abril
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_4" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Mayo
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_5" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Junio
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_6" />
+                   </div>
+
+               </div>
+
+           </div>
+
+
+
+           <div id="monthsRightPanel">
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Julio
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_7" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Agosto
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_8" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Septiembre
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_9" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Octubre
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_10" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Noviembre
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_11" />
+                   </div>
+
+               </div>
+
+               <div class="monthContainer">
+
+                   <div class="monthLabel">
+                       Diciembre
+                   </div>
+
+                   <div class="monthInput">
+                       <input type="text" id="AdjustmentMonth_12" />
+                   </div>
+
+               </div>
+
+           </div>
+
+       </div>
+
+       <hr />
+
+       <div>
+           <label id="lblAdjustmentSummary">
+               Resumen de ajuste
+           </label>
+       </div>
+
+       <div id="informationCollectionContainer">
+
+
+           <div class="informationContainer">
+               <div class="informationName">
+                   Total presupuestado:
+               </div>
+               <div class="informationValue">
+                   <span id="BudgetingLineTotal" style="font-weight:bold;">
+
+                   </span>
+               </div>
+           </div>
+
+
+           <div class="informationContainer">
+               <div class="informationName">
+                   Total ajustado:
+               </div>
+               <div class="informationValue">
+                   <span id="AdjustmentTotal" style="font-weight:bold;">
+
+                   </span>
+               </div>
+           </div>
+
+           <div class="informationContainer" id="adjustmentDifferenceContainer">
+               <div class="informationName">
+                   Diferencia:
+               </div>
+               <div class="informationValue">
+                   <span id="AdjustmentDifference" style="font-weight:bold;">
+
+                   </span>
+               </div>
+           </div>
+
+           <div style="text-align: center; margin-top: 10px;">
+               <input type="button" class="btn btn-default" value="Ajustar" id="btnOkAdjustBudgetingLine"/>
+               <input type="button" class="btn btn-default" value="Cancelar" id="btnCancelAdjustBudgetingLine"/>
+           </div>
+       </div>
+   </div>
+</div>
+
+<script type="text/javascript">
+
+    function closeBudgetingAdjustmentDialog() {
+        $("#budgetingLineAdjustmentDialog").data("ejDialog").close();
+    };
+
+    function convertToNumber(strVal) {
+
+        while (strVal.indexOf(",") >= 0) {
+            strVal = strVal.replace(",", "");
+        }
+        return new Number(strVal);
+    };
+
+    function formatNumber(num) {
+        var strNum = num.toLocaleString();
+        return (strNum.indexOf(".") < 0) ? strNum + ".00" : strNum;
+    };
+
+    function toggleOkButtonAndAdjustmentDifference(enable) {
+        if (enable) {
+            $("#btnOkAdjustBudgetingLine").removeAttr("disabled");
+            $("#adjustmentDifferenceContainer").hide();
+
+        } else {
+            $("#btnOkAdjustBudgetingLine").attr("disabled", "disabled");
+            $("#adjustmentDifferenceContainer").show();
+        }
+    };
+
+    function monthInputChange(args) {
+
+        var monthValues = $("#monthsCollectionContainer .monthInput .e-numerictextbox");
+
+        var adjustmentTotal = 0;
+        for (var i = 0; i < monthValues.length; i++) {
+            adjustmentTotal += $(monthValues[i]).data("ejNumericTextbox").getValue();
+        }
+
+        $("#AdjustmentTotal").text(formatNumber(adjustmentTotal));
+        $("#AdjustmentDifference").text(formatNumber(sessionStorage.SubLineTotal - adjustmentTotal));
+
+        var color = "orange";
+        if (adjustmentTotal > sessionStorage.SubLineTotal) {
+            color = "red";
+        } else if (adjustmentTotal == sessionStorage.SubLineTotal) {
+            color = color = "green";
+        }
+        $("#AdjustmentDifference").css("color", color);
+        toggleOkButtonAndAdjustmentDifference(adjustmentTotal == sessionStorage.SubLineTotal);
+        
+    };
+
+    $(function () {
+
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: getUrl("/api/Forecasts/BudgetingLineAdjustment/" + sessionStorage.subLineId),
+            method: "GET"
+        }).done(function (data) {
+
+            if (data.MonthDetails.length == 12) {
+
+                toggleOkButtonAndAdjustmentDifference(true);
+                $("#BudgetingLineDescription").text(data.Display);
+
+                var subLineTotal = convertToNumber(data.Total.toString())
+                sessionStorage.SubLineTotal = subLineTotal;
+
+                var total = formatNumber(subLineTotal);
+                $("#BudgetingLineTotal").text(total);
+                $("#AdjustmentTotal").text(total);
+                $("#AdjustmentDifference").text(0.00);
+                $("#lblAdjustmentSummary").text("Resumen de ajuste (" + data.CurrencyId + ")");
+                $("#lblMonthlyAdjustment").text("Ajuste de presupuesto por mes (" + data.CurrencyId + ")");
+
+                var currentMonth = new Date().getMonth() + 1;
+
+                for (var i = 1; i <= 12; i++) {
+                    $("#AdjustmentMonth_" + i).ejNumericTextbox({
+                        width: "120px",
+                        value: data.MonthDetails[i - 1],
+                        decimalPlaces: 2,
+                        minValue: 0,
+                        enabled: i > currentMonth,
+                        change: monthInputChange
+                    });
+                }
+                $("#btnCancelAdjustBudgetingLine").click(closeBudgetingAdjustmentDialog);
+
+            } else {
+                alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+            }
+
+        }).fail(function (jqXHR, textStatus, errThrown) {
+            if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                alert(jqXHR.responseJSON.Message);
+            } else {
+                alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+            }
+            closeBudgetingAdjustmentDialog();
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+
+        $("#btnCancelBudgetingLineAdjustment").click(closeBudgetingAdjustmentDialog);
+
+        $("#btnOkAdjustBudgetingLine").click(function () {
+
+            var monthValues = [];
+
+            for (var i = 1; i <= 12; i++) {
+                monthValues.push({ MonthNumber: i, Target: $("#AdjustmentMonth_" + i).data("ejNumericTextbox").getValue() });
+            }
+            
+            ej.WaitingPopup.showDefault();
+            $.ajax({
+                url: getUrl("/api/Forecasts/" + sessionStorage.subLineId),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                method: "PUT",
+                data: JSON.stringify(monthValues)
+            }).done(function (data) {
+
+                loadBudgetSheets();
+                closeBudgetingAdjustmentDialog();
+
+            }).fail(function (jqXHR, textStatus, errThrown) {
+                if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                    alert(jqXHR.responseJSON.Message);
+                } else {
+                    alert("Ocurrió un error al intentar ajustar los datos de la línea presupuestaria");
+                }
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+
+        });
+
+
+    });
+
+</script>

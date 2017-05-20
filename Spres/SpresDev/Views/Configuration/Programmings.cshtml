@@ -1,0 +1,610 @@
+﻿ @{
+    ViewBag.Title = "Programmings";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    .parametersContainer > div{
+        display: inline-block;
+    }
+    .parametersContainer #divButtonGroup {
+        display: inline-block;
+        vertical-align: bottom;
+    }
+    .addMarginTop {
+        margin-top: 7px;
+    }
+    .addMarginLeft {
+        margin-left: 15px;
+    }
+    hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="frame">
+
+    <div class="parametersContainer">
+
+        <div>
+            <label>
+                Región
+            </label>
+            <input type="text" id="companyList" />
+        </div>
+
+        <div id="divFiscalYear" class="addMarginLeft">
+            <label>
+                Año fiscal
+            </label>
+            <input type="text" id="FiscalYear" />
+            <input type="text" id="txtFiscalYear" class="form-control"
+                   style="display: none; width:250px" placeholder="Ingrese el año fiscal"
+                   onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+        </div>
+
+        <div id="divButtonGroup" class="addMarginLeft">
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="btnNew" title="Agregar un nuevo año fiscal">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="btnEdit" title="Editar el año fiscal seleccionado">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="btnSubmitNew" title="Guardar nuevo año fiscal">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="btnSave" title="Guardar cambios para el año fiscal seleccionado">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="btnCancel" style="display:none;" title="Cancelar cambios">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="btnSendEmail" style="display:none;" title="Enviar notificación por correo electrónico a los responsables de centros de costo">
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+
+    <hr />
+
+    <label>Período de ingreso de presupuesto</label>
+    <div class="parametersContainer">
+        <div>
+            <label>Inicio</label>
+            <input id="BudgetStartDate" type="text" />
+        </div>
+
+        <div class="addMarginLeft">
+            <label>Final</label>
+            <input id="BudgetEndDate" type="text" />
+        </div>
+    </div>
+
+    <hr />
+    
+    <label>Períodos de forecast</label>
+
+    <div class="addMarginTop">
+        <div id="gridForecastsConfiguration">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    var currentMode;
+    
+    function buildDate(date) {
+
+        date = new Date(date);
+        var dd = date.getDate();
+        var mm = date.getMonth() + 1;
+        var yyyy = date.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        return new Date(yyyy + '/' + mm + '/' + dd);
+    };
+
+    function gridForecastsConfigurationActionBegin(args) {
+
+        if (args.requestType == "save") {
+            var data = args.data;
+            
+            var startDate = data.StartDate;
+            var endDate = data.EndDate;
+            
+            if (startDate && endDate) {
+
+                if (new Date(endDate) < new Date(startDate)) {
+                    alert("La fecha de fin debe ser mayor que la fecha de inicio.");
+                    args.cancel = true;
+                } else {
+
+                    startDate = startDate.toISOString().substring(0, 10);
+                    endDate = endDate.toISOString().substring(0, 10);
+
+                    ej.WaitingPopup.showDefault();
+                    $.ajax({
+                        url: getUrl("/api/ForecastProgrammings"),
+                        method: "PUT",
+                        data: {
+                            FiscalYear: data.FiscalYear,
+                            CompanyId: data.CompanyId,
+                            Item: data.Item,
+                            StartDate: startDate,
+                            EndDate: endDate
+                        }
+                    }).done(function (data) {
+
+                    }).fail(function (jqXHR, textStatus, errThrown) {
+                        if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                            alert(jqXHR.responseJSON.Message);
+                        } else {
+                            alert("Ocurrió un error al intentar editar el período de forecast");
+                        }
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+                }
+            } else {
+                alert("Ingrese una fecha de inicio y una fecha final");
+            }
+        }
+    };
+
+    function getTodayDate() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        return new Date(yyyy + '/' + mm + '/' + dd);
+    }
+
+
+    $(function () {
+
+        var urlCompanies = getUrl("/api/Companies");
+        var dataMangerCompany = ej.DataManager({
+            url: urlCompanies,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        
+        $('#companyList').ejDropDownList({
+            width: '250px',
+            watermarkText: "Seleccione región",
+            fields: { text: "Name", value: "Id" },
+            change: companiesListChange,
+            dataSource: dataMangerCompany
+        });
+
+        $('#FiscalYear').ejDropDownList({
+            dataSource: [],
+            fields: { text: "FiscalYear", value: "FiscalYear" },
+            width: "250px",
+            watermarkText: "Seleccione un año fiscal",
+            change: UpdateBudgetDates
+        });
+        
+        $("#BudgetStartDate").ejDatePicker({
+            locale: "es-SV",
+            dateFormat: 'yyyy/MM/dd',
+            watermarkText: "Fecha inicio",
+            allowEdit: false,
+            width: "250px"
+        });
+
+        $("#BudgetEndDate").ejDatePicker({
+            locale: "es-SV",
+            dateFormat: 'yyyy/MM/dd',
+            watermarkText: "Fecha final",
+            allowEdit: false,
+            width: "250px"
+        });
+
+        var columnsForecastsConfiguration = [
+            { field: "FiscalYear", isPrimaryKey: true, visible: false },
+            { field: "CompanyId", isPrimaryKey: true, visible: false },
+            { field: "Item", isPrimaryKey: true, visible: false },
+            { field: "Display", headerText: "Item", width: "110px", allowEditing: false },
+            { field: "StartDate", headerText: "Inicio", width: "110px", format: "{0:yyyy/MM/dd}", editType: ej.Grid.EditingType.DatePicker, editParams: { locale: "es-SV" }, validationRules: { required: true } },
+            { field: "EndDate", headerText: "Fin", width: "110px", format: "{0:yyyy/MM/dd}", editType: ej.Grid.EditingType.DatePicker, editParams: { locale: "es-SV" }, validationRules: { required: true } }
+        ];
+
+        var editForecastsConfigurationButtons = {
+            headerText: "",
+            commands: [{ type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                        { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                        { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } },
+                        {
+                            type: "Benefits", buttonOptions:
+                            {
+                                contentType: "imageonly",
+                                prefixIcon: "glyphicon glyphicon-envelope",
+                                click: "sendForecastProgrammingEmailClick",
+                                htmlAttributes: { title: "Enviar correos electrónicos de notificación de fechas de período de forecast a responsables de centros de costo" }
+                            },
+                            
+                        }],
+            isUnbound: true,
+            width: 90
+        };
+
+        var permissions = JSON.parse(sessionStorage.permissions);
+        for (var i = 0; i < permissions.length; i++) {
+
+            var permission = permissions[i];
+            if (permission.Option == "Configuration") {
+                if (permission.Edit) {
+                    columnsForecastsConfiguration.push(editForecastsConfigurationButtons);
+                }
+            }
+        }
+
+        $("#gridForecastsConfiguration").ejGrid({
+            dataSource: [],
+            allowScrolling: true,
+            allowSearching: false,
+            editSettings: { allowEditing: true },
+            allowPaging: false,
+            columns: columnsForecastsConfiguration,
+            actionBegin: gridForecastsConfigurationActionBegin
+        });
+
+        ChangeMode('initial');
+        $('#btnNew').hide();           
+
+        $('#btnNew').click(function () {            
+            ChangeMode('create');
+        });
+
+        $('#btnCancel').click(function () {
+
+            if (currentMode == "create") { // cancel create
+                ChangeMode("initial");
+
+            }
+            else { // cancel edit
+                ChangeMode('index');
+
+                $("#btnEdit").show();
+                $("#btnSendEmail").show();
+            }
+        });
+
+        $('#btnEdit').click(function () {
+            ChangeMode('edit');
+        });
+
+        $('#btnSubmitNew').click(function () { // post new item
+            
+            var fiscalYear = $('#txtFiscalYear').val();
+            var budgetStartDate = $('#BudgetStartDate').ejDatePicker('instance').getValue();
+            var budgetEndDate = $('#BudgetEndDate').ejDatePicker('instance').getValue();
+            var CompanyId = $('#companyList').ejDropDownList('instance').getSelectedValue();
+
+            var fiscalYearNumber = parseInt(fiscalYear);
+
+            var dateStart = new Date(budgetStartDate);
+            var dateEnd = new Date(budgetEndDate);                    
+
+            if ( fiscalYear == "" || budgetStartDate == "" || budgetEndDate == "") {
+                alert("Ingrese año fiscal y seleccione fecha de inicio y fecha final.");
+            } else if (dateStart > dateEnd) {
+                alert("La fecha de inicio no puede ser mayor que la fecha de finalización.");
+            } else if (fiscalYearNumber <= 0 || fiscalYearNumber > 9999) {
+                alert("El año fiscal ingresado no tiene el formáto válido");
+            //} else if (dateEnd < getTodayDate()) {
+            //    alert("La fecha final no puede ser menor que la fecha actual");
+            } else {
+
+                var urlProgrammings = getUrl("/api/programmings");
+
+                ej.WaitingPopup.showDefault();
+
+                $.ajax({
+                    method: "POST",
+                    url: urlProgrammings,
+                    data: {
+                        FiscalYear: fiscalYear, BudgetStartDate: budgetStartDate, BudgetEndDate: budgetEndDate, companyId: CompanyId,
+                        startDate: budgetStartDate, endDate: budgetEndDate
+                    }
+                }).done(function () {
+
+                    var year = $('#txtFiscalYear').val();
+                    var companyId = $('#companyList').ejDropDownList('instance').getSelectedValue();
+                    rebindFiscalYears(companyId, year);
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.Message == "-1") {
+                        alert("El año fiscal ingresado ya existe para la región seleccionada.");
+                    } else if (jqXHR.status == 500) {
+                        alert("Ocurrió un error al intentar crear el período presupuestario.");
+                        var year = $('#txtFiscalYear').val();
+                        var companyId = $('#companyList').ejDropDownList('instance').getSelectedValue();
+                        rebindFiscalYears(companyId, year);
+                    }
+
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        });
+
+        $('#btnSave').click(function () { // Save edited item
+            var fiscalYear = $('#FiscalYear').ejDropDownList('instance').getSelectedValue();
+            var budgetStartDate = $('#BudgetStartDate').ejDatePicker('instance').getValue();
+            var budgetEndDate = $('#BudgetEndDate').ejDatePicker('instance').getValue();
+            var CompanyId = $('#companyList').ejDropDownList('instance').getSelectedValue();
+
+            var dateStart = new Date(budgetStartDate);
+            var dateEnd = new Date(budgetEndDate);            
+            
+            if (fiscalYear == "" || budgetStartDate == "" || budgetEndDate == "") {
+                alert("Ingrese año fiscal y seleccione fecha de inicio y fecha final.");
+            } else if (dateStart > dateEnd) {
+                alert('La fecha de inicio no puede ser mayor que la fecha de finalización.');
+            //} else if (dateEnd < getTodayDate()) {
+            //    alert("La Fecha Final no puede ser menor que la fecha actual");
+            } else {
+                var urlProgrammings = getUrl("/api/programmings");
+
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    method: "PUT",
+                    url: urlProgrammings,
+                    data: { FiscalYear: fiscalYear, BudgetStartDate: budgetStartDate, BudgetEndDate: budgetEndDate, companyId: CompanyId }
+                }).done(function () {
+
+                }).fail(function (jqXHR, textStatus, errThrown) {
+                    alert("Ocurrió un error al intentar modificar el período presupuestario.");
+                }).always(function () {
+
+                    $("#btnCancel").hide();
+                    $("#btnSave").hide();
+                    $("#btnEdit").show();
+                    $("#btnSendEmail").show();
+                    $("#btnNew").show();
+
+                    $('#FiscalYear').ejDropDownList('instance').enable();
+                    $('#companyList').ejDropDownList('instance').enable();
+                    $('#BudgetStartDate').ejDatePicker('instance').disable();
+                    $('#BudgetEndDate').ejDatePicker('instance').disable();
+
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        });
+
+        $("#btnSendEmail").click(function () {
+
+            var fiscalYear = $('#FiscalYear').ejDropDownList('instance').getSelectedValue();
+            var companyId = $('#companyList').ejDropDownList('instance').getSelectedValue();
+
+            if (fiscalYear == "" || companyId == "") {
+                alert("Seleccione un año fiscal y una región");
+            } else if (confirm("¿Desea enviar correos electrónicos de notificación de fechas de ingreso de presupuesto a los responsables de centros de costo de la región seleccionada")) {
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    url: getUrl("/api/Programmings?fiscalYear=" + fiscalYear + "&companyId=" + companyId),
+                    method: "PUT"
+                }).done(function (data) {
+                    alert("Los correos electrónicos se enviaron satisfactoriamente");
+                }).fail(function (jqXHR, textStatus, errThrown) {
+                    alert("Ocurrió un error al intentar enviar correos electrónicos de notificación");
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        });
+    });
+
+    function sendForecastProgrammingEmailClick() {
+
+        var grid = $('#gridForecastsConfiguration').ejGrid("instance");
+        var index = this.element.closest("tr").index();
+        var record = grid.getCurrentViewData()[index];
+
+        if (record.StartDate && record.EndDate && record.Item && record.CompanyId && record.FiscalYear) {
+            
+            if (confirm("¿Desea enviar correos electrónicos de notificación de fechas de ingreso de forecast a los responsables de centros de costo de la región seleccionada")) {
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    url: getUrl("/api/ForecastProgrammings?fiscalYear=" + record.FiscalYear + "&companyId=" + record.CompanyId + "&item=" + record.Item),
+                    method: "PUT"
+                }).done(function (data) {
+                    alert("Los correos electrónicos se enviaron satisfactoriamente");
+                }).fail(function (jqXHR, textStatus, errThrown) {
+                    alert("Ocurrió un error al intentar enviar correos electrónicos de notificación");
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        } else {
+            alert("Debe configurar las fechas de inicio y final del período de forecast seleccionado para poder enviar correos de notificación");
+        }
+    };
+
+    function permissionsEdit() {
+        var permissions = JSON.parse(sessionStorage.permissions);
+        var benefitsToolItems = [ej.Grid.ToolBarItems.Search];
+        for (var pr = 0; pr < permissions.length; pr++) {
+
+            var permission = permissions[pr];
+            if (permission.Option == "Configuration") {
+                if (!permission.Edit) {
+                    $('#divButtonGroup').hide();
+                }
+            }
+        }
+    };
+
+    function companiesListChange() {
+
+        var CompanyId = $('#companyList').ejDropDownList('instance').getSelectedValue();
+        rebindFiscalYears(CompanyId);
+        permissionsEdit();
+    };
+
+    function rebindFiscalYears(id, year) {
+
+        var urlDtProgrammings = getUrl("/api/Programmings?companyId=" + id);
+        var dataManagerProgrammings = ej.DataManager({
+            url: urlDtProgrammings,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        ej.WaitingPopup.showDefault();
+        dataManagerProgrammings.executeQuery(ej.Query()).done(function (e) {
+
+            $('#FiscalYear').ejDropDownList("instance").option("dataSource", e.result);
+            ChangeMode('index');
+            if (year) {
+                $('#FiscalYear').ejDropDownList("instance").selectItemByText(year);
+            }
+
+        }).fail(function (jqXHR, textStatus, errThrown) {
+            console.log(jqXHR.responseText);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    function UpdateBudgetDates() {
+
+        var FiscalYear = $('#FiscalYear').ejDropDownList('instance').getSelectedValue();
+        var CompanyId = $('#companyList').ejDropDownList('instance').getSelectedValue();
+
+        if (FiscalYear != "" && CompanyId != "") {
+
+            var urlProg = getUrl("/api/programmings/" + FiscalYear + "?companyId=" + CompanyId);
+
+            ej.WaitingPopup.showDefault();
+            $.getJSON(urlProg).done(function (data) {
+
+                $('#BudgetStartDate').ejDatePicker('instance').option('value', data.BudgetStartDate);
+                $('#BudgetEndDate').ejDatePicker('instance').option('value', data.BudgetEndDate);
+                $("#btnEdit").show();
+                $("#btnSendEmail").show();
+
+                if (data.ForecastProgrammings && data.ForecastProgrammings.length == 3) {
+                    $("#gridForecastsConfiguration").ejGrid("instance").option("dataSource", data.ForecastProgrammings);
+                } else {
+                    alert("Ocurrió un error al intentar cargar los períodos de ajuste de presupuesto (Forecast).");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                 console.log(textStatus + ". " + jqXHR.responseText);
+            }).always(function () {
+                 ej.WaitingPopup.hideDefault();
+            });
+
+            permissionsEdit();
+
+        } else {
+            $("#gridForecastsConfiguration").ejGrid("instance").option("dataSource", []);
+        }
+        
+    };
+
+    function ChangeMode(mode) {
+        currentMode = mode;
+        switch (mode) {
+            case "initial":
+                $("#txtFiscalYear").val("");
+                $("#txtFiscalYear").hide();
+                $("#btnSubmitNew").hide();
+                $("#btnCancel").hide();
+                $("#btnNew").show();
+                $("#btnEdit").hide();
+                $("#btnSave").hide();
+                $("#btnSendEmail").hide();
+                $("#FiscalYear").ejDropDownList('instance').wrapper.show();
+                $("#FiscalYear").ejDropDownList('instance').setSelectedValue('');
+                $("#BudgetStartDate").ejDatePicker('instance').disable();
+                $("#BudgetEndDate").ejDatePicker('instance').disable();
+                $("#FiscalYear").ejDropDownList('instance').enable();
+                $("#companyList").ejDropDownList('instance').enable();
+
+                $('#BudgetStartDate').ejDatePicker('instance').option("value", "");
+                $('#BudgetEndDate').ejDatePicker('instance').option("value", "");
+                break;
+
+            case "create":
+                $('#divFiscalYear').show();
+                $('#btnSubmitNew').show();
+                $('#btnCancel').show();
+                $('#btnNew').hide();
+                $('#btnEdit').hide();
+                $('#btnSave').hide();
+                $("#btnSendEmail").hide();
+                $('#txtFiscalYear').val('');
+                $('#txtFiscalYear').css("display","block");
+                $('#FiscalYear').ejDropDownList('instance').wrapper.hide();
+                $('#BudgetStartDate').ejDatePicker('instance').option('value', "");
+                $('#BudgetEndDate').ejDatePicker('instance').option('value', "");
+                $('#BudgetStartDate').ejDatePicker('instance').enable();
+                $('#BudgetEndDate').ejDatePicker('instance').enable();
+                $("#gridForecastsConfiguration").ejGrid("instance").option("dataSource", []);
+                break;
+
+            case "edit":
+                $('#divFiscalYear').show();
+                $('#btnSubmitNew').hide();
+                $('#btnCancel').show();
+                $('#btnNew').hide();
+                $('#btnEdit').hide();
+                $('#btnSave').show();
+                $("#btnSendEmail").hide();
+                $('#txtFiscalYear').hide();
+                $('#FiscalYear').ejDropDownList('instance').disable();
+                $('#companyList').ejDropDownList('instance').disable();
+                $('#BudgetStartDate').ejDatePicker('instance').enable();
+                $('#BudgetEndDate').ejDatePicker('instance').enable();
+                $('#BudgetStartDate').show();
+                $('#BudgetEndDate').show();
+                break;
+
+            default: //case: index
+                $('#divFiscalYear').show();
+                $('#btnSubmitNew').hide();
+                $('#btnCancel').hide();
+                $('#btnNew').show();
+                $('#btnEdit').hide();
+                $('#btnSave').hide();
+                $('#txtFiscalYear').hide();
+                $('#FiscalYear').ejDropDownList('instance').enable();
+                $('#companyList').ejDropDownList('instance').enable();
+                $('#FiscalYear').ejDropDownList('instance').wrapper.show();
+                $('#txtFiscalYear').val('');
+                $('#BudgetStartDate').ejDatePicker('instance').disable();
+                $('#BudgetEndDate').ejDatePicker('instance').disable();
+
+                var value = $('#FiscalYear').ejDropDownList('instance').getSelectedValue();
+
+                if (value != "") {
+                    UpdateBudgetDates();
+                }
+        
+                break;
+        }
+    };
+
+</script>

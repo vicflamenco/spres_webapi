@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Options";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<style>
+    .role {
+        display: flex;
+    }
+
+    .roleDropDown {
+        width: 200px;
+        margin-left: 20px;
+    }
+
+    .buttonBack {
+        margin-top: 25em;
+        margin-left: 21.6em;
+    }
+</style>
+
+<div id="rolesList">
+    <div class="role">
+        <h5><strong>Seleccione un rol: </strong></h5>
+        <div class="roleDropDown"><input type="text" id="roleList" /></div>
+    </div>
+    <div id="gridroles"></div>
+
+</div>
+
+<script type="text/javascript">
+
+    var urlPermissions = getUrl("/api/Permissions");
+    var dataManager = ej.DataManager({
+        url: urlPermissions,
+        adaptor: new ej.WebApiAdaptor()
+    });
+
+    function rebindroles(id) {
+        var urlPermissionsByRole = getUrl("/api/Permissions/GetByRole/" + id);
+        var dataManagerByRole = ej.DataManager({
+            url: urlPermissionsByRole,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        dataManagerByRole.executeQuery(ej.Query()).done(function (e) {
+            $("#gridroles").ejGrid("instance").option("dataSource", e.result);
+        });
+    }
+
+    function companiesListChange(sender) {
+        rebindroles(sender.value);
+    }
+
+    $(function () {
+        var urlRole = getUrl("/api/Roles");
+        var dataMangerRole = ej.DataManager({
+            url: urlRole,
+            adaptor: new ej.WebApiAdaptor(),
+        });
+
+
+        
+
+        $('#roleList').ejDropDownList({
+            dataSource: dataMangerRole,
+            fields: { text: "Name", value: "Id" },
+            watermarkText: "Seleccione rol",
+            change: companiesListChange,
+            width: 170
+        });
+
+
+        var columnsOptionsPopUp =[
+                    { field: "RolId", headerText: "Role id", visible: false },
+                    { field: "OptionId", isPrimaryKey: true, headerText: "Opción Id", visible: false },
+                    { field: "Display", headerText: "Opción", allowEditing: false, width: 110},
+                    { field: "View", headerText: "Ver", editType: ej.Grid.EditingType.Boolean, width: 80, textAlign: ej.TextAlign.Center },
+                    { field: "Edit", headerText: "Editar", editType: ej.Grid.EditingType.Boolean, width: 80, textAlign: ej.TextAlign.Center },
+                    { field: "AllCostCenters", headerText: "Todos los CECO", editType: ej.Grid.EditingType.Boolean, width: 100, textAlign: ej.TextAlign.Center },
+                    
+        ] ;
+
+        var editOptionsButtons = {
+            headerText: "Editar", textAlign: ej.TextAlign.Center,
+            commands: [{ type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                       { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                       { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } }
+            ],
+            isUnbound: true,
+            width: 115
+        };
+
+        var permissions = JSON.parse(sessionStorage.permissions);
+        for (var op = 0; op < permissions.length; op++) {
+            var permission = permissions[op];
+            if (permission.Option == "Security") {
+                if (permission.Edit) {
+                    columnsOptionsPopUp.push(editOptionsButtons);
+                }
+            }
+        }
+
+        $("#gridroles").ejGrid({
+            dataSource: [],
+            editSettings: { allowEditing: true, allowEditOnDblClick: false},
+            allowScrolling: true,
+            allowPaging: false,
+            actionBegin: function (args) {
+
+                if (args.requestType == "beginedit") {
+                    var index = args.rowIndex;
+                    var row = $("#gridroles").data("ejGrid").getRowByIndex(index);
+                }
+
+                if (args.requestType == "save") {
+                    var urlPermissionsPut = getUrl("/api/Permissions/");
+                    var dataItem = args.data;
+                    $.ajax({
+                        method: "PUT",
+                        url: urlPermissions,
+                        data: {
+                            RolId: dataItem.RolId,
+                            Option: dataItem.OptionId,
+                            View: dataItem.View,
+                            Edit: dataItem.Edit,
+                            Process: dataItem.Process,
+                            AllCostCenters: dataItem.AllCostCenters
+                        }
+                    }).done(function () {
+    
+                    }).fail(function (jHXR, textStatus, err) {
+                        alert(jHXR.responseJSON.Message);
+                    });
+                    
+                }
+            },
+            actionFailure: function(args){
+                alert(args.error.responseJSON.Message);
+            },
+            columns:columnsOptionsPopUp 
+        });
+
+    });
+
+
+</script>
+
+

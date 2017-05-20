@@ -1,0 +1,430 @@
+﻿
+<style type="text/css" class="cssStyles">
+    .btn-primary {
+        background-color: rgb(196, 214, 0) !important;
+        border-color: rgb(196, 214, 0) !important;
+        color: rgb(0, 48, 135) !important;
+        }
+
+    .btn-primary:hover {
+            color: /*#000000 !important;*/rgb(0, 48, 135) !important;
+            background-color: rgb(192, 223, 22) !important;
+            border-color: rgb(192, 223, 22) !important;
+        }
+    
+    #packageSelectionContainer {
+        margin-bottom: 15px;
+    }
+
+    #packageSelectionContainer > div {
+        display: inline-block;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    .cont {
+        padding: 10px 0 0 10px;
+    }
+</style>
+
+<div>
+    <div id="packageSelectionContainer">
+        <div>
+            <label>Paquete</label>
+        </div>
+        <div>
+            <input id="increasePackages" />
+        </div>
+        <div>
+            <input type="button" id="authorizeIncrease" value="Autorizar" class="btn btn-primary" />
+        </div>
+
+        <div>
+            <input type="button" id="rejectIncrease" value="Rechazar" class="btn btn-primary" />
+        </div>
+                
+    </div>
+</div>
+
+<div id="outterSpliter">
+    <div>
+        <div>
+            <div class="cont">
+                
+                <div id="budget"><label>Presupuesto</label></div>
+                <div id="gridBudget"></div>
+            
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="cont">
+        
+            <div id="increase"><label>Incremento</label></div>
+            <div id="gridBudgetIncrease"></div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        
+        $("#outterSpliter").ejSplitter({
+            width: 1350,
+            orientation: ej.Orientation.Horizontal,
+            properties: [{ paneSize: "50%", minSize: "50px", resizable: true }, { paneSize: "50%", minSize: "50px", resizable: true }],
+            enableResize: true,
+            enableAutoResize: false,
+            enableRTL: false
+        });
+        
+        var cmpny = sessionStorage.getItem("companyIncrease");
+        var fiscalYear = sessionStorage.getItem("fiscalYearIncrease");
+        var costCenter = sessionStorage.getItem("costCenterIncrease");
+
+        $("#increasePackages").ejDropDownList({
+            dataSource: JSON.parse(sessionStorage.getItem("increasedPackages")),
+            fields: { text: "Name", value: "Id" },
+            watermarkText: "Seleccione paquete",
+            change: IncreasePackagesChange,
+            width: "200",
+            enabled: true
+        });
+
+        $("#rejectIncrease").click(function () {
+
+            var pkgId = sessionStorage.getItem("packageIdIncrease");
+            var pkg = $("#increasePackages").ejDropDownList("getSelectedValue");
+
+            if (pkg != "") {
+
+                if (confirm("¿Desea rechazar los incrementos al paquete seleccionado?") == true) {
+                    
+                    ej.WaitingPopup.showDefault();
+                    $.ajax({
+                        method: "PUT",
+                        url: getUrl("/api/Forecasts/RejectIncrease/" + cmpny + "/" + fiscalYear + "/" + costCenter + "/" + pkgId),
+                    }).done(function () {
+
+                        alert("Incremento ha sido rechazado satisfactoriamente");
+                        $("#gridBudget").ejGrid("destroy");
+                        $("#gridBudgetIncrease").ejGrid("destroy");
+
+                        sessionStorage.removeItem("increasedPackages");
+                        $('#increasePackages').ejDropDownList("destroy");
+                        IncreasesRequest();
+                        $("#increasePackages").ejDropDownList({
+                            dataSource: JSON.parse(sessionStorage.getItem("increasedPackages")),
+                            fields: { text: "Name", value: "Id" },
+                            watermarkText: "Seleccione paquete",
+                            change: IncreasePackagesChange,
+                            width: "200",
+                            enabled: true
+                        });
+                    }).fail(function (jqXHR, textStatus, errThrown) {
+                        if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                            alert(jqXHR.responseJSON.Message);
+                        } else {
+                            alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+                        }
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+                }
+
+            } else {
+                alert("Seleccione el paquete a revisar");
+            }
+        });
+
+        $("#authorizeIncrease").click(function () {
+            var pkgId = sessionStorage.getItem("packageIdIncrease");
+            var pkg = $("#increasePackages").ejDropDownList("getSelectedValue");
+
+            if (pkg != "") {
+                
+                if (confirm("¿Desea autorizar los incrementos al paquete seleccionado?") == true) {
+                    var urlAuthorizeIncrease = getUrl("/api/Forecasts/AuthorizeIncrease/" + cmpny + "/" + fiscalYear + "/" + costCenter + "/" + pkgId);
+
+                    ej.WaitingPopup.showDefault();
+                    $.ajax({
+                        method: "PUT",
+                        url: urlAuthorizeIncrease,
+                    }).done(function () {
+                        alert("Incremento ha sido autorizado satisfactoriamente");
+                        $("#gridBudget").ejGrid("destroy");
+                        $("#gridBudgetIncrease").ejGrid("destroy");
+                        
+                        sessionStorage.removeItem("increasedPackages");
+                        $('#increasePackages').ejDropDownList("destroy");
+                        IncreasesRequest();
+                        $("#increasePackages").ejDropDownList({
+                            dataSource: JSON.parse(sessionStorage.getItem("increasedPackages")),
+                            fields: { text: "Name", value: "Id" },
+                            watermarkText: "Seleccione paquete",
+                            change: IncreasePackagesChange,
+                            width: "200",
+                            enabled: true
+                        });
+                    }).fail(function (jqXHR, textStatus, errThrown) {
+                        if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                            alert(jqXHR.responseJSON.Message);
+                        } else {
+                            alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+                        }
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+                }
+
+            } else {
+                alert("Seleccione el paquete a revisar");
+            }
+        });
+        
+    });
+
+    var stackedHeader =
+[
+    {
+        stackedHeaderColumns:
+        [
+            { headerText: "Enero", column: "January_Quantity,January_UnitCost,January_Target,January_Real,January_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Febrero", column: "February_Quantity,February_UnitCost,February_Target,February_Real,February_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Marzo", column: "March_Quantity,March_UnitCost,March_Target,March_Real,March_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Abril", column: "April_Quantity,April_UnitCost,April_Target,April_Real,April_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Mayo", column: "May_Quantity,May_UnitCost,May_Target,May_Real,May_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Junio", column: "June_Quantity,June_UnitCost,June_Target,June_Real,June_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Julio", column: "July_Quantity,July_UnitCost,July_Target,July_Real,July_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Agosto", column: "August_Quantity,August_UnitCost,August_Target,August_Real,August_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Septiembre", column: "September_Quantity,September_UnitCost,September_Target,September_Real,September_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Octubre", column: "October_Quantity,October_UnitCost,October_Target,October_Real,October_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Noviembre", column: "November_Quantity,November_UnitCost,November_Target,November_Real,November_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Diciembre", column: "December_Quantity,December_UnitCost,December_Target,December_Real,December_Forecast", textAlign: ej.TextAlign.Center }
+            , { headerText: "Resumen", column: "Summary_YearTotal,Summary_PreviousYear,Summary_DifferenceTotal,Summary_DifferencePercentage", textAlign: ej.TextAlign.Center }
+        ]
+    }
+];
+
+    var columns = [
+        { cssClass: "RowHeader", field: "Id", customAttributes: { "data-month": "" }, headerText: "Id", visible: false, isPrimaryKey: true },
+        { cssClass: "RowHeader", field: "AccountId", customAttributes: { "data-month": "" }, headerText: "AccountId", visible: false },
+        { cssClass: "RowHeader", field: "ParentId", customAttributes: { "data-month": "" }, headerText: "ParentId", visible: false },
+        { cssClass: "RowHeader", field: "PremiseId", customAttributes: { "data-month": "" }, headerText: "PremiseId", visible: false },
+        { cssClass: "RowHeader Description", field: "Description", customAttributes: { "data-month": "Description" }, headerText: "Descripción", width: 300, validationRules: { required: true } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Enero" }, field: "January_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Enero" }, field: "January_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Enero" }, field: "January_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Enero" }, field: "January_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Enero" }, field: "January_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Febrero" }, field: "February_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Febrero" }, field: "February_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Febrero" }, field: "February_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Febrero" }, field: "February_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Febrero" }, field: "February_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Marzo" }, field: "March_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Marzo" }, field: "March_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Marzo" }, field: "March_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Marzo" }, field: "March_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Marzo" }, field: "March_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Abril" }, field: "April_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Abril" }, field: "April_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Abril" }, field: "April_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Abril" }, field: "April_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Abril" }, field: "April_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Mayo" }, field: "May_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Mayo" }, field: "May_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Mayo" }, field: "May_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Mayo" }, field: "May_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Mayo" }, field: "May_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Junio" }, field: "June_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Junio" }, field: "June_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Junio" }, field: "June_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Junio" }, field: "June_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Junio" }, field: "June_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Julio" }, field: "July_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Julio" }, field: "July_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Julio" }, field: "July_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Julio" }, field: "July_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Julio" }, field: "July_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Agosto" }, field: "August_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Agosto" }, field: "August_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Agosto" }, field: "August_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Agosto" }, field: "August_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Agosto" }, field: "August_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Septiembre" }, field: "September_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Septiembre" }, field: "September_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Septiembre" }, field: "September_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Septiembre" }, field: "September_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Septiembre" }, field: "September_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Octubre" }, field: "October_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Octubre" }, field: "October_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Octubre" }, field: "October_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Octubre" }, field: "October_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Octubre" }, field: "October_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Noviembre" }, field: "November_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Noviembre" }, field: "November_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Noviembre" }, field: "November_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Noviembre" }, field: "November_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Noviembre" }, field: "November_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "Diciembre" }, field: "December_Quantity", headerText: "Cantidad", textAlign: ej.TextAlign.Center, validationRules: { number: true } },
+        { cssClass: "Value", customAttributes: { "data-month": "Diciembre" }, field: "December_UnitCost", headerText: "C. U.", format: "{0:n2}", textAlign: ej.TextAlign.Right, validationRules: { number: true }, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Diciembre" }, field: "December_Target", headerText: "Meta", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Diciembre" }, field: "December_Real", headerText: "Real", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+        { cssClass: "Value", customAttributes: { "data-month": "Diciembre" }, field: "December_Forecast", headerText: "Forecast", format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false, editType: ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 2 } },
+
+        { cssClass: "Value", customAttributes: { "data-month": "" }, field: "Summary_YearTotal", headerText: 'Presente', format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false },
+        { cssClass: "Value", customAttributes: { "data-month": "" }, field: "Summary_PreviousYear", headerText: 'Anterior', format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false },
+        { cssClass: "Value", customAttributes: { "data-month": "" }, field: "Summary_DifferenceTotal", headerText: 'Dif', format: "{0:n2}", textAlign: ej.TextAlign.Right, allowEditing: false },
+        { cssClass: "Value", customAttributes: { "data-month": "" }, field: "Summary_DifferencePercentage", headerText: 'Dif %', format: "{0:P}", textAlign: ej.TextAlign.Right, allowEditing: false }
+    ];
+    function IncreasePackagesChange(sender) {
+        
+        sessionStorage.setItem("packageIdIncrease", sender.value);
+        var pkgId = sessionStorage.getItem("packageIdIncrease");
+        var cmpny = sessionStorage.getItem("companyIncrease");
+        var fiscalYear = sessionStorage.getItem("fiscalYearIncrease");
+        var costCenter = sessionStorage.getItem("costCenterIncrease");
+
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: getUrl("/api/Forecasts/ComparisonData/"+cmpny+"/"+fiscalYear+"/"+costCenter+"/"+pkgId),
+            method: "GET"
+        }).done(function (data) {
+            
+            var subChildGrid = {
+                dataSource: data[0].SubChildrenLines,
+                queryString: "LevelTwoId",
+                allowPaging: false,
+                columns: columns,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader,
+                allowSelection: true,
+                rowSelecting: unselectAllRows,
+                rowSelected: function (args) {
+                    sessionStorage.subLineId = args.data.Id;
+                    var generateButton = $("#defaultRibbon_generate");
+                    if (generateButton.length) {
+                        generateButton.data("ejButton").disable();
+                    }
+
+                },
+                allowScrolling: false,
+                commonWidth: 60,
+                editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: false },
+                recordDoubleClick: subChildGridRecordDoubleClick,
+                actionBegin: subChildGridActionBegin
+            };
+
+            var principalChild = {
+                dataSource: data[0].ChildrenLines,
+                queryString: "LevelOneId",
+                allowPaging: false,
+                columns: columns,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader,
+                allowSelection: true,
+                allowScrolling: false,
+                commonWidth: 60,
+                rowSelecting: unselectAllRows,
+                rowSelected: principalChildRowSelected,
+                childGrid: subChildGrid
+            };
+
+           $("#gridBudgetIncrease").ejGrid({
+                dataSource: data[0].ParentLines,
+                childGrid: principalChild,
+                allowPaging: false,
+                columns: columns,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader,
+                allowSelection: false,
+                commonWidth: 60,
+                allowScrolling: true,
+                isResponsive: false
+            });
+
+            var subChildGridIncrease = {
+                dataSource: data[1].SubChildrenLines,
+                queryString: "LevelTwoId",
+                allowPaging: false,
+                columns: columns,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader,
+                allowSelection: true,
+                rowSelecting: unselectAllRows,
+                rowSelected: function (args) {
+                    sessionStorage.subLineId = args.data.Id;
+                    var generateButton = $("#defaultRibbon_generate");
+                    if (generateButton.length) {
+                        generateButton.data("ejButton").disable();
+                    }
+
+                },
+                allowScrolling: false,
+                commonWidth: 60,
+                editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: false },
+                recordDoubleClick: subChildGridRecordDoubleClick,
+                actionBegin: subChildGridActionBegin
+            };
+
+            var principalChildIncrease = {
+                dataSource: data[1].ChildrenLines,
+                queryString: "LevelOneId",
+                allowPaging: false,
+                columns: columns,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader,
+                allowSelection: true,
+                allowScrolling: false,
+                commonWidth: 60,
+                rowSelecting: unselectAllRows,
+                rowSelected: principalChildRowSelected,
+                childGrid: subChildGridIncrease
+            };
+
+            $("#gridBudget").ejGrid({
+                dataSource: data[1].ParentLines,
+                childGrid: principalChildIncrease,
+                allowPaging: false,
+                columns: columns,
+                showStackedHeader: true,
+                stackedHeaderRows: stackedHeader,
+                allowSelection: false,
+                commonWidth: 60,
+                allowScrolling: true,
+                isResponsive: false
+            });
+
+
+            console.log(data[0].ParentLines[0]);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+</script>
+<style type="text/css" class="cssStyles">
+    h3 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .content {
+        padding: 15px;
+    }
+</style>
+

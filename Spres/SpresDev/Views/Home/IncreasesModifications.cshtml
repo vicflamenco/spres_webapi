@@ -1,0 +1,589 @@
+﻿<style type="text/css">
+    #IM_monthsCollectionContainer {
+        width: 760px;
+        text-align: left;
+    }
+
+    #IM_monthsLeftPanel {
+        display: inline-block;
+        width: 375px;
+        border-right: 1px solid rgba(0,0,0,0.3)
+    }
+
+    #IM_monthsRightPanel {
+        display: inline-block;
+        width: 375px;
+    }
+
+    #IM_informationCollectionContainer {
+        width: 760px;
+        text-align: center;
+    }
+
+    .IM_informationContainer {
+        margin-bottom: 5px;
+    }
+
+    .IM_monthLabel {
+        text-align: right;
+        width: 85px;
+        display: inline-block;
+    }
+
+    .IM_monthContainer:first-child {
+        border-bottom: 1px solid rgba(0,0,0,0.3);
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+
+    .IM_monthTarget {
+        text-align: right;
+        width: 80px;
+        display: inline-block;
+        margin-right: 3px;
+    }
+
+    .IM_monthInput {
+        display: inline-block;
+        text-align: center;
+        width: 110px;
+        margin-right: 3px;
+    }
+
+    .IM_monthResult {
+        text-align: left;
+        width: 80px;
+        display: inline-block;
+    }
+
+    .IM_informationName {
+        text-align: right;
+        width: 140px;
+        display: inline-block;
+    }
+
+    .IM_informationValue {
+        width: 140px;
+        display: inline-block;
+        text-align: left;
+    }
+
+    hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div>
+
+    <div>
+        <div style="display:inline-block;">
+            <label>
+                Cuenta contable: 
+            </label>
+        </div>
+
+        <div style="display: inline-block;">
+            <span id="IM_BudgetingLineDescription">
+
+            </span>
+        </div>
+    </div>
+
+    <hr />
+
+    <div id="IM_contentContainer">
+
+        <div>
+            <label id="IM_lblMonthlyAdjustment">Incremento de presupuesto por mes</label>
+        </div>
+
+        <div id="IM_monthsCollectionContainer">
+
+
+            <div id="IM_monthsLeftPanel">
+
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        <strong>Mes</strong>
+                    </div>
+
+                    <div class="IM_monthTarget">
+                        <strong>Meta</strong>
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <strong>Incremento</strong>
+                    </div>
+
+                    <div class="IM_monthResult">
+                        <strong>Resultado</strong>
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Enero:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_1" />
+                    </div>
+
+                    <div class="IM_monthResult">
+                        
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Febrero:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_2" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Marzo:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_3" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Abril:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_4" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Mayo:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_5" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Junio:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_6" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div id="IM_monthsRightPanel">
+
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        <strong>Mes</strong>
+                    </div>
+
+                    <div class="IM_monthTarget">
+                        <strong>Meta</strong>
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <strong>Incremento</strong>
+                    </div>
+
+                    <div class="IM_monthResult">
+                        <strong>Resultado</strong>
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Julio:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_7" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Agosto:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_8" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Septiembre:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_9" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Octubre:
+                    </div>
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_10" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Noviembre:
+                    </div>
+                    
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_11" />
+                    </div>
+
+                    <div class="IM_monthResult">
+                        
+                    </div>
+
+                </div>
+
+                <div class="IM_monthContainer">
+
+                    <div class="IM_monthLabel">
+                        Diciembre:
+                    </div>
+
+                    <div class="IM_monthTarget">
+
+                    </div>
+
+                    <div class="IM_monthInput">
+                        <input type="text" id="IM_AdjustmentMonth_12" />
+                    </div>
+
+                    <div class="IM_monthResult">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <div>
+            <label id="IM_lblAdjustmentSummary">
+                Resumen de incrementos
+            </label>
+        </div>
+
+        <div id="IM_informationCollectionContainer">
+
+
+            <div class="IM_informationContainer">
+                <div class="IM_informationName">
+                    Total presupuestado:
+                </div>
+                <div class="IM_informationValue">
+                    <span id="IM_BudgetingLineTotal" style="font-weight:bold;">
+
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="IM_informationContainer">
+                <div class="IM_informationName">
+                    Total incrementos:
+                </div>
+                <div class="IM_informationValue">
+                    <span id="IM_AdjustmentTotal" style="font-weight:bold;">
+
+                    </span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 10px;">
+                <input type="button" class="btn btn-default" value="Solicitar incremento" id="IM_btnOkAdjustBudgetingLine" />
+                <input type="button" class="btn btn-default" value="Cancelar" id="IM_btnCancelAdjustBudgetingLine" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function closeIncreasesModificationsDialog() {
+        $("#increasesModificationsDialog").data("ejDialog").close();
+    };
+
+    function convertToNumber(strVal) {
+
+        while (strVal.indexOf(",") >= 0) {
+            strVal = strVal.replace(",", "");
+        }
+        return new Number(strVal);
+    };
+
+    function formatNumber(num) {
+        var strNum = num.toString();
+        return (strNum.indexOf(".") < 0) ? strNum + ".00" : strNum;
+    };
+
+    function monthInputChange(args) {
+
+        var inputControl = $("#" + args.model.name);
+        var increase = convertToNumber(inputControl.data("ejNumericTextbox").getValue().toString());
+
+        var inputContainer = inputControl.parent().parent().parent();
+
+        var targetContainer = inputContainer.prev();
+        var resultContainer = inputContainer.next();
+        
+        var target = convertToNumber(targetContainer.text());
+        resultContainer.text(formatNumber(increase + target));
+        
+        resultContainer.css("color", (increase > 0) ? "red" : "black");
+
+        var monthValues = $("#IM_monthsCollectionContainer .IM_monthInput .e-numerictextbox");
+
+        var adjustmentTotal = 0;
+        for (var i = 0; i < monthValues.length; i++) {
+            adjustmentTotal += convertToNumber($(monthValues[i]).data("ejNumericTextbox").getValue().toString());
+        }
+
+        $("#IM_AdjustmentTotal").text(formatNumber(adjustmentTotal));
+
+        var color = "orange";
+        if (adjustmentTotal > sessionStorage.LineTotal) {
+            color = "red";
+        } else if (adjustmentTotal == sessionStorage.LineTotal) {
+            color = "green";
+        }
+    };
+
+    $(function () {
+
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: getUrl("/api/Forecasts/IncreasesModifications/" + sessionStorage.lineId),
+            method: "GET"
+        }).done(function (data) {
+
+            if (data.MonthDetails.length == 12) {
+
+                $("#IM_BudgetingLineDescription").text(data.Display);
+
+                var LineTotal = convertToNumber(data.Total.toString())
+                sessionStorage.LineTotal = LineTotal;
+
+                var total = formatNumber(LineTotal);
+                $("#IM_BudgetingLineTotal").text(total);
+                $("#IM_AdjustmentTotal").text("0.00");
+                $("#IM_lblAdjustmentSummary").text("Resumen de incrementos (" + data.CurrencyId + ")");
+                $("#IM_lblMonthlyAdjustment").text("Incrementos de presupuesto por mes (" + data.CurrencyId + ")");
+
+                var currentMonth = new Date().getMonth() + 1;
+
+                for (var i = 1; i <= 12; i++) {
+
+                    var inputControl = $("#IM_AdjustmentMonth_" + i);
+                    var monthInputDiv = inputControl.parent();
+                    var targetDiv = monthInputDiv.prev();
+                    var resultDiv = monthInputDiv.next();
+                    var formattedNumber = formatNumber(data.MonthDetails[i - 1]);
+
+                    targetDiv.text(formattedNumber);
+                    resultDiv.text(formattedNumber);
+
+                    inputControl.ejNumericTextbox({
+                        width: "110px",
+                        value: 0,
+                        decimalPlaces: 2,
+                        minValue: 0,
+                        enabled: i > currentMonth,
+                        change: monthInputChange
+                    });
+                }
+                $("#IM_btnCancelBudgetingLineAdjustment").click(closeIncreasesModificationsDialog);
+            } else {
+                alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+                closeIncreasesModificationsDialog();
+            }
+
+        }).fail(function (jqXHR, textStatus, errThrown) {
+            if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                alert(jqXHR.responseJSON.Message);
+            } else {
+                alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+            }
+            closeIncreasesModificationsDialog();
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+
+        $("#IM_btnCancelAdjustBudgetingLine").click(closeIncreasesModificationsDialog);
+
+        $("#IM_btnOkAdjustBudgetingLine").click(function () {
+
+            var monthValues = [];
+            var sum = 0;
+
+            for (var i = 1; i <= 12; i++) {
+
+                var target = $("#IM_AdjustmentMonth_" + i).data("ejNumericTextbox").getValue();
+                monthValues.push({ MonthNumber: i, Target: target });
+                sum += target;
+            }
+            
+            if (sum > 0) {
+
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+                    url: getUrl("/api/Forecasts/IncreasesModifications/" + sessionStorage.lineId),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    method: "PUT",
+                    data: JSON.stringify(monthValues)
+                }).done(function (data) {
+
+                    alert("La solicitud de incremento de presupuesto fue enviada con éxito.");
+                    loadBudgetSheets();
+                    
+
+                }).fail(function (jqXHR, textStatus, errThrown) {
+                    if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                        alert(jqXHR.responseJSON.Message);
+                    } else if (jqXHR.status == 500 && jqXHR.responseJSON && jqXHR.responseJSON.ExceptionMessage) {
+                        alert(jqXHR.responseJSON.ExceptionMessage);
+                    } else {
+                        alert("Ocurrió un error al intentar ajustar los datos de la línea presupuestaria");
+                    }
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                    closeIncreasesModificationsDialog();
+                });
+
+            } else {
+                alert("Aún no se ha añadido ningún incremento.");
+            }
+        });
+    });
+
+</script>

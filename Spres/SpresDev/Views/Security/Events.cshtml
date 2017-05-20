@@ -1,0 +1,271 @@
+﻿
+@{
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<style>
+
+    #divEndDate{
+        margin-top: -70px;
+        margin-left: 165px;
+    }
+
+    #consult{
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+            background-color: rgb(196, 214, 0) !important;
+            border-color: rgb(196, 214, 0) !important;
+            color:rgb(0, 48, 135) !important;
+        }
+
+    #divEvents{
+        margin-top: -55px;
+        margin-left: 330px;
+    }
+
+    #divSource{
+        margin-top: -55px;
+        margin-left: 331px;
+
+    }
+
+    #divUser{
+        margin-top: 10px;
+    }
+
+</style>
+
+<div>
+    <div>
+        <label>
+            Fecha de consulta
+        </label>
+    </div>
+
+    <div id="divStartDate" class="control">
+        <div class="ctrllabel">Inicio</div>
+        <input id="startDate" type="text" />
+    </div>
+    <br />
+    <div id="divEndDate" class="control">
+        <div class="ctrllabel">Final</div>
+        <input id="endDate" type="text" />
+    </div>
+    <div id="divEvents">
+        <label>Tipo de evento</label>
+        <input id="eventType" type="text" />
+    </div>
+</div>
+<div>
+    <div id="divUser">
+        <label>Usuario</label>
+        <input id="user" type="text" />
+    </div>
+
+    <div id="divSource">
+        <label>Fuente</label>
+        <input id="source" type="text" />
+    </div>
+</div>
+<div>
+    <input id="consult" class="btn btn-primary" type="button" value="Consultar"/>
+</div>
+<div id="gridEvents"></div>
+<script>
+
+
+    var urlUsers = getUrl("/api/Users");
+    var dataManagerUser = ej.DataManager({
+        url: urlUsers,
+        adaptor: new ej.WebApiAdaptor()
+    });
+
+    var dataUsers = [];
+    dataManagerUser.executeQuery(ej.Query()).done(function (e) {
+
+        for (var i = 0; i < e.result.length; i++) {
+            dataUsers.push({
+                Id: e.result[i].Id,
+                UserName: e.result[i].UserName
+            });
+        }
+    });
+
+    var urlEventTypes = getUrl("/api/Events/GetEventTypes");
+    var dataManagerEventTypes = ej.DataManager({
+        url: urlEventTypes,
+        adaptor: new ej.WebApiAdaptor()
+    });
+
+    var dataEventTypes = [];
+    dataManagerEventTypes.executeQuery(ej.Query()).done(function (e) {
+
+        for (var i = 0; i < e.result.length; i++) {
+            dataEventTypes.push({
+                Id: e.result[i].Id,
+                Name: translateStatusType(e.result[i].Name)
+            });
+        }
+    });
+
+    function translateStatusType(status) {
+        switch (status) {
+            case "Insert": return "Insertar";
+            case "Update": return "Actualizar";
+            case "Delete": return "Eliminar";
+            default: return "";
+        }
+    };
+
+    var columns = [
+       { field: "Id", isPrimaryKey: true, visible: false },
+       {
+           field: "Type", headerText: 'Tipo', textAlign: ej.TextAlign.Left, dataSource: dataEventTypes, width: 70,
+           foreignKeyValue: "Name", foreignKeyField: "Id"
+       },
+       
+       {
+           field: "UserId", headerText: 'Usuario', textAlign: ej.TextAlign.Left, dataSource: dataUsers, width: 100,
+           foreignKeyValue: "UserName", foreignKeyField: "Id"
+       },
+       { field: "Source", headerText: 'Fuente', textAlign: ej.TextAlign.Left, width: 350 },
+       { field: "Description", headerText: 'Descripción', textAlign: ej.TextAlign.Left, width: 2000 }
+    ];
+
+    function rebindEvents(startDate,endDate, eventType, user, source){
+        var dataManager = ej.DataManager({
+            url: getUrl("/api/Events/GetEvents?startDate=" + startDate +
+                "&endDate=" + endDate +
+                "&evenType=" + ((!eventType || eventType == "0") ? "" : eventType)  +
+                "&userId=" + ((!user || user == "All") ? "" :  user) +
+                "&source=" + ((!source || source == "All") ? "" : source)),
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        dataManager.executeQuery(ej.Query()).done(function (e) {
+            $("#gridEvents").ejGrid("instance").option("dataSource", e.result);     
+        });
+
+    };
+    
+
+    $(function () {
+
+       
+
+
+        $("#startDate").ejDatePicker({
+            locale: "es-SV",
+            dateFormat: 'yyyy/MM/dd',
+            watermarkText: "Fecha inicio",
+            allowEdit: true,
+            width: "150px",
+            value: new Date()
+        });
+
+        $("#endDate").ejDatePicker({
+            locale: "es-SV",
+            dateFormat: 'yyyy/MM/dd',
+            watermarkText: "Fecha final",
+            allowEdit: true,
+            width: "150px",
+            value: new Date()
+        });
+
+        var urlEventTypes = getUrl("/api/Events/GetEventTypes");
+        var dataMangerEventTypes = ej.DataManager({
+            url: urlEventTypes,
+            adaptor: new ej.WebApiAdaptor(),
+        });
+
+        dataMangerEventTypes.executeQuery(ej.Query()) // executing query
+          .done(function (e) {
+              var events = [{ Id:"0", Name: "Todos los eventos" }];
+              $("#eventType").ejDropDownList("instance").option("dataSource", events.concat(e.result));
+          });
+
+
+        $('#eventType').ejDropDownList({
+            width: '250px',
+            watermarkText: "Seleccione tipo de evento",
+            fields: { text: "Name", value: "Id" },
+            //change: "",
+            dataSource: [],//dataMangerEventTypes,            
+        });
+
+
+
+        var urlUsers = getUrl("/api/Users");
+        var dataMangerUsers = ej.DataManager({
+            url: urlUsers,
+            adaptor: new ej.WebApiAdaptor(),
+        });
+        dataMangerUsers.executeQuery(ej.Query()) // executing query
+          .done(function (e) {
+              var usr = [{ Id: "All", Name: "Todos los usuarios" }];
+              $("#user").ejDropDownList("instance").option("dataSource", usr.concat(e.result));
+          });
+        $('#user').ejDropDownList({
+            width: '250px',
+            watermarkText: "Seleccione usuario",
+            fields: { text: "Name", value: "Id" },
+            //change: "",
+            dataSource: [],
+        });
+
+
+        var urlSources = getUrl("/api/Events/GetSources");
+        var dataMangerSources = ej.DataManager({
+            url: urlSources,
+            adaptor: new ej.WebApiAdaptor(),
+        });
+        dataMangerSources.executeQuery(ej.Query()) // executing query
+          .done(function (e) {
+              var src = [{ Id: "All", Name: "Todos los controladores" }];
+              $("#source").ejDropDownList("instance").option("dataSource", src.concat(e.result));
+          });
+
+        $('#source').ejDropDownList({
+            width: '250px',
+            watermarkText: "Seleccione un controlador",
+            fields: { text: "Name", value: "Id" },
+            //change: "",
+            dataSource: [],
+
+        });
+
+        $('#consult').click(function () {
+            var startDate = $('#startDate').ejDatePicker('instance').getValue();
+            var endDate = $('#endDate').ejDatePicker('instance').getValue();
+            var eType = $('#eventType').ejDropDownList('instance').getSelectedValue();
+            var user = $('#user').ejDropDownList('instance').getSelectedValue();;
+            var source = $('#source').ejDropDownList('instance').getSelectedValue();;
+
+            if (endDate < startDate) {
+                alert("La fecha final no puede ser menor que la fecha de inicio.");
+            } else {
+                rebindEvents(startDate, endDate, eType, user, source);
+            }
+
+        });
+
+        $("#gridEvents").ejGrid({
+            dataSource: [],
+            allowPaging: true,
+            allowScrolling: true,
+            pageSettings: { pageSize: 9 },
+            columns: columns,
+           scrollSettings: {width:665, height:155 }
+        });
+
+
+        
+        
+
+    });
+   
+</script>

@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Exchange Rates";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<div id="gridExchangeRates"></div>
+
+<script type="text/javascript">
+    $(function () {
+
+        var urlExchangesRates = getUrl("/api/ExchangeRates");
+        var dataManager = ej.DataManager({
+            url: urlExchangesRates,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        var urlCurrencies = getUrl("/api/Currencies");
+        var dataManagerCurrency = ej.DataManager({
+            url: urlCurrencies,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        var dataType = [];
+        dataManagerCurrency.executeQuery(ej.Query()).done(function (e) {
+
+            for (var i = 0; i < e.result.length; i++) {
+                dataType.push({
+                    CurrencyId: e.result[i].Id,
+                    CurrencyName: e.result[i].Name
+                });
+            }
+
+        });
+        var columnsExchangeRatesPopUp = [
+                { field: "Id", isPrimaryKey: true, visible: false },
+                {
+                    field: "CurrencyId", headerText: "Moneda", editType: ej.Grid.EditingType.Dropdown,
+                    dataSource: dataType, foreignKeyValue: "CurrencyName", foreignKeyField: "CurrencyId",
+                    validationRules: { required: true }
+                },
+                { field: "TradeDate", headerText: "Fecha de Operación", format: "{0:yyyy/MM/dd}", editType: ej.Grid.EditingType.DatePicker, editParams: { locale: "es-SV" }, validationRules: { required: true } },
+                { field: "Rate", headerText: "Tasa de Cambio", format: "{0:n4}", editType:ej.Grid.EditingType.Numeric, editParams: { decimalPlaces: 4 }, validationRules: { required: true } },
+        ];
+
+        var editExchangeRatesButtons = {
+                    headerText: "",
+                    commands: [
+                        { type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                        { type: ej.Grid.UnboundType.Delete, buttonOptions: { contentType: "imageonly", prefixIcon: "e-delete" } },
+                        { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                        { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } }
+                    ],
+                    isUnbound: true,
+                    width: 150
+        };
+
+        var permissions = JSON.parse(sessionStorage.permissions);
+        var exchangeRatesToolItems = [];
+        for (var er = 0; er < permissions.length; er++) {
+
+            var permission = permissions[er];
+            if (permission.Option == "Configuration") {
+                if (permission.Edit) {
+                    columnsExchangeRatesPopUp.push(editExchangeRatesButtons);
+                    exchangeRatesToolItems = [ej.Grid.ToolBarItems.Add];
+                }
+            }
+                }
+
+        $("#gridExchangeRates").ejGrid({
+            dataSource: dataManager,
+            columns: columnsExchangeRatesPopUp,
+            allowPaging: true,
+            allowScrolling: true,
+            pageSettings: { pageSize: 6 },
+            editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: true },
+            toolbarSettings: { showToolbar: true, toolbarItems: exchangeRatesToolItems },
+            actionBegin: function (args){
+                if (args.requestType == "delete") {
+                    if (!confirm("¿Desea eliminar la tasa de cambio seleccionada?")) {
+                        args.cancel = true;
+                    }
+                }
+            },
+            endAdd: function () {
+                this.refreshContent();
+            }
+        });
+
+    });
+
+</script>
+

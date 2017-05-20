@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PremiseTypeDefinition"
+    targetNamespace="http://tempuri.org/PremiseDefinition.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/PremiseDefinition.xsd"
+    xmlns:mstns="http://tempuri.org/PremiseDefinition.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+    <xs:element name="Definition">
+        <xs:complexType>
+            <xs:sequence>                
+                <xs:element name="Variables">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Variable" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>                                    
+                                    <xs:attribute name="Name" use="required"></xs:attribute>
+                                    <xs:attribute name="Type" type="VariableType" use="required"></xs:attribute>
+                                    <xs:attribute name="Display" use="optional"></xs:attribute>
+                                    <xs:attribute name="Source" use="optional"></xs:attribute>
+                                    <xs:attribute name="Quantifiable" use="optional" type="xs:boolean" default="false"></xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>                
+            </xs:sequence>
+            <xs:attribute name="VariableKey"></xs:attribute>
+            <xs:attribute name="PremiseType"></xs:attribute>
+            <xs:attribute name="Constraint" type="xs:boolean" default="false"></xs:attribute>
+        </xs:complexType>        
+    </xs:element>
+
+    <xs:simpleType name="VariableType">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Option"></xs:enumeration>
+            <xs:enumeration value="Money"></xs:enumeration>
+            <xs:enumeration value="Quantity"></xs:enumeration>
+            <xs:enumeration value="Text"></xs:enumeration>
+            <xs:enumeration value="Any"></xs:enumeration>            
+        </xs:restriction>
+    </xs:simpleType>
+    
+</xs:schema>

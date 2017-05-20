@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Definition VariableKey="Equipment" PremiseType="Equipment" Constraint="true">
+    <Variables>
+        <Variable Name="Equipment" Type="Option" Display="Equipo" Source="Equipments" Quantifiable="false" />
+        <Variable Name="Expense" Type="Money" Display="Costo" Quantifiable="true" />
+        <Variable Name="Provider" Type="Option" Display="Proveedor" Source="Providers" Quantifiable="false" />
+    </Variables>
+</Definition>

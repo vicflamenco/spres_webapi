@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "_ExpenseDetail";
+}
+
+<style type="text/css">
+table, th, td {
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+
+#premiseDescription{
+    font-weight: bold;
+}
+</style>
+<br />
+
+<div id="tabContainer">
+
+</div>
+<hr />
+<div class="pull-right">
+    <input type="button" class="btn btn-primary" id="btnSavePremiseChanges" value="Guardar Cambios"/>
+    <input type="button" class="btn btn-primary" id="btnClosePremiseChanges" value="Cerrar" />
+</div>
+
+<br />
+<br />
+
+<script type="text/javascript">
+
+    var ObjsArray = [];
+
+    function myObj(monthId, data) {
+        this.monthId = monthId;
+        this.data = data;
+    };
+
+    function closeEditPremiseLineDialog() {
+        $("#editPremiseDialog").data("ejDialog").close();
+        loadBudgetSheets();
+    };
+
+    function togglePremiseButtons(disable) {
+        $("#obj").children().prop("disabled", disable);
+        $("#btnSavePremiseChanges").prop("disabled", disable);
+        $("#btnClosePremiseChanges").prop("disabled", disable);
+    };
+
+    $(function () {
+        togglePremiseButtons(true);
+        var urlRenderPremiseLineEditor = getUrl("/api/RenderPremiseLineEditor/" + sessionStorage.subLineId);
+        $.ajax({
+            url: urlRenderPremiseLineEditor,
+            method: "GET"
+        }).done(function (html) {
+            $("#tabContainer").append(html);
+            $("#obj").ejTab();
+            var vm = {};
+            ko.applyBindings(vm, document.getElementById("tabContainer"));
+            togglePremiseButtons(false);
+        });
+
+        $("#btnClosePremiseChanges").click(function () {
+            
+            if (confirm("Los cambios sin guardar se perderán. ¿Desea cerrar esta ventana?"))
+                closeEditPremiseLineDialog();
+        });
+
+        $("#btnSavePremiseChanges").click(function () {
+
+            togglePremiseButtons(true);
+            var lineId = sessionStorage.subLineId;
+            ObjsArray = [];
+
+            $("#obj").find("div[role='tabpanel']").each(function () {
+                var form = $(this);
+                var idAttribute = form.attr("id");
+                var monthId = idAttribute.substring(12, idAttribute.length);
+                var data = form.find("input:not([role='combobox']):not([name='hiddenEle'])").serializeArray();
+                var newObj = new myObj(monthId, data);
+                ObjsArray.push(newObj);
+            });
+            var urlUpdateExpenseDetail = getUrl('/api/UpdateExpenseDetail/' + lineId);
+            $.ajax({
+                method: 'POST',
+                url: urlUpdateExpenseDetail,
+                data: JSON.stringify(ObjsArray),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json'
+            }).done(function (data) {
+                closeEditPremiseLineDialog();
+            }).fail(function (jqXHR, textStatus, errThrown) {
+                console.log(jqXHR.responseText);
+            });
+
+        });
+    });
+
+    
+</script>
+

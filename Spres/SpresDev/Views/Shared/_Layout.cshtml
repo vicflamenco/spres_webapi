@@ -1,0 +1,690 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Sistema de administración de presupuesto - LivSmart</title>
+    <meta name="viewport" content="width=device-width" />
+
+    <script src="@Url.Content("~/Scripts/jquery-2.1.0.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jsrender.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.easing.1.3.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.globalize.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.globalize.es-SV.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/knockout-3.1.0.js")"></script>
+    <script src="@Url.Content("~/Scripts/ej/ej.web.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/ej/ej.unobtrusive.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/ej/ej.globalization.js")"></script>
+    <script src="@Url.Content("~/Scripts/ej/ej.widget.ko.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/spres.js")"></script>
+    <script src="@Url.Content("~/Scripts/spres.budgetFunctions.js")"></script>
+    <script src="@Url.Content("~/Scripts/spres.ribbonConfig.js")"></script>
+    <link href="@Url.Content("~/Content/ejThemes/default-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/ejThemes/ribbon-css/ej.icons.css")" rel="stylesheet" />    
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/spres.css")" rel="stylesheet" />
+
+    <style>
+        .ParameterList {
+            font-size: 8pt !important;
+        }
+
+        .CustomButton {
+            white-space: normal !important;
+        }
+
+        .CustomButton .e-btntxt {
+            line-height: 1em !important;
+        }
+
+        .e-contenteditor {
+            width: 100%;
+            height: 100px;
+            border: 1px solid #D9DFDE;
+            border-top: 0;
+            overflow: auto;
+        }
+
+            .e-contenteditor p {
+                margin: 20px;
+            }
+
+        .e-tab.e-js > .e-content {
+            border-bottom: none !important;
+        }
+
+        .e-button>div{
+            width:100%;
+        }
+        
+        .e-headercell.Value{
+            width:80px;
+        }
+
+        .e-headercell.Value .e-headercelldiv {
+            font-size:8pt !important;            
+            text-align:center !important;
+        }
+
+        .e-headercell.Value .e-headercelldiv table {
+            width:100%;
+        }
+
+        .e-parentColumns th {
+            border-bottom:solid 1px #c8c8c8 !important;
+        }
+
+        #designMonths td{
+            padding: 0px 10px;
+        }
+
+        #designColumns td{
+            padding: 0px 10px;
+        }
+
+        .e-grid .e-detailcell {
+            padding-left:0 !important;            
+            padding-right:0 !important;
+        }
+
+        .e-tab > .e-content > .e-grid > .e-gridheader > .e-headercontent > .e-table > colgroup > .Description,
+        .e-tab > .e-content > .e-grid > .e-gridcontent > .e-content > .e-table > colgroup > .Description {
+            width:331px !important;
+        }
+
+        .e-tab > .e-content > .e-grid {
+            border-right: rgb(200,200,200) 1px solid !important;
+        }
+
+        #statusContainer{
+            margin-top: 2px;
+            border-top: 1px solid rgb(199,199,199)
+        }
+
+        .statusList{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .statusList li {
+            display: inline-block;
+            padding: 5px;
+            padding-right: 15px;
+            color:rgb(255, 199, 44);
+        }
+        .fileButtonRibbon:hover{
+            background-color:red !important;
+     }
+        .e-menu.e-horizontal .e-list:hover{
+            background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgb(0, 156, 222)), color-stop(100%, rgb(0, 156, 222)));
+        }
+
+        .e-dialog>.e-header{
+            border-bottom: 3px solid rgb(0, 48, 135)!important;
+        }
+
+        .e-grid .e-gridheader {
+    border-bottom-color: rgb(0, 48, 135);
+}
+        .e-grid td.e-active{
+            color:#000000;
+            background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgb(0, 156, 222)),color-stop(100%,rgb(0, 156, 222)));
+        }
+        #IncreasesRequestView{
+            margin-left: 8px;
+        }
+
+        .e-rowcell input {
+            font-size: 10px !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div>
+        <div id="defaultRibbon">
+
+        </div>
+
+        <div id="CompanyControl" class="Parameters">
+            <input id="CompanyList" />
+        </div>
+
+        <div id="FiscalYearControl" class="Parameters">
+            <input id="FiscalYearList" />
+        </div>
+
+        <div id="CostCenterControl" class="Parameters">
+            <input id="CostCenterList" />
+        </div>
+
+        <div id="CurrencyControl" class="Parameters">
+            <span>Seleccione una moneda:</span>
+            <input id="currencyDropDown" />
+        </div>
+    </div>
+
+    <div id="analysisParameter">
+        <div id="typeAnalysis" class="Parameters">
+            <input id="analysisTypeList" />
+            <div id="analysisList">
+                <ul>
+                    <li value="0">Consolidado (Paquetes)</li>
+                    <li value="1">Cuentas contables</li>
+                    <li value="2">Centros de costo</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="fiscalYearAnalisys" class="Parameters">
+            <input id="fiscalYearAnalysisList" />
+        </div>
+
+        <div id="packageAnalisys" class="Parameters">
+            <input id="packageAnalisysList" />
+        </div>
+    </div>
+    <div id="statusContainer">
+        <ul class="statusList">
+            <li id="budgetStatusLabel">
+            </li>
+
+            <li id="currencyStatusLabel">
+            </li>
+
+            <li id="userNameLabel" class="pull-right">
+            </li>
+        </ul>
+    </div>
+
+    <div id="informationDialog"></div>
+    <div id="summaryView"></div>
+    <div id="IncreasesRequestView"></div>
+    <div id="analysisView"></div>
+
+    <ul id="ribbonmenu">
+        <li>
+            <a>ARCHIVO</a>
+            <ul class="internalMenu">                
+                <li><a href="javascript:void(0)">AOP</a></li>
+                <li><a href="javascript:void(0)">Consolidado</a></li>
+                <li><a href="javascript:void(0)">Histórico</a></li>
+                <li><a href="javascript:void(0)">Importar</a></li>
+                <li><a href="javascript:void(0)">Salir</a></li>               
+            </ul>
+        </li>
+    </ul>
+       
+    <div>
+        @RenderBody()
+    </div>
+    <div id="popUp"></div>
+    
+    <table id="designMonths" class="e-designtablestyle">
+        <tr>
+            <td>
+                <input type="checkbox" id="chkMes1" class="chkMeses" checked="checked" /><label for="chkMes1">Enero</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes4" class="chkMeses" checked="checked" /><label for="chkMes4">Abril</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes7" class="chkMeses" checked="checked" /><label for="chkMes7">Julio</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes10" class="chkMeses" checked="checked" /><label for="chkMes10">Octubre</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="chkMes2" class="chkMeses" checked="checked" /><label for="chkMes2">Febrero</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes5" class="chkMeses" checked="checked" /><label for="chkMes5">Mayo</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes8" class="chkMeses" checked="checked" /><label for="chkMes8">Agosto</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes11" class="chkMeses" checked="checked" /><label for="chkMes11">Noviembre</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="chkMes3" class="chkMeses" checked="checked" /><label for="chkMes3">Marzo</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes6" class="chkMeses" checked="checked" /><label for="chkMes6">Junio</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes9" class="chkMeses" checked="checked" /><label for="chkMes9">Septiembre</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkMes12" class="chkMeses" checked="checked" /><label for="chkMes12">Diciembre</label>
+            </td>
+        </tr>
+    </table>
+
+    <table id="designColumns" class="e-designtablestyle">
+        <tr>
+            <td>
+                <input type="checkbox" id="chkUnitCost" class="chkColumnas" checked="checked" /><label for="chkUnitCost">Costo unitario</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkReal" class="chkColumnas" checked="checked" /><label for="chkReal">Real</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="chkQuantity" class="chkColumnas" checked="checked" /><label for="chkQuantity">Cantidad</label>
+            </td>
+            <td>
+                <input type="checkbox" id="chkForecast" class="chkColumnas" checked="checked" /><label for="chkForecast">Forecast</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="chkTarget" class="chkColumnas" checked="checked" /><label for="chkTarget">Meta</label>
+            </td>
+        </tr>
+    </table>
+    <table id="designSummary" class="e-designtablestyle">
+        <tr>
+            <td>
+                <input type="checkbox" id="chkSummary" class="chkResumen" checked="checked" /><label for="chkSummary">Resumen</label>
+            </td>
+        </tr>
+    </table>
+
+    <table id="analysisOption" class="e-designtablestyle">
+        <tr>
+            <td>
+                <input type="checkbox" id="chkGroupData" class="chkAnalysis" checked="checked" /><label for="chkGroupData">Ocultar datos agrupados</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="chkIncludeDetailLines" class="chkAnalysis" checked="checked" /><label for="chkIncludeDetailLines">Incluir líneas de detalle</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="chkShowAlert" class="chkAnalysis" checked="checked" /><label for="chkShowAlert">Ocultar líneas no presupuestadas</label>
+            </td>
+        </tr>
+    </table>
+
+        <script type="text/javascript">
+
+            function changeBudgetStatusLabel(value) {
+                $("#budgetStatusLabel").html("Presupuesto: <i>" + value + "</i>");
+            };
+
+            function changeCurrencyStatusLabel(value) {
+                $("#currencyStatusLabel").html("Moneda: <i>" + value + "</i>");
+            };
+
+            var dialog = $("#popUp").ejDialog(
+                {
+                    enableModal: true,
+                    contentType: "iframe",
+                    close: "onDialogClose",
+                    showOnInit: false,
+                    width: 700,
+                    height: 650,
+                    enableResize: false,
+                    allowDraggable: true,
+                    isResponsive: false
+                }).data("ejDialog");
+
+            function getCompanyId() { return $("#CompanyList").ejDropDownList("instance").getSelectedValue(); }
+
+            function getFiscalYear() { return $("#FiscalYearList").ejDropDownList("instance").getSelectedValue(); }
+
+            function getCostCenterId() { return $("#CostCenterList").ejDropDownList("instance").getSelectedValue(); }
+
+            function getCostCenterDisplay() { return $("#CostCenterList").ejDropDownList("instance").option("text"); }
+
+            function getCurrencyId() { return $("#currencyDropDown").ejDropDownList("instance").getSelectedValue(); }
+
+            function companyListChange(args) {
+
+                clearBudgetSheets();
+                var urlprogramm = getUrl("/api/Programmings?companyid=" + getCompanyId());
+                var fiscalYearDataSource = new ej.DataManager({
+                    url: urlprogramm,
+                    adaptor: new ej.WebApiAdaptor()
+                });
+
+                fiscalYearDataSource.executeQuery(ej.Query()).done(function (data) {
+
+                    if (data.result.length > 0) {
+                        var fiscalYearList = $("#FiscalYearList").ejDropDownList("instance");
+                        fiscalYearList.enable();
+                        fiscalYearList.option("dataSource", data.result);
+                    } else {
+                        alert("Aún no se ha configurado ningún período de presupuestación para " + args.selectedText);
+                    }
+                });
+
+                var permissions = JSON.parse(sessionStorage.permissions);
+
+                permissions = $.grep(permissions, function (p) {
+                    return p.Option == "Budgeting";
+                });
+
+                var costCenterObj = $("#CostCenterList").ejDropDownList("instance");
+
+                if (permissions.length) {
+
+                    var permission = permissions[0];
+
+                    if (permission.View) {
+                        var url = getUrl("/api/CostCenters?id=-1&companyid=" + getCompanyId());
+
+                        var costCenterDataSource = new ej.DataManager({
+                            url: url,
+                            adaptor: new ej.WebApiAdaptor()
+                        });
+                        costCenterDataSource.executeQuery(ej.Query()).done(function (data) {
+                            costCenterObj.enable();
+                            costCenterObj.option("dataSource", data.result);
+                        });
+                    } else {
+                        costCenterObj.enable();
+                        costCenterObj.option("dataSource", []);
+                    }
+                } else {
+                    costCenterObj.enable();
+                    costCenterObj.option("dataSource", []);
+                }
+                populateCurrencyDropDown();
+                if (sessionStorage.currentView == "Summary" && typeof Summary != "undefined") {
+                    Summary();
+                }
+                
+            };
+
+            function populateCurrencyDropDown() {
+
+                var company = getCompanyId();
+                var urlCurrencies = getUrl("/api/Currencies/OrderedList/" + company);
+                $.ajax({
+                    method: "GET",
+                    url: urlCurrencies,
+                    data: { id: company }
+                }).done(function (data) {
+                    var drop = $("#currencyDropDown").data("ejDropDownList");
+                    var source = [];
+                    for (var i = 0; i < data.length; i++) {
+                        source.push({ Id: data[i].Id, Name: data[i].Name });
+                    }
+                    drop.option("dataSource", source);
+                    drop.selectItemsByIndices("0");
+                    toggleBudgeting(true);
+                    changeCurrencyStatusLabel(drop.option("text"));
+                });
+            };
+
+            function fiscalYearListChange(args) {
+
+                if (typeof loadBudgetSheets != "undefined") {
+                    loadBudgetSheets();
+                    if (sessionStorage.currentView == "Summary" && typeof Summary != "undefined") {
+                        Summary();
+                    }
+                }
+            };
+
+            function costCenterListChange(args) {
+                if (typeof loadBudgetSheets != "undefined") {
+                    loadBudgetSheets();
+                    if (sessionStorage.currentView == "Summary" && typeof Summary != "undefined") {
+                        Summary();
+                    }
+                }
+                getBudgetIsAuthorized();
+            };
+
+            function getBudgetIsAuthorized() {
+                var costCenter = getCostCenterId(); var company = getCompanyId(); var fiscal = getFiscalYear();
+
+                if (costCenter && company && fiscal) {
+                    var urlBudgetAuthorized = getUrl("/api/Budgets/IsAuthorized/" + costCenter + "/" + fiscal + "/" + company);
+                    $.ajax({
+                        method: "GET",
+                        url: urlBudgetAuthorized
+                    }).done(function (data) {
+
+                        sessionStorage.IsTracked = data.IsTracked;
+                        sessionStorage.ProgrammingIsActive = data.ProgrammingIsActive;
+                        var IsAuthorized = data.Status == 3;
+
+                        if (data.IsTracked) {
+                            toggleBudgetButtons(false, data.Status);
+                        } else {
+                            toggleBudgetButtons(true, data.Status);
+                        }
+                        var texto;
+                        switch (data.Status) {
+                            case 0:
+                                texto = "Ninguno";
+                                break;
+                            case 1:
+                                texto = "Creado";
+                                break;
+                            case 2:
+                                texto = "En ajuste";
+                                break;
+                            case 3:
+                                texto = "Autorizado";
+                                break;
+                            default:
+                                texto = "No existe";
+                                break;
+                        }
+                        changeBudgetStatusLabel(texto);
+
+                    }).fail(function (jqXHR, textStatus, errThrown) {
+                        toggleBudgetButtons(true, 0);
+                        changeBudgetStatusLabel("No existe");
+                    });
+                }
+            };
+
+            function analysisTypeChange(args) {
+                
+                if (args.selectedValue == "0") {
+                    $("#packageAnalisysList").ejDropDownList({
+                        enabled: false
+                    });
+                } else {
+                    $("#packageAnalisysList").ejDropDownList({
+                        enabled: true
+                    });
+                }
+            }
+
+            $(function () {
+
+                if (!sessionStorage.getItem('tokenKey')) {
+                    window.location = "@Url.Action("Login")";
+                }
+
+                $('#SheetsTab').hide();
+                $('#CompanyControl').hide();
+                $('#FiscalYearControl').hide();
+                $('#CostCenterControl').hide();
+                $('#CurrencyControl').hide();
+                $('#designMonths').hide();
+                $('#designColumns').hide();
+                $('#designSummary').hide();
+                $('#analysisParameter').hide();
+                $('#analysisOption').hide();
+
+                $('#expSummary').hide();
+                $('#exp').hide();
+
+                var uname = sessionStorage.getItem("userName");
+                $("#userNameLabel").text("¡Bienvenido " + uname + "!");
+
+                var tokenKey = sessionStorage.getItem("tokenKey");
+                if (tokenKey) {
+                    sessionStorage.setItem("tokenKey", tokenKey);
+                }
+                var urlCompanies = getUrl("/api/Companies");
+                var companyDataSource = new ej.DataManager({
+                    url: urlCompanies,
+                    adaptor: new ej.WebApiAdaptor()
+                });
+
+                $("#CompanyList").ejDropDownList({
+                    dataSource: companyDataSource,
+                    fields: { text: "Name", value: "Id" },
+                    watermarkText: "Seleccione región",
+                    cssClass: "ParameterList",
+                    width: 245,
+                    height: 20,
+                    change: companyListChange
+                });
+                $("#FiscalYearList").ejDropDownList({
+                    dataSource: [],
+                    fields: { text: "FiscalYear", value: "FiscalYear" },
+                    watermarkText: "Seleccione año fiscal",
+                    cssClass: "ParameterList",
+                    width: 245,
+                    height: 20,
+                    enabled: false,
+                    change: fiscalYearListChange
+                });
+                $("#CostCenterList").ejDropDownList({
+                    dataSource: [],
+                    fields: { text: "Display", value: "Id" },
+                    watermarkText: "Seleccione centro de costo",
+                    cssClass: "ParameterList",
+                    width: 245,
+                    height: 20,
+                    enabled: false,
+                    enableFilterSearch: true,
+                    enableIncrementalSearch: true,
+                    filterType: ej.filterType.Contains,
+                    change: costCenterListChange
+                });
+
+                $("#currencyDropDown").ejDropDownList({
+                    dataSource: [],
+                    fields: { text: "Name", value: "Id" },
+                    watermarkText: "Seleccione una moneda",
+                    cssClass: "ParameterList",
+                    width: 160,
+                    height: 20,
+                    change: changeCurrency,
+                    selectedIndex: 0
+                });
+
+                $("#analysisTypeList").ejDropDownList({
+                    targetID: "analysisList",
+                    watermarkText: "Tipo de análisis",
+                    cssClass: "ParameterList",
+                    width: 245,
+                    height: 20,
+                    change: analysisTypeChange,
+                    
+                });
+
+                $("#fiscalYearAnalysisList").ejDropDownList({
+                    fields: { text: "Name", value: "Id" },
+                    dataSource: [],
+                    watermarkText: "Año fiscal",
+                    cssClass: "ParameterList",
+                    width: 245,
+                    height: 20,
+                    change: []
+                });
+
+                $("#packageAnalisysList").ejDropDownList({
+                    dataSource: [],
+                    fields: { text: "Name", value: "Id" },
+                    watermarkText: "Paquete",
+                    cssClass: "ParameterList",
+                    width: 245,
+                    height: 20,
+                    change: [],
+                    enabled: false
+                });
+
+                createRibbonControl();
+                sessionStorage.setItem("currentView", "Budgeting");
+
+                loadFiscalYearAnalysisList();
+                loadPackageAnalisysList();
+            });
+
+            function loadFiscalYearAnalysisList() {
+
+                $.ajax({
+                    url: getUrl("/api/Programmings"),
+                    method: "GET"
+                }).done(function (data) {
+
+                    var obj = $("#fiscalYearAnalysisList").ejDropDownList("instance");
+                    if (data && data.Items && data.Items.length) {
+
+                        var dataSource = [];
+                        for (var i = 0; i < data.Items.length; i++) {
+                            dataSource.push({ Id: data.Items[i].FiscalYear, Name: data.Items[i].FiscalYear });
+                        }
+                        obj.option("dataSource", dataSource);
+                    }
+                    else {
+                        obj.option("dataSource", []);
+                    }
+                    
+                });
+            };
+
+            function loadPackageAnalisysList() {
+
+                $.ajax({
+                    url: getUrl("/api/Packages"),
+                    method: "GET"
+                }).done(function (data) {
+
+                    var obj = $("#packageAnalisysList").ejDropDownList("instance");
+                    if (data && data.Items && data.Items.length) {
+
+                        var dataSource = [];
+                        for (var i = 0; i < data.Items.length; i++) {
+                            dataSource.push({ Id: data.Items[i].Id, Name: data.Items[i].Name });
+                        }
+                        obj.option("dataSource", dataSource);
+                    }
+                    else {
+                        obj.option("dataSource", []);
+                    }
+
+                });
+            };
+
+            function clearDialogContent(newUrl) {
+
+                var currentUrl = dialog.option("contentUrl");
+                if (newUrl == currentUrl) {
+                    dialog.option({ contentUrl: "" });
+                    dialog.element.children(".e-iframe").remove();
+                }
+            };
+
+            function createControl(args) {
+                var ribbon = $("#defaultRibbon").data("ejRibbon");
+            };
+
+            function colorHandler(args) {
+                (this._id.indexOf("fillcolor") != -1) ? $("#contenteditor").css('background-color', args.value) : document.execCommand('forecolor', false, args.value);
+            };
+
+        </script>
+</body>
+</html>

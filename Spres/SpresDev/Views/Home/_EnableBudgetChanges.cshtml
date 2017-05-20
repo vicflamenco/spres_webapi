@@ -1,0 +1,62 @@
+﻿<div>
+    <div id="contentDiv2">
+        <p>
+            ¿Desea habilitar las modificaciones en el presupuesto para el centro de costo seleccionado?
+        </p>
+        <p>
+            <input id="btnOkEnableBudgetChanges" type="button" class="btn" value="Habilitar" />
+            <input id="btnCancelEnableBudgetChanges" type="button" class="btn" value="Cancelar" />
+        </p>
+    </div>
+    <div id="resultDiv2">
+        <p id="resultText2">
+
+        </p>
+        <input id="btnCloseEnableBudgetChanges" type="button" class="btn" value="Cerrar" />
+    </div>
+</div>
+
+<script>
+
+    function closeDialog(){
+        var dialog = $("#enableBudgetChangesDialog").data("ejDialog");
+        dialog.close();
+    };
+
+    function showResult(text) {
+        $("#resultText2").text(text);
+        $("#resultDiv2").show();
+        $("#contentDiv2").hide();
+    };
+
+    $(function () {
+
+        $("#resultDiv2").hide();
+
+        $("#btnOkEnableBudgetChanges").click(function () {
+
+            $('#btnOkEnableBudgetChanges').prop("disabled", true);
+            $('#btnCancelEnableBudgetChanges').prop("disabled", true);
+
+            var urlBudgetsPut = getUrl("/api/budgets?costCenterId=" + getCostCenterId() + "&fiscalYear=" + getFiscalYear() + "&companyId=" + getCompanyId() + "&status=3");
+
+            ej.WaitingPopup.showDefault();
+            $.ajax({
+                method: "PUT",
+                url: urlBudgetsPut
+            }).done(function (data) {
+                
+                showResult("El presupuesto se modificó satisfactoriamente.");
+                getBudgetIsAuthorized();
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                showResult("Ocurrió un error al intentar modificar el estado del presupuesto.");
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+        });
+        $("#btnCancelEnableBudgetChanges").click(closeDialog);
+        $("#btnCloseEnableBudgetChanges").click(closeDialog);
+    });
+
+</script>

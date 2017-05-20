@@ -1,0 +1,1338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/SimpleShapesModel" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ActivityDesigner"
+  dslVersion="1.0.0.0"
+  Id="0904205e-27c9-4a80-8a94-ba8f0c6a0d93"
+  name="SpresModeling" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <appliedStereotypesInternal>
+    <stereotypeInstance
+      Id="d984857c-ef98-4692-a576-b8824dbf7520"
+      name="namespace"
+      profile="CSharpProfile">
+      <propertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="ffae5f1d-ea76-4aa4-af57-616f73b018d5">
+          <propertyInstance
+            Id="84511006-fdde-47fc-9c19-8948f96a6036"
+            name="BaseName" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="46b10534-e0e7-4e61-a4f7-f86687736e7d">
+          <propertyInstance
+            Id="02dc29b9-b5a4-4931-8850-565882a7e5d1"
+            name="ClrAttributes" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="a66e9510-2dea-480e-a918-f4aa31bd45ab">
+          <propertyInstance
+            Id="8f0b4bdc-1632-4269-91ad-8e7427988c2f"
+            name="Usings" />
+        </stereotypeInstanceHasPropertyInstances>
+      </propertyInstances>
+    </stereotypeInstance>
+    <stereotypeInstance
+      Id="b369bb33-1d33-4b4e-91dd-673269746937"
+      name="TextTemplateBindings"
+      profile="TextTemplateBindings">
+      <propertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="9fa25398-a223-47ac-a409-8a555fadee78">
+          <propertyInstance
+            Id="630b4711-2a4c-44f4-8404-5e6ab8f5cd29"
+            name="Alias"
+            value="ClassTemplate|EnumTemplate|InterfaceTemplate|StructTemplate" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="3a54c967-6ac0-4903-860f-c5c69e21a4d1">
+          <propertyInstance
+            Id="348cb439-18b6-4042-ade2-890c67674429"
+            name="TemplateFilePath"
+            value="ClassTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4|EnumTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\EnumTemplate.t4|InterfaceTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4|StructTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="c9161f57-4103-43bf-bed7-3597ad60cf1e">
+          <propertyInstance
+            Id="e37b5537-b3fb-45d3-bc8b-a6ff788c4d60"
+            name="ProjectPath"
+            value="ClassTemplate=..\SpresModelingLib\SpresModelingLib.csproj|EnumTemplate=..\SpresModelingLib\SpresModelingLib.csproj|InterfaceTemplate=..\SpresModelingLib\SpresModelingLib.csproj|StructTemplate=..\SpresModelingLib\SpresModelingLib.csproj" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="f1cfd122-c783-402a-abba-f29df1ca1b57">
+          <propertyInstance
+            Id="2f76adc3-ed8c-46ea-ab59-1a5f244621eb"
+            name="TargetDirectory"
+            value="ClassTemplate=GeneratedCode\{PackageStructure}|EnumTemplate=GeneratedCode\{PackageStructure}|InterfaceTemplate=GeneratedCode\{PackageStructure}|StructTemplate=GeneratedCode\{PackageStructure}" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="fd325a3f-6038-42bc-8384-d73118e20697">
+          <propertyInstance
+            Id="bad8ea9e-5ef4-4c5a-959a-af6e2932f786"
+            name="TargetName"
+            value="ClassTemplate={Name}|EnumTemplate={Name}|InterfaceTemplate={Name}|StructTemplate={Name}" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="f7022e07-bd88-4e35-910d-0e10b654de27">
+          <propertyInstance
+            Id="9df555e5-5d44-4984-aa56-9ac51060aa7c"
+            name="Overwrite"
+            value="ClassTemplate=True|EnumTemplate=True|InterfaceTemplate=True|StructTemplate=True" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="8a4ba4eb-5275-40ba-885e-8b6b2bff46f3">
+          <propertyInstance
+            Id="356f1017-1d3e-4f65-9840-11e723df0cef"
+            name="Parameters" />
+        </stereotypeInstanceHasPropertyInstances>
+      </propertyInstances>
+    </stereotypeInstance>
+  </appliedStereotypesInternal>
+  <profileInstances>
+    <packageHasProfileInstances
+      Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
+      <profileInstance
+        Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791"
+        name="StandardProfileL2" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="29349502-908c-4fda-9054-c48619c59ed0">
+      <profileInstance
+        Id="532ea607-fb19-44b8-8502-3351b05452be"
+        name="StandardProfileL3" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="17591a6d-a127-4e71-ad50-c87112f0207a">
+      <profileInstance
+        Id="61aaf588-2cd7-49d5-b797-ec8ed5735872"
+        name="CSharpProfile" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="6603fe77-15a9-4604-826e-4943e6848c94">
+      <profileInstance
+        Id="94b9379e-18e5-4c39-ac4e-0c68a981bf94"
+        name="TextTemplateBindings" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <packageHasNamedElement>
+      <activity
+        Id="c608ab2b-c3c6-433b-9445-27dee149608d"
+        name="Proceso de presupuestación anual"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false"
+        isReentrant="false"
+        isReadOnly="false"
+        isSingleExecution="false">
+        <nodes>
+          <initialNode
+            Id="46340f9b-19d8-4586-baee-529ddde66dd9"
+            name="Initial1"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="7f7cb11c-2b3e-4d16-bf30-dc0b502fcd91"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="d5c1a21e-03bb-44ae-a6df-94726dd255f2"
+                  LastKnownName="Ingresa presupuesto"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </initialNode>
+          <opaqueAction
+            Id="d5c1a21e-03bb-44ae-a6df-94726dd255f2"
+            name="Ingresa presupuesto"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="59ed4cdd-3967-49d2-89b9-ed69ced789e8"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="4ca1fc48-82fd-4366-8f1c-28de133905e5"
+                  LastKnownName="Verifica tipo de gastos"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <decisionNode
+            Id="b9c7ee25-9e51-4268-ae4c-95699173b903"
+            name="Decision1"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="eaaf4212-1360-4e08-a4ff-9388853d129b"
+                guard="Sí"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="f67c6c71-3196-4603-9983-67c6d34dc4dc"
+                  LastKnownName="Verifica premisas"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+              <controlFlow
+                Id="377943ce-7afd-44d3-97f7-4d901145e2a1"
+                guard="No"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="16094526-da83-4b97-806b-b8d812ddae04"
+                  LastKnownName="Verificación del presupuesto"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </decisionNode>
+          <opaqueAction
+            Id="f67c6c71-3196-4603-9983-67c6d34dc4dc"
+            name="Verifica premisas"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="c1164ca3-f31a-42a2-8c56-06941eb25498"
+                guard="Cumple premisas"
+                isLeaf="false">
+                <decisionNodeMoniker
+                  Id="be87fe4c-a4c1-4d9a-83dd-a2301503db56"
+                  LastKnownName="Decision2"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <decisionNode
+            Id="be87fe4c-a4c1-4d9a-83dd-a2301503db56"
+            name="Decision2"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="a518f893-4da6-40dd-925f-982bd769621f"
+                guard="No"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="395a42a1-9201-4249-9c24-6cb1ff054af3"
+                  LastKnownName="Modifica presupuesto"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+              <controlFlow
+                Id="f5ec74e1-87d5-4c6a-b6bf-ed30e8327caa"
+                guard="Sí"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="16094526-da83-4b97-806b-b8d812ddae04"
+                  LastKnownName="Verificación del presupuesto"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </decisionNode>
+          <opaqueAction
+            Id="395a42a1-9201-4249-9c24-6cb1ff054af3"
+            name="Modifica presupuesto"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="65215799-db43-4424-936b-03c74d26c283"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="4ca1fc48-82fd-4366-8f1c-28de133905e5"
+                  LastKnownName="Verifica tipo de gastos"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction
+            Id="16094526-da83-4b97-806b-b8d812ddae04"
+            name="Verificación del presupuesto"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="aa213888-fade-4e16-bc56-0d0c9f6f9f1d"
+                guard="Existen observaciones"
+                isLeaf="false">
+                <decisionNodeMoniker
+                  Id="c0a936b7-e5a5-4481-9098-7c5e05c72793"
+                  LastKnownName="Decision3"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <decisionNode
+            Id="c0a936b7-e5a5-4481-9098-7c5e05c72793"
+            name="Decision3"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="fdc8518d-a8d4-4fde-8a03-d2cfb0ac6e3c"
+                guard="Sí"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="395a42a1-9201-4249-9c24-6cb1ff054af3"
+                  LastKnownName="Modifica presupuesto"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+              <controlFlow
+                Id="076b9d67-792e-4025-bd14-af70307ffc0a"
+                guard="No"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="df24391c-162a-4d07-9295-c9860f9e3edf"
+                  LastKnownName="Aprobación de presupuesto"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </decisionNode>
+          <opaqueAction
+            Id="4ca1fc48-82fd-4366-8f1c-28de133905e5"
+            name="Verifica tipo de gastos"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="a82fdbc0-a425-4149-accc-3d3beebaf4f8"
+                guard="Gastos variables"
+                isLeaf="false">
+                <decisionNodeMoniker
+                  Id="b9c7ee25-9e51-4268-ae4c-95699173b903"
+                  LastKnownName="Decision1"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction
+            Id="df24391c-162a-4d07-9295-c9860f9e3edf"
+            name="Aprobación de presupuesto"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="06623afa-fa37-4f3a-ba7f-26b1097caffb"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="d68b343e-00d9-4608-9836-e2bf3df38176"
+                  LastKnownName="Consolidación de presupuestos"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction
+            Id="d68b343e-00d9-4608-9836-e2bf3df38176"
+            name="Consolidación de presupuestos"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="22e99603-31fd-442a-b261-0e8972b7e9f5"
+                isLeaf="false">
+                <opaqueActionMoniker
+                  Id="0462f47f-00c1-4e1b-b61f-edcccc503f35"
+                  LastKnownName="Exportación a SAP"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction
+            Id="0462f47f-00c1-4e1b-b61f-edcccc503f35"
+            name="Exportación a SAP"
+            isLeaf="false">
+            <flowNodeTargets>
+              <controlFlow
+                Id="eafc0087-2814-4a8a-8cc1-fd23a89247ef"
+                isLeaf="false">
+                <activityFinalNodeMoniker
+                  Id="eb7d5ca0-eb5d-4367-9b9c-2cf2688e9c52"
+                  LastKnownName="ActivityFinal1"
+                  LastKnownLocation="SpresModeling.uml" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <activityFinalNode
+            Id="eb7d5ca0-eb5d-4367-9b9c-2cf2688e9c52"
+            name="ActivityFinal1"
+            isLeaf="false" />
+        </nodes>
+      </activity>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <undefinedType
+        Id="28195061-4ca1-4324-93b9-c60f850e78a4"
+        name="DateTime" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <undefinedType
+        Id="dee3201b-02fd-4ed8-beec-14868c83a7d3"
+        name="Decimal" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <undefinedType
+        Id="65f85b34-42b0-4dd5-8894-fbadd8b482ac"
+        name="Xml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="452ab66e-1ffa-4739-aa4d-bf57b615f0cd"
+        LastKnownName="Models"
+        LastKnownLocation="Package_1336.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="5fd999b7-3341-43ba-8be7-b961d37d300b"
+        LastKnownName="Infrastructure"
+        LastKnownLocation="Package_1515.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="73a8b41e-8052-4aa6-96ac-b595d949207e"
+        name="Component1"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <subsystem
+        Id="00e11ce5-f133-4947-8fd0-130b8f9408f4"
+        name="Configuration"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <subsystem
+        Id="2b0440bd-2105-4d72-9a08-84d8b02f6a4d"
+        name="Processes"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <subsystem
+        Id="f8e396bb-b0a3-44d8-a838-ecb5e7df5ce6"
+        name="Reporting"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="b61558af-95ce-4acc-9e5b-9788477f60db"
+        name="Catalog Maintenance"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="00e11ce5-f133-4947-8fd0-130b8f9408f4"
+            LastKnownName="Configuration"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="a4aa86fe-f19a-40a8-abdf-fcdbe32bf591"
+        name="Catalog Importation"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="00e11ce5-f133-4947-8fd0-130b8f9408f4"
+            LastKnownName="Configuration"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="ab33e02a-d4a4-4659-8c7a-604c42143afa"
+        name="Premise Configuration"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="00e11ce5-f133-4947-8fd0-130b8f9408f4"
+            LastKnownName="Configuration"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="5d7bce0d-5aa1-4fa0-9c71-5eacd143357f"
+        name="Budgeting"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="2b0440bd-2105-4d72-9a08-84d8b02f6a4d"
+            LastKnownName="Processes"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="8c5dea5b-d311-48de-bb5c-b8e55e51dd77"
+        name="Budget Authorization"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="2b0440bd-2105-4d72-9a08-84d8b02f6a4d"
+            LastKnownName="Processes"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="73348d8f-7750-4637-a24e-2f4d8039494b"
+        name="Consolidation"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="2b0440bd-2105-4d72-9a08-84d8b02f6a4d"
+            LastKnownName="Processes"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="eeab0e1f-0413-4b65-9e2a-e64ae3ad6493"
+        name="Exportation"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="7cad7c9b-4cb7-458d-98e4-dc767c880d17"
+        name="Data Importing"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="f8e396bb-b0a3-44d8-a838-ecb5e7df5ce6"
+            LastKnownName="Reporting"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <subsystem
+        Id="5139adb3-99f8-4afe-bd25-38b363f3a411"
+        name="Security"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <actor
+        Id="d1050302-d835-468a-9ece-b5b1b4cd790a"
+        name="Administrator"
+        isAbstract="false"
+        isLeaf="false">
+        <targetEnds>
+          <association
+            Id="3df7219b-5427-4d64-b7cd-4d44b2bf799f"
+            isDerived="false"
+            sourceEndRoleName="Administrator"
+            targetEndRoleName="User Administration"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="208705f6-658e-4969-b981-22e0054dbdb3"
+              LastKnownName="User Administration"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="57b28b46-6abf-4181-a8f4-7256b27b23e0"
+                  name="Administrator"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="187ad348-e977-4501-804c-3fac6133a03c"
+                  name="User Administration"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="f79ad12e-c539-4a1d-9863-6087285e8dd9"
+            isDerived="false"
+            sourceEndRoleName="Administrator"
+            targetEndRoleName="Role Administration"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="ff62a758-e32c-4598-97cf-ff12f979b42a"
+              LastKnownName="Role Administration"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1e970417-1c7a-4e97-a6d1-bd798a7dd27d"
+                  name="Administrator"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="b08f6855-8d4b-44c3-9158-a166d882ad79"
+                  name="Role Administration"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="d2b71b8d-fce0-4dc0-be5c-039a04316d5c"
+            isDerived="false"
+            sourceEndRoleName="Administrator"
+            targetEndRoleName="Permission Assignment"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="b7549f2e-de98-4996-aec7-1d7fa44f6228"
+              LastKnownName="Permission Assignment"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="c29b6749-dff2-4c42-baba-85cb36789703"
+                  name="Administrator"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1f1fbddb-2e53-42f9-acb0-118541aac9b4"
+                  name="Permission Assignment"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="eb08da4d-c7a5-4e8a-82bf-1b63dbb594cb"
+            isDerived="false"
+            sourceEndRoleName="Administrator"
+            targetEndRoleName="Auditing"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="17816dcd-b478-4df4-ad4b-2965b0966074"
+              LastKnownName="Auditing"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="8b6bbdbf-e9f1-44f7-bc61-98e1305edaac"
+                  name="Administrator"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="c41c4a48-f855-45ef-b0c1-cf0adc7b7d66"
+                  name="Auditing"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </actor>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="208705f6-658e-4969-b981-22e0054dbdb3"
+        name="User Administration"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="5139adb3-99f8-4afe-bd25-38b363f3a411"
+            LastKnownName="Security"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="ff62a758-e32c-4598-97cf-ff12f979b42a"
+        name="Role Administration"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="5139adb3-99f8-4afe-bd25-38b363f3a411"
+            LastKnownName="Security"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="b7549f2e-de98-4996-aec7-1d7fa44f6228"
+        name="Permission Assignment"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="5139adb3-99f8-4afe-bd25-38b363f3a411"
+            LastKnownName="Security"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <actor
+        Id="58bc9e58-93ad-4bbf-b6a1-a95bb1f4f338"
+        name="OBZ Responsible"
+        isAbstract="false"
+        isLeaf="false">
+        <targetEnds>
+          <association
+            Id="0aca2c38-745e-4126-9a65-a1d0d40a9c1f"
+            isDerived="false"
+            sourceEndRoleName="OBZ Responsible"
+            targetEndRoleName="Catalog Maintenance"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="b61558af-95ce-4acc-9e5b-9788477f60db"
+              LastKnownName="Catalog Maintenance"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e2c98309-883e-484c-9903-4a33772167be"
+                  name="OBZ Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="879a507b-221e-4de7-8c0b-09bbc3005030"
+                  name="Catalog Maintenance"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="e1d148e6-bc76-4c10-904b-5338a9eea875"
+            isDerived="false"
+            sourceEndRoleName="OBZ Responsible"
+            targetEndRoleName="Catalog Importation"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="a4aa86fe-f19a-40a8-abdf-fcdbe32bf591"
+              LastKnownName="Catalog Importation"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e158ee2e-9921-4737-b304-c74f92b26ee7"
+                  name="OBZ Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e9dd8953-f54e-4079-8616-80e3b70a9490"
+                  name="Catalog Importation"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="ccee204e-8417-4504-8785-8a61cc925111"
+            isDerived="false"
+            sourceEndRoleName="OBZ Responsible"
+            targetEndRoleName="Premise Configuration"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="ab33e02a-d4a4-4659-8c7a-604c42143afa"
+              LastKnownName="Premise Configuration"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="fb602d65-3be8-44fd-aad1-87c80a4ec62e"
+                  name="OBZ Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="48abf70a-d8cc-492c-ba4e-6ac3fcde796e"
+                  name="Premise Configuration"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="0f5be2f8-8adc-4588-9a89-352d2122dead"
+            isDerived="false"
+            sourceEndRoleName="OBZ Responsible"
+            targetEndRoleName="Consolidation"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="73348d8f-7750-4637-a24e-2f4d8039494b"
+              LastKnownName="Consolidation"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="58edc32c-fcf3-4216-9de8-9c8825a0655c"
+                  name="OBZ Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="9daa4cbe-3864-4a6c-bef4-50a471b6d62a"
+                  name="Consolidation"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="5cee0784-99a7-4e39-8987-bd509c5093c6"
+            isDerived="false"
+            sourceEndRoleName="OBZ Responsible"
+            targetEndRoleName="Exportation"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="eeab0e1f-0413-4b65-9e2a-e64ae3ad6493"
+              LastKnownName="Exportation"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="8f6b9eb9-7ce4-4013-a361-993f959eee82"
+                  name="OBZ Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="d27537bc-1682-4585-8f8a-871b0ad9dbb5"
+                  name="Exportation"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="3e3a09d2-7c7f-4d9a-8e92-21a4f0220a78"
+            isDerived="false"
+            sourceEndRoleName="OBZ Responsible"
+            targetEndRoleName="Budgeting"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="5d7bce0d-5aa1-4fa0-9c71-5eacd143357f"
+              LastKnownName="Budgeting"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="52b703c0-e254-4e70-96a0-c494a01c84fb"
+                  name="OBZ Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="5382de31-45af-43c2-bd63-2225f22e45d8"
+                  name="Budgeting"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </actor>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <actor
+        Id="cfe20327-6fdf-47fc-9925-f9b875043fa7"
+        name="Financial Officer"
+        isAbstract="false"
+        isLeaf="false">
+        <targetEnds>
+          <association
+            Id="03ee462e-ca29-489f-842d-f1783b7efad7"
+            isDerived="false"
+            sourceEndRoleName="Financial Officer"
+            targetEndRoleName="Data Analysis"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="03bd3654-8bd9-48f5-bd75-5bac4f811b8d"
+              LastKnownName="Data Analysis"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e70c2d65-3d05-45f4-81af-805b26d631f3"
+                  name="Financial Officer"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="5b0ba488-8e15-4e2f-a097-e03a34ca34a4"
+                  name="Data Analysis"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="4a7e3f8b-a888-49c5-b734-ec7c01b96c56"
+            isDerived="false"
+            sourceEndRoleName="Financial Officer"
+            targetEndRoleName="Budget Authorization"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="8c5dea5b-d311-48de-bb5c-b8e55e51dd77"
+              LastKnownName="Budget Authorization"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1a735b0e-02ba-40b6-8fae-8f9be5225e33"
+                  name="Financial Officer"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="b7c0b346-0fdc-4ea6-aa12-4e5c2d0e36f1"
+                  name="Budget Authorization"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </actor>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <actor
+        Id="8f1322ef-1809-48db-98a9-7748afa27966"
+        name="CdC Responsible"
+        isAbstract="false"
+        isLeaf="false">
+        <targetEnds>
+          <association
+            Id="d6c0bcca-5e10-4bab-98b0-9d7de7be931c"
+            isDerived="false"
+            sourceEndRoleName="CdC Responsible"
+            targetEndRoleName="Budgeting"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="5d7bce0d-5aa1-4fa0-9c71-5eacd143357f"
+              LastKnownName="Budgeting"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="bb4177c4-2c13-492f-9ae9-89985c7c0e78"
+                  name="CdC Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e36d1d8b-3861-49c3-9515-1814a4bb2d60"
+                  name="Budgeting"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="b0d9da61-83d1-4e34-987e-5184aa270c66"
+            isDerived="false"
+            sourceEndRoleName="CdC Responsible"
+            targetEndRoleName="Data Importing"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="7cad7c9b-4cb7-458d-98e4-dc767c880d17"
+              LastKnownName="Data Importing"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="edbd50f9-a5e9-44ed-8cee-de01f3c16cab"
+                  name="CdC Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="48950684-5e04-45a1-8fc4-1c4a679c1b5c"
+                  name="Data Importing"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="2a91c3aa-9ea1-4443-a162-bd5b126cdcd9"
+            isDerived="false"
+            sourceEndRoleName="CdC Responsible"
+            targetEndRoleName="Data Analysis"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="03bd3654-8bd9-48f5-bd75-5bac4f811b8d"
+              LastKnownName="Data Analysis"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="630512c4-ad6d-4946-be48-a557f53f57c3"
+                  name="CdC Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="35c765ec-f7a0-4e0e-a06c-5c908dc400e7"
+                  name="Data Analysis"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </actor>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="03bd3654-8bd9-48f5-bd75-5bac4f811b8d"
+        name="Data Analysis"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="f8e396bb-b0a3-44d8-a838-ecb5e7df5ce6"
+            LastKnownName="Reporting"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="17816dcd-b478-4df4-ad4b-2965b0966074"
+        name="Auditing"
+        isAbstract="false"
+        isLeaf="false">
+        <subjects>
+          <subsystemMoniker
+            Id="5139adb3-99f8-4afe-bd25-38b363f3a411"
+            LastKnownName="Security"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <useCase
+        Id="b6f6f6c3-7c29-47c8-9da1-a55efc9108e2"
+        name="Benefits Administration"
+        isAbstract="false"
+        isLeaf="false">
+        <extendedCases>
+          <extend
+            Id="1206a65c-e4b2-43db-8eba-361f393e7661">
+            <useCaseMoniker
+              Id="ab33e02a-d4a4-4659-8c7a-604c42143afa"
+              LastKnownName="Premise Configuration"
+              LastKnownLocation="SpresModeling.uml" />
+          </extend>
+        </extendedCases>
+        <subjects>
+          <subsystemMoniker
+            Id="00e11ce5-f133-4947-8fd0-130b8f9408f4"
+            LastKnownName="Configuration"
+            LastKnownLocation="SpresModeling.uml" />
+        </subjects>
+      </useCase>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <actor
+        Id="ecdb5737-54b2-40b7-aa4c-7778f49e5cc2"
+        name="People Responsible"
+        isAbstract="false"
+        isLeaf="false">
+        <generalsInternal>
+          <generalization
+            Id="5c3e8e9a-5bef-45b2-9ef3-4030f0fce7dc"
+            isSubstitutable="false">
+            <actorMoniker
+              Id="8f1322ef-1809-48db-98a9-7748afa27966"
+              LastKnownName="CdC Responsible"
+              LastKnownLocation="SpresModeling.uml" />
+          </generalization>
+        </generalsInternal>
+        <targetEnds>
+          <association
+            Id="d24967ba-4402-4555-b62c-b85e7e45caae"
+            isDerived="false"
+            sourceEndRoleName="People Responsible"
+            targetEndRoleName="Business Benefits"
+            isLeaf="false"
+            isAbstract="false">
+            <useCaseMoniker
+              Id="b6f6f6c3-7c29-47c8-9da1-a55efc9108e2"
+              LastKnownName="Benefits Administration"
+              LastKnownLocation="SpresModeling.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="c0c598fc-4ae5-4fbc-b92b-a47033e47e28"
+                  name="People Responsible"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="5f7871be-021f-4b66-83ce-96d3d3524010"
+                  name="Business Benefits"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </actor>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <activity
+        Id="1b17727c-ed04-408e-ad82-f81967b62c16"
+        name="Tracking"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false"
+        isReentrant="false"
+        isReadOnly="false"
+        isSingleExecution="false">
+        <nodes>
+          <initialNode
+            Id="ef181bbd-027d-4ef1-8bae-af70319ab3c7"
+            name="Initial1"
+            isLeaf="false" />
+          <opaqueAction
+            Id="ac13cfea-8608-4d20-b46f-decc00a54583"
+            name="Creación de presupuesto "
+            isLeaf="false" />
+        </nodes>
+      </activity>
+    </packageHasNamedElement>
+  </packagedElements>
+  <primitiveType
+    Id="220a3521-e091-4221-bae9-3ef9018e845c"
+    name="Integer"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="8943dc84-709e-4f62-b15a-a3273aa6f165"
+    name="Boolean"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="59259974-6d55-42c6-b7bd-763d77ac8ef9"
+    name="String"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="3ab42e7d-4969-445a-b209-471f5cb8209c"
+    name="UnlimitedNatural"
+    isAbstract="false"
+    isLeaf="false" />
+</modelStoreModel>

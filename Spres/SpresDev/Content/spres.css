@@ -1,0 +1,82 @@
+﻿html, body {
+    height:100%;
+    margin:0;
+    padding:0;
+    width:100%;
+}
+
+#DefaultWaitingDiv {
+    position:fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    z-index:50000;
+    display:none;
+}
+
+.e-ribbon .e-header>.e-apptab .e-menu {
+    background: rgb(196, 214, 0)!important;
+}
+
+.e-ribbon.e-js .e-header .e-active:not(.e-list) a{
+    color: rgb(196, 214, 0)!important;
+}
+.e-ribbon.e-js .e-header>.e-select:not(.e-apptab) a{
+    color:rgb(0, 48, 135);
+}
+.e-ribbon.e-js .e-header li.e-select:not(.e-apptab) a:hover{
+ color: rgb(196, 214, 0)!important;   
+}
+
+.e-menu.e-horizontal.e-list.e-active{
+    background:-webkit-gradient(linear,left top, left bottom,color-stop(0%,rgb(196, 214, 0),color.stop(100%, rgb(196, 214, 0))));
+}
+
+.e-ribbon.e-js .e-btn.e-select:hover{
+    background: rgb(196, 214, 0);
+    color: #282827;
+}
+
+.CenterButtonText > div > span:nth-child(2) {
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+
+.btn-primary:hover {
+        color: rgb(0, 48, 135) !important;
+        background-color: rgb(192, 223, 22) !important;
+        border-color: rgb(192, 223, 22) !important;
+    }
+
+    .btn-primary {
+        background-color: rgb(196, 214, 0)!important;
+        border-color: rgb(196, 214, 0)!important;
+        color: rgb(0, 48, 135)!important;
+    }
+
+    .btn:hover{
+        color: rgb(0, 48, 135);
+        background-color: rgb(192, 223, 22);
+        border-color: rgb(192, 223, 22);
+    }
+
+    .btn{
+        background-color: rgb(196, 214, 0);
+        border-color: rgb(196, 214, 0);
+        color: rgb(0, 48, 135);
+    }
+
+    #ulTabs > li > a {
+        font-size: smaller;
+    }
+
+#analysisView {
+    position:absolute;
+    top:200px;
+    bottom:0;
+    width:100%;
+    overflow:auto;
+    display:none;
+}

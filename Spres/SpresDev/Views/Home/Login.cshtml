@@ -1,0 +1,174 @@
+﻿@{
+    Layout = "~/Views/Shared/_Initial.cshtml";
+}
+
+@section Header {
+
+    <script>
+
+        var paginachange = getUrl("/Home/PasswordChange");
+
+        function redirectChangePassword() {
+            window.location = paginachange + "?userName=" + $('#user').val();
+        };
+
+        var testAuth = function () {
+
+            var user = $('#user').val();
+            var pass = $('#pass').val();
+
+            if (user == "" || pass == "") {
+                alert("Digite su usuario y su contraseña.");
+            } else {
+
+                ej.WaitingPopup.showDefault();
+                $.ajax({
+
+                    method: "GET",
+                    url: getUrl("/api/Users/GetUserByName/" + user),
+                    dataType: 'json'
+
+                }).done(function (data) {
+
+                    var userId = data.Id;
+                    var passTemp = data.PasswordTemp;
+                        
+                    sessionStorage.setItem("userId", userId);
+                    sessionStorage.setItem("userName", data.Name);
+                        
+                    $('#id').val(userId);
+                    $('#passwordTemp').val(passTemp);
+
+                    if (passTemp == null) {
+                        model.username(user);
+                        model.password(pass);
+                        authenticate(null, function () {
+                            ej.WaitingPopup.hideDefault();
+                        });
+                    } else {
+                        redirectChangePassword();
+                    }
+
+                }).fail(function (jqXHR, textStatus, errThrown) {
+
+                    if (jqXHR.status == 404) {
+                        alert("El nombre de usuario especificado no existe.");
+                    } else {
+                        alert("Ocurrió un error al intentar iniciar sesión, contacte con el adminstrador del sistema");
+                    }
+                }).always(function () {
+                    ej.WaitingPopup.hideDefault();
+                });
+            }
+        }
+    </script>
+
+    <style>
+        
+        #user {
+            margin-left: 25px;
+        }
+
+        #signIn {
+            margin-left: 83px;
+        }
+
+        .navbar-inverse {
+            background-color: white;
+            border-color: white;
+            border-bottom: 3px solid rgb(0, 48, 135);
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: rgb(196, 214, 0) !important;
+            border-color: rgb(196, 214, 0) !important;
+            color: rgb(0, 48, 135) !important;
+        }
+
+        .navbar-brand {
+            color: #ffffff !important;
+        }
+
+        #pass:focus {
+            outline-color: rgb(0, 156, 222) !important;
+        }
+
+        #user:focus {
+            outline-color: rgb(0, 156, 222) !important;
+        }
+
+        .btn-primary:hover {
+            color: /*#000000 !important;*/rgb(0, 48, 135) !important;
+            background-color: rgb(192, 223, 22) !important;
+            border-color: rgb(192, 223, 22) !important;
+        }
+
+        #livImg {
+            height: auto;
+            width: auto;
+            max-width: 131px;
+            margin-top: -27px;
+        }
+
+        #SpresSpan {
+            float: right;
+            font-size: 17px;
+            margin-top: 17px;
+            margin-right: 15px;
+            font-family: Raleway;
+            color: rgb(0, 48, 135);
+        }
+
+        #usrLbl{
+            color:rgb(0, 48, 135);
+        }
+
+        #passLbl{
+            color:rgb(0, 48, 135);
+        }
+
+        #loginSpres{
+                font-size: 26px;
+    color: rgb(0, 48, 135);
+    margin-left: 86px;
+    margin-bottom: 13px;
+    margin-top: 27px;
+    font-family:Raleway;
+        }
+    </style>
+
+}
+
+<div class="navbar navbar-inverse">
+    <span class="navbar-brand"><img id="livImg" src="~/Content/livsmart.png" /></span>
+    <span id="SpresSpan">Sistema de administración de presupuestos</span>
+</div>
+<div class="container">
+
+    
+    <div class="text-center">
+        <div id="loginSpres">
+            <span class="text-center">Inicio de sesión</span>
+        </div>
+        <form action="testAuth">
+            <div class="form-group">
+                <label id="usrLbl">Usuario</label>
+                <input id="user" />
+            </div>
+
+            <div class="form-group">
+                <label id="passLbl">Contraseña</label>
+                <input type="password" id="pass" />
+            </div>
+            <button class="btn btn-primary" id="signIn"
+                    data-bind="click: testAuth">
+                Iniciar sesión
+            </button>
+        </form>
+    </div>
+</div>
+<input id="id" hidden />
+<input id="passwordTemp" hidden />
+
+

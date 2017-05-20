@@ -1,0 +1,343 @@
+﻿<style type="text/css">
+    .ST_parameterContainer > div {
+        display: inline-block;
+    }
+
+    .ST_parameterLabel {
+        width: 150px;
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-top: -17px;
+        text-align: right;
+    }
+
+    .ST_parameterInput {
+        width: 300px;
+        overflow: hidden;
+    }
+
+    .label {
+        margin-left: 10px;
+    }
+
+    hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    #ST_lblSourceLineNewTarget {
+        color: red;
+    }
+
+    #ST_lblDestinationLineNewTarget {
+        color: green;
+    }
+</style>
+
+<div>
+
+    <label>Origen</label>
+
+    <div class="ST_parameterContainer">
+        <div class="ST_parameterLabel">
+            Cuenta contable:
+        </div>
+        <div class="ST_parameterInput">
+            <span id="ST_lblSourceLineDisplay">
+            </span>
+        </div>
+    </div>
+
+    <div class="ST_parameterContainer">
+        <div class="ST_parameterLabel" id="ST_lblCurrency">
+            Ahorro:
+        </div>
+        <div class="ST_parameterInput">
+            <span id="ST_lblSourceLineCurrentTarget">
+                0.00
+            </span>
+            <span class="glyphicon glyphicon-arrow-right">
+
+            </span>
+            <span id="ST_lblSourceLineNewTarget">
+                0.00
+            </span>
+        </div>
+    </div>
+
+    <hr />
+
+    <label>Destino</label>
+
+    <div class="ST_parameterContainer">
+        <div class="ST_parameterLabel">
+            Cuenta contable:
+        </div>
+        <div class="ST_parameterInput">
+            <input type="text" id="ST_destinationLineId" />
+        </div>
+    </div>
+
+    <div class="ST_parameterContainer">
+        <div class="ST_parameterLabel">
+            Período (mes):
+        </div>
+        <div class="ST_parameterInput">
+            <input type="text" id="ST_destinationLineMonthNumber" />
+        </div>
+    </div>
+
+    <div class="ST_parameterContainer">
+        <div class="ST_parameterLabel ST_currencyLabel">
+            Presupuesto:
+        </div>
+        <div class="ST_parameterInput">
+            <span id="ST_lblDestinationLineCurrentTarget">
+                0.00
+            </span>
+            <span class="glyphicon glyphicon-arrow-right">
+
+            </span>
+            <span id="ST_lblDestinationLineNewTarget">
+                0.00
+            </span>
+        </div>
+    </div>
+
+    <hr />
+
+    <label>Traslado</label>
+
+    <div class="ST_parameterContainer">
+        <div class="ST_parameterLabel">
+            Monto:
+        </div>
+
+        <div class="ST_parameterInput">
+            <input type="text" id="ST_txtAdjustmentAmount" />
+        </div>
+    </div>
+
+    <hr />
+
+    <div style="text-align: center;">
+        <input id="btnOkSavingsTransfer" type="button" class="btn btn-default" value="Trasladar" />
+        <input id="btnCancelSavingsTransfer" type="button" class="btn btn-default" value="Cancelar" />
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    var sourceLineSavings = 0;
+    var destinationLineCurrentTarget = 0;
+
+    function getMonthName(month){
+        switch (month){
+            case 1: return "Enero";
+            case 2: return "Febrero";
+            case 3: return "Marzo";
+            case 4: return "Abril";
+            case 5: return "Mayo";
+            case 6: return "Junio";
+            case 7: return "Julio";
+            case 8: return "Agosto";
+            case 9: return "Septiembre";
+            case 10: return "Octubre";
+            case 11: return "Noviembre";
+            case 12: return "Diciembre";
+            default: return "";
+        }
+    };
+
+    function closeSavingsTransferDialog() {
+        $("#savingsTransferDialog").data("ejDialog").close();
+    }
+
+    function destinationLineMonthNumberChange(args) {
+
+        var lineId = $("#ST_destinationLineId").data("ejDropDownList").getSelectedValue();
+        getMonthTarget(args.value, lineId, "#ST_lblDestinationLineCurrentTarget", "#ST_lblDestinationLineNewTarget", false);
+    };
+
+    function getMonthTarget(monthNumber, lineId, controlCurrentTargetId, controlNewTargetId) {
+
+        if (lineId != "" && monthNumber != "") {
+            ej.WaitingPopup.showDefault();
+            $.ajax({
+                url: getUrl("/api/Forecasts?lineId=" + lineId + "&monthNumber=" + monthNumber),
+                method: "GET"
+            }).done(function (data) {
+
+                $(controlNewTargetId).text(data.Target);
+                $(controlCurrentTargetId).text(data.Target);
+
+                $("#ST_txtAdjustmentAmount").ejNumericTextbox({ value: 0 });
+                destinationLineCurrentTarget = convertToNumber(data.Target);
+            }).fail(function (jqXHR, textStatus, errThrown) {
+                if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                    alert(jqXHR.responseJSON.Message);
+                } else {
+                    alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+                }
+            }).always(function () {
+                ej.WaitingPopup.hideDefault();
+            });
+        }
+    };
+
+    function convertToNumber(strVal) {
+
+        while (strVal.indexOf(",") >= 0) {
+            strVal = strVal.replace(",", "");
+        }
+        return new Number(strVal);
+    };
+
+    function formatNumber(num) {
+        var strNum = num.toLocaleString();
+        return (strNum.indexOf(".") < 0) ? strNum + ".00" : strNum;
+    };
+
+    function txtAdjustmentAmountChange(args) {
+
+        var sourceLineId = sessionStorage.lineId;
+
+        var destinationLineMonthNumber = $("#ST_destinationLineMonthNumber").ejDropDownList("getSelectedValue");
+        var destinationLineId = $("#ST_destinationLineId").ejDropDownList("getSelectedValue");
+
+        if (sourceLineId && destinationLineMonthNumber && destinationLineId) {
+
+            var adjustment = args.value;
+            var value1 = sourceLineSavings - adjustment;
+            var value2 = destinationLineCurrentTarget + adjustment;
+
+            $("#ST_lblSourceLineNewTarget").text(formatNumber(value1));
+            $("#ST_lblDestinationLineNewTarget").text(formatNumber(value2));
+
+        }
+
+    };
+
+    function destinationLineIdChange(args) {
+
+        var monthNumber = $("#ST_destinationLineMonthNumber").data("ejDropDownList").getSelectedValue();
+        getMonthTarget(monthNumber, args.value, "#ST_lblDestinationLineCurrentTarget", "#ST_lblDestinationLineNewTarget", false);
+    };
+
+    $(function () {
+
+        var months = [];
+        var currentMonth = new Date().getMonth() + 1;
+
+        for (var i = currentMonth; i <= 12; i++) {
+            months.push({ Id: i, Name: getMonthName(i) });
+        }
+
+        $("#ST_destinationLineMonthNumber").ejDropDownList({
+            dataSource: months,
+            fields: { text: "Name", value: "Id" },
+            watermarkText: "Seleccione período",
+            change: destinationLineMonthNumberChange,
+            width: "300px"
+        });
+
+        $("#ST_destinationLineId").ejDropDownList({
+            dataSource: [],
+            fields: { text: "Name", value: "Id" },
+            watermarkText: "Seleccione cuenta contable",
+            change: destinationLineIdChange,
+            width: "300px"
+        });
+
+        $("#ST_txtAdjustmentAmount").ejNumericTextbox({
+            value: 0,
+            decimalPlaces: 2,
+            minValue: 0,
+            width: "300px",
+            change: txtAdjustmentAmountChange
+        });
+
+        $("#btnCancelSavingsTransfer").click(closeSavingsTransferDialog);
+
+        $("#btnOkSavingsTransfer").click(function () {
+
+            var sourceLineId = sessionStorage.lineId;
+
+            var destinationLineMonthNumber = $("#ST_destinationLineMonthNumber").ejDropDownList("getSelectedValue");
+            var destinationLineId = $("#ST_destinationLineId").ejDropDownList("getSelectedValue");
+
+            if (sourceLineId && destinationLineMonthNumber && destinationLineId) {
+
+                var adjustment = $("#ST_txtAdjustmentAmount").ejNumericTextbox("getValue");
+
+                if (adjustment <= 0) {
+                    alert("El monto del traslado es inválido");
+                } else {
+
+                    ej.WaitingPopup.showDefault();
+                    $.ajax({
+                        url: getUrl("/api/Forecasts/SavingsTransfer"),
+                        method: "PUT",
+                        data: {
+                            SourceLineId: sourceLineId,
+                            SourceMonthNumber: 0,
+                            DestinationLineId: destinationLineId,
+                            DestinationMonthNumber: destinationLineMonthNumber,
+                            Adjustment: adjustment
+                        }
+                    }).done(function () {
+
+                        closeSavingsTransferDialog();
+                        loadBudgetSheets();
+                        alert("Traslado de ahorros realizado con éxito");
+
+                    }).fail(function (jqXHR, textStatus, errThrown) {
+                        if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                            alert(jqXHR.responseJSON.Message);
+                        } else {
+                            alert("Ocurrió un error interno al intentar realizar el traslado de ahorros entre las líneas presupuestarias.");
+                        }
+                    }).always(function () {
+                        ej.WaitingPopup.hideDefault();
+                    });
+                }
+
+            } else {
+                alert("Seleccione una cuenta contable y período de destino");
+            }
+
+        });
+
+        var lineId = sessionStorage.lineId;
+
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: getUrl("/api/Forecasts/SavingsTransfer/" + lineId),
+            method: "GET"
+        }).done(function (data) {
+            $("#ST_lblSourceLineDisplay").text(data.Display);
+            $("#ST_destinationLineId").ejDropDownList("instance").setModel({ dataSource: data.ChildAccounts });
+
+            $("#ST_lblCurrency").text("Ahorro " + getMonthName(data.MonthNumber) + " (" + data.CurrencyId + "):");
+            sourceLineSavings = convertToNumber(data.Savings.toString());
+            var savings = formatNumber(sourceLineSavings);
+            $("#ST_lblSourceLineCurrentTarget").text(savings);
+            $("#ST_lblSourceLineNewTarget").text(savings);
+            $("#ST_txtAdjustmentAmount").ejNumericTextbox({ maxValue: data.Savings });
+
+        }).fail(function (jqXHR, textStatus, errThrown) {
+            if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.Message) {
+                alert(jqXHR.responseJSON.Message);
+                closeSavingsTransferDialog();
+            } else {
+                alert("Ocurrió un error interno al intentar cargar la información de la línea presupuestaria.");
+            }
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    });
+</script>
+
+

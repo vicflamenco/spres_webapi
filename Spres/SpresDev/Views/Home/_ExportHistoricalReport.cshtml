@@ -1,0 +1,116 @@
+﻿<style type="text/css">
+    #reportTypesContainer > div {
+        margin: 0px 0px 7px 20px;
+    }
+
+    #reportTypesContainer > div:last-child > div {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    #historicalDateContainer {
+        margin-left: 15px;
+    }
+    #exportButtonsContainer {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+
+<div>
+
+    <div id="reportTypesContainer">
+
+        <label>Seleccione tipo de reporte:</label>
+
+        <div>
+            <input type="radio" name="reportType" value="1" /> Forecast 1
+        </div>
+
+        <div>
+            <input type="radio" name="reportType" value="2" /> Forecast 2
+        </div>
+
+        <div>
+            <input type="radio" name="reportType" value="3" /> Forecast 3
+        </div>
+
+        <div>
+            <div>
+                <input type="radio" name="reportType" value="0" checked /> Por fecha
+            </div>
+            
+            <div id="historicalDateContainer">
+                <input type="text" id="historicalDate" />
+            </div>
+        </div>
+    </div>
+
+    <div id="exportButtonsContainer">
+        <input id="btnOkExportHistoricalReport" type="button" class="btn" value="Exportar" />
+        <input id="btnCancelExportHistoricalReport" type="button" class="btn" value="Cancelar" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    function closeHistoricalReportDialog() {
+        $("#exportHistoricalReportDialog").data("ejDialog").close();
+    };
+
+    $(function () {
+
+        $("input[name='reportType']").change(function () {
+            $("#historicalDate").ejDatePicker({ enabled: this.value == 0 });
+        });
+
+        $("#historicalDate").ejDatePicker({
+            locale: "es-SV",
+            dateFormat: 'yyyy/MM/dd',
+            watermarkText: "Seleccione una fecha",
+            allowEdit: false,
+            width: "300px"
+        });
+
+        $("#btnOkExportHistoricalReport").click(function () {
+
+            var reportType = $("input[name='reportType']:checked").val();
+
+            if (reportType == "0") {
+
+                var historicalDate = $('#historicalDate').ejDatePicker('instance').getValue();
+
+                if (historicalDate == "") {
+                    alert("Seleccione una fecha");
+                } else {
+                    downloadHistoricalReport(historicalDate, reportType);
+                }
+
+            } else {
+                downloadHistoricalReport(null, reportType);
+            }
+            
+        });
+
+        $("#btnCancelExportHistoricalReport").click(closeHistoricalReportDialog);
+    });
+
+    function downloadHistoricalReport(historicalDate, reportType) {
+        $('#btnOkExportHistoricalReport').prop("disabled", true);
+        $('#btnCancelExportHistoricalReport').prop("disabled", true);
+
+        var fiscal = getFiscalYear();
+        var company = getCompanyId();
+        var costCenter = getCostCenterId();
+        var currency = getCurrencyId();
+
+        var url = "/api/export?fiscal=" + fiscal + "&company=" + company + "&costCenter=" + costCenter + "&toCurrencyId=" + currency;
+        if (historicalDate != null) {
+            url += "&historicalDate=" + historicalDate;
+        }
+        url += "&reportType=" + reportType;
+
+        var popup = window.open(getUrl(url), "_blank");
+        closeHistoricalReportDialog();
+    };
+
+</script>

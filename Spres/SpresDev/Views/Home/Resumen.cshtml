@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewBag.Title = "Resumen";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<h2>Resumen</h2>
+<div id="gridAccounts"></div>
+<script type="text/javascript">
+
+
+
+    $(function () {
+
+        var dataManagerTotal = ej.DataManager({
+            url: "/api/Summaries/Total/1/2015",
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+
+        var dataTotal = [];
+        dataManagerTotal.executeQuery(ej.Query()).done(function (e) {
+            for (var i = 0; i < e.result.length; i++) {
+                dataPosition.push({
+                    
+                });
+            }
+        });
+
+        var dataManager = ej.DataManager({
+            url: "/api/Summaries/GetSummary/2015",
+            adaptor: new ej.WebApiAdaptor()
+        });
+            dataManager.executeQuery(ej.Query()).done(function (data) {
+                var dataModel = data.result;
+
+                subChildGrid = {
+                    dataSource: dataModel.SubChildrenLines,
+                    queryString: "LevelTwoId",
+                    allowPaging: false,
+                    columns: subColumnsChild,
+                    allowSelection: true,
+                    allowScrolling: false,
+                    commonWidth: 45,
+                    queryCellInfo: function (args) {
+                        var a = 3;
+                        var value = args.text.replace(",", "");
+                        var $element = $(args.cell);
+                        switch (args.column.headerText) {
+
+                            case "Variación total anual vs fcst":
+                                if (parseFloat(value) < 0)
+                                    $element.css("color", "red").prepend("<img src='Content/ejThemes/images/down.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img> ");
+                                else
+                                    $element.css("color", "green").prepend("<img src='Content/ejThemes/images/up.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img>");
+                                break;
+
+                            case "Variación total anual vs real 2014":
+                                if (parseFloat(value) < 0)
+                                    $element.css("color", "red").prepend("<img src='Content/ejThemes/images/down.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img> ");
+                                else
+                                    $element.css("color", "green").prepend("<img src='Content/ejThemes/images/up.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img>");
+                                break;
+                        }
+                    }
+                    
+                };
+
+                principalChild = {
+                    dataSource: dataModel.ChildrenLines,
+                    queryString: "LevelOneId",
+                    allowPaging: false,
+                    columns: subColumnsChild,
+                    allowSelection: true,
+                    allowScrolling: false,
+                    commonWidth: 50,
+                    childGrid: subChildGrid,
+                    queryCellInfo: function (args) {
+                        var a = 3;
+                        var value = args.text.replace(",", "");
+                        var $element = $(args.cell);
+                        switch (args.column.headerText) {
+
+                            case "Variación total anual vs fcst":
+                                if (parseFloat(value) < 0)
+                                    $element.css("color", "red").prepend("<img src='Content/ejThemes/images/down.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img> ");
+                                else
+                                    $element.css("color", "green").prepend("<img src='Content/ejThemes/images/up.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img>");
+                                break;
+
+                            case "Variación total anual vs real 2014":
+                                if (parseFloat(value) < 0)
+                                    $element.css("color", "red").prepend("<img src='Content/ejThemes/images/down.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img> ");
+                                else
+                                    $element.css("color", "green").prepend("<img src='Content/ejThemes/images/up.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img>");
+                                break;
+                        }
+                    }
+                };
+
+                $("#gridAccounts").ejGrid({
+                    dataSource: dataModel.ParentLines,
+                    childGrid: principalChild,
+                    allowPaging: false,
+                    columns: columns,
+                    commonWidth: 70,
+                    allowScrolling: true,
+                    isResponsive: true,
+                    width: '98%',
+                    height: '300',
+                   queryCellInfo: function (args) {
+                        var a = 3;
+                        var value = args.text.replace(",", "");
+                        var $element = $(args.cell);
+                        switch (args.column.headerText) {
+                            
+                            case "Variación total anual vs fcst":
+                                if (parseFloat(value) < 0)
+                                    $element.css("color", "red").prepend("<img src='Content/ejThemes/images/down.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img> ");
+                                else
+                                    $element.css("color", "green").prepend("<img src='Content/ejThemes/images/up.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img>");
+                                break;
+
+                            case "Variación total anual vs real 2014":
+                                if (parseFloat(value) < 0)
+                                    $element.css("color", "red").prepend("<img src='Content/ejThemes/images/down.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img> ");
+                                else
+                                    $element.css("color", "green").prepend("<img src='Content/ejThemes/images/up.png' height='15px' width='13px' style='padding-left:10px; float:right;' ></img>");
+                                break;
+                        }
+                    }
+                });
+            });
+    });
+    var columns = [
+        { field: "Id", headerText: "Id", visible: false, isPrimaryKey: true },
+        { field: "Package", headerText: "Paquete" },
+        {
+            field: "CurrentTotal", headerText: "Total 2015",format: "{0:C}"
+        },
+        { field: "PreviousTotal", headerText: "Total 2014", format: "{0:C}" },
+        { field: "VarTotalVSFrcst", headerText: "Variación total anual vs fcst", format: "{0:P}" },
+        { field: "PreviousReal", headerText: "Real 2014", format:"{0:C}"},
+        { field: "VarTotalVSPrevious", headerText: "Variación total anual vs real 2014", format:"{0:P}" }
+    ];
+    var subColumnsChild = [
+        { field: "Id", headerText: "Id", visible: false, isPrimaryKey: true },
+        { field: "Code", headerText: "Código" },
+        { field: "Description", headerText: "Descripción" },
+        { field: "CurrentTotal", headerText: "Total 2015", format: "{0:C}" },
+        { field: "PreviousTotal", headerText: "Total 2014", format: "{0:C}" },
+        { field: "VarTotalVSFrcst", headerText: "Variación total anual vs fcst", format: "{0:P}" },
+        { field: "PreviousReal", headerText: "Real 2014", format: "{0:C}" },
+        { field: "VarTotalVSPrevious", headerText: "Variación total anual vs real 2014", format: "{0:P}" }
+    ];
+    
+
+</script>
+

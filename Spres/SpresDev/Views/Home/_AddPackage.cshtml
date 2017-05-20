@@ -1,0 +1,89 @@
+﻿<div id="addPackageContent">
+    <p>
+        Seleccione el paquete que desea agregar
+    </p>
+    <p>
+        <input id="PackageList" />
+    </p>
+    <p>
+        <input id="btnOkAddPackage" type="button" class="btn" value="Agregar" />
+        <input id="btnCancelAddPackage" type="button" class="btn" value="Cancelar" />
+    </p>
+</div>
+<div id="addPackageErrorContent">
+    <p>
+        <span id="addPackageErrorText">
+
+        </span>
+    </p>
+    <p>
+        <input id="btnCloseAddPackage" type="button" class="btn" value="Cerrar" />
+    </p>
+</div>
+
+<script>
+
+    function showAddPackageError(message) {
+        $("#addPackageContent").hide();
+        $("#addPackageErrorText").text(message);
+        $("#addPackageErrorContent").show();
+    };
+
+    function closeAddPackageDialog() {
+        $("#budgetDialog").data("ejDialog").close();
+    };
+
+    $(function () {
+
+        $("#addPackageContent").hide();
+        $("#addPackageErrorContent").hide();
+
+        var urlBudgetAvailablePackages = getUrl("/api/BudgetAvailablePackages/" + getCostCenterId() + "/" + getFiscalYear() + "/" + getCompanyId());
+
+        $.ajax({
+            url: urlBudgetAvailablePackages,
+            method: "GET"
+        }).done(function (data) {
+            if (data.Count) {
+                $("#PackageList").ejDropDownList({
+                    dataSource: data.Items,
+                    fields: { text: "Name", value: "Id" },
+                    watermarkText: "Seleccione paquete",
+                    width: 350
+                });
+                $("#addPackageContent").show();
+            } else {
+                showAddPackageError("Todos los paquetes disponibles ya fueron agregados al presupuesto actual o no tiene permisos suficientes para editar este presupuesto.");
+            }
+        }).fail(function (jqXHR) {
+            showAddPackageError("Ocurrió un error interno al intentar cargar los paquetes disponibles para el presupuesto actual.");
+        });
+
+        $("#btnOkAddPackage").click(function () {
+            var packagesList = $("#PackageList").ejDropDownList("instance");
+            var selectedPackage = packagesList.getSelectedValue();
+            if (selectedPackage != ""){
+
+                $('#btnOkAddPackage').prop("disabled", true);
+                $('#btnCancelAddPackage').prop("disabled", true);
+                packagesList.disable();
+                var url = getUrl("/api/BudgetSheets?packageId=" + selectedPackage);
+
+                $.post(url, { companyId: getCompanyId(), fiscalYear: getFiscalYear(), costCenterId: getCostCenterId() }).done(function (data) {
+                    getBudgetIsAuthorized();
+                    closeAddPackageDialog();
+                    loadBudgetSheets(true);
+                }).fail(function (jqXHR) {
+                    showAddPackageError("Ocurrió un error interno al intentar agregar el paquete seleccionado.");
+                });
+
+            } else {
+                alert("Seleccione un paquete");
+            }
+        });
+
+        $("#btnCancelAddPackage").click(closeAddPackageDialog);
+        $("#btnCloseAddPackage").click(closeAddPackageDialog);
+    });
+
+</script>

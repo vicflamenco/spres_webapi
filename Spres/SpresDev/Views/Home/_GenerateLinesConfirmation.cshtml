@@ -1,0 +1,91 @@
+﻿<div id="generateLinesContent">
+    <p id="generateLinesWarningText">
+        Si se generan las líneas de presupuestación para la subcuenta contable seleccionada, 
+        se eliminará cualquier línea de presupuestación que esté actualmente asociada a dicha subcuenta contable.
+    </p>
+    <div id="divSelectGenerationType">
+        <p>
+            Seleccione el tipo de generación:
+        </p>
+        <ul style="list-style:none">
+
+            <li><input type="radio" name="generationType" value="costCenter" checked> Para el centro de costo:<br /><strong><span id="costCenterDisplay" style="padding-left:20px"></span></strong></li>
+            <li><input type="radio" name="generationType" value="allCostCenters"> Todos los centros de costo del mismo tipo de la cuenta contable<br /><strong><span id="accountDisplay" style="padding-left:20px"></span></strong></li>
+        </ul>
+    </div>
+    <p id="generateLinesButtonGroup" style="text-align: center;">
+        <input id="btnGenerateLines" type="button" class="btn" value="Generar líneas" />
+        <input id="btnCancelLines" type="button" class="btn" value="Cancelar" />
+    </p>
+</div>
+
+<script>
+
+    var hasAllCostCentersPermission = false;
+    var generateLinesContainer = $("#generateLinesContainer");
+    generateLinesContainer.hide();
+
+    $(function () {
+
+        $.ajax({
+            url: getUrl("/api/BudgetSheets/" + sessionStorage.sheetId),
+            method: "GET",
+        }).done(function (data) {
+
+            hasAllCostCentersPermission = data.HasAllCostCentersPermission;
+
+            if (data.HasAllCostCentersPermission && data.IsHumanResources) {
+                $("#costCenterDisplay").text(getCostCenterDisplay());
+                $("#accountDisplay").text(sessionStorage.lineDescription);
+            } else {
+                $("#divSelectGenerationType").hide();
+                $("#generateLinesWarningText").css("margin-top", "30px");
+                $("#generateLinesButtonGroup").css("margin-top", "30px");
+            }
+            generateLinesContainer.show();
+
+        }).fail(function (jqXHR) {
+            console.log(jqXHR);
+        });
+    });
+
+    $("#btnGenerateLines").click(function () {
+
+        $('#btnGenerateLines').prop("disabled", true);
+        $('#btnCancelLines').prop("disabled", true);
+
+        var urlPostGenerateLines = "/api/BudgetLines/PostGenerateLines/" + getCostCenterId() + "/" + sessionStorage.lineId;
+
+        if (hasAllCostCentersPermission) {
+            var generationType = $("input[name=generationType]:checked").val();
+            urlPostGenerateLines += "/" + (generationType == "allCostCenters").toString();
+        } else {
+            urlPostGenerateLines += "/false";
+        }
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            method: "POST",
+            url: getUrl(urlPostGenerateLines),
+            timeout: 180000
+        }).done(function () {
+            sessionStorage.removeItem("lineId");
+            sessionStorage.removeItem("subLineId");
+            var button = $("#defaultRibbon_generate");
+            if (button.length) {
+                button.data("ejButton").disable();
+            }
+            loadBudgetSheets();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Ocurrió un error interno al intentar generar las líneas de presupuestación");
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+            $("#generateLinesConfirmationDialog").data("ejDialog").close();
+        });
+
+    });
+
+    $("#btnCancelLines").click(function () {
+        $("#generateLinesConfirmationDialog").data("ejDialog").close();
+    });
+
+</script>

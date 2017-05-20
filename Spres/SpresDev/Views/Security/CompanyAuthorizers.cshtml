@@ -1,0 +1,183 @@
+﻿
+@{
+    ViewBag.Title = "CompanyAuthorizers";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<style>
+    .company {
+        display: flex;
+    }
+
+    .companyDropDown {
+        width: 200px;
+        margin-left: 20px;
+    }
+
+    #gridCompanyAuthorizers {
+        margin-top: 15px;
+    }
+</style>
+<div id="companyAuthorizersList">
+    <div class="company">
+        <h5><strong>Región</strong></h5>
+        <div class="companyDropDown"><input type="text" id="companyList" /></div>
+    </div>
+    <div id="gridCompanyAuthorizers"></div>
+
+</div>
+
+<script type="text/javascript">
+
+    var usersList = [];
+
+    var dataManager = ej.DataManager({
+        url: getUrl("/api/CompanyAuthorizers"),
+        adaptor: new ej.WebApiAdaptor()
+    });
+
+    var usersDataManager = ej.DataManager({
+        url: getUrl("/api/Users"),
+        adaptor: new ej.WebApiAdaptor()
+    });
+    usersList = [];
+    usersDataManager.executeQuery(ej.Query()).done(function (e) {
+
+        var data = e.result;
+        if (data.length) {
+            for (var i = 0; i < data.length; i++) {
+                usersList.push({ Id: data[i].Id, Name: data[i].Name });
+            }
+        };
+    });
+
+    function rebindCompanyAuthorizers(id) {
+        $("#gridCompanyAuthorizers").ejGrid("instance").option("query", new ej.Query().addParams("companyId", id));
+        $("#gridCompanyAuthorizers").ejGrid("instance").option("dataSource", dataManager);
+    };
+
+    function companiesListChange(sender) {
+        rebindCompanyAuthorizers(sender.value);
+        $("#gridCompanyAuthorizers").ejGrid("refreshContent", true);
+    };
+
+    $(function () {
+
+        var urlCompanies = getUrl("/api/Companies");
+        var dataMangerCompany = ej.DataManager({
+            url: urlCompanies,
+            adaptor: new ej.WebApiAdaptor(),
+        });
+
+        $('#companyList').ejDropDownList({
+            dataSource: dataMangerCompany,
+            fields: { text: "Name", value: "Id" },
+            watermarkText: "Seleccione región",
+            change: companiesListChange,
+            width: "500"
+        });
+
+        viewCompanyAuthorizersPermissions();
+    });
+
+    function createCompanyAuthorizersGrid(editPermission) {
+
+        var columnsCompanyAuthorizersPopUp = [
+            {
+                field: "AuthorizerGUID", headerText: "Nombre del autorizador", validationRules: { required: true }, width: 250,
+                editType: ej.Grid.EditingType.Dropdown, dataSource: usersList, isPrimaryKey: true,
+                foreignKeyValue: "Name", foreignKeyField: "Id"
+            }
+        ];
+
+        var editCompanyAuthorizersButtons = {
+            headerText: "",
+            commands: [
+                { type: ej.Grid.UnboundType.Delete, buttonOptions: { contentType: "imageonly", prefixIcon: "e-delete" } },
+                { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } }
+            ],
+            textAlign: ej.TextAlign.Center,
+            isUnbound: true, width: 100
+        };
+
+        var companyAuthorizersToolItems = [ej.Grid.ToolBarItems.Search];
+        if (editPermission) {
+            columnsCompanyAuthorizersPopUp.push(editCompanyAuthorizersButtons);
+            companyAuthorizersToolItems = [ej.Grid.ToolBarItems.Add, ej.Grid.ToolBarItems.Search];
+        }
+
+        $("#gridCompanyAuthorizers").ejGrid({
+            dataSource: [],
+            allowPaging: true,
+            allowSearching: true,
+            editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: true, showConfirmDialog: true },
+            pageSettings: { pageSize: 6 },
+            toolbarSettings: { showToolbar: true, toolbarItems: companyAuthorizersToolItems },
+            allowScrolling: true,
+            actionBegin: function (args) {
+                if (args.requestType == "delete") {
+                    args.cancel = true;
+                    if (confirm("¿Desea eliminar al autorizador seleccionado?")) {
+
+                        var grid = this;
+                        var companyId = $('#companyList').ejDropDownList("instance").getSelectedValue();
+                        $.ajax({
+                            url: getUrl("/api/CompanyAuthorizers"),
+                            method: "DELETE",
+                            data: {
+                                CompanyId: companyId,
+                                AuthorizerGUID: args.data.AuthorizerGUID,
+                            }
+                        }).done(function (result) {
+                            grid.refreshContent();
+                        }).fail(function (jqXHR, textStatus, errThrown) {
+                            alert(jqXHR.responseJSON.Message);
+                        });
+                    }
+                } else if (args.requestType == "save") {
+                    
+                    args.cancel = true;
+                    var grid = this;
+
+                    var companyId = $('#companyList').ejDropDownList("instance").getSelectedValue();
+                    $.ajax({
+                        url: getUrl("/api/CompanyAuthorizers"),
+                        method: "POST",
+                        data: {
+                            CompanyId: companyId,
+                            AuthorizerGUID: args.data.AuthorizerGUID,
+                        }
+                    }).done(function (result) {
+                        grid.refreshContent();
+                    }).fail(function (jqXHR, textStatus, errThrown) {
+                        alert(jqXHR.responseJSON.Message);
+                    });
+                }
+            },
+            actionFailure: function (args) {
+                alert(args.error.responseJSON.Message);
+                args.cancel = true;
+            },
+            endAdd: function () {
+                this.refreshContent();
+            },
+            columns: columnsCompanyAuthorizersPopUp
+        });
+
+    };
+
+    function viewCompanyAuthorizersPermissions() {
+        var permissions = JSON.parse(sessionStorage.permissions);
+
+        for (var i = 0; i < permissions.length; i++) {
+
+            var permission = permissions[i];
+            if (permission.Option == "Security") {
+                createCompanyAuthorizersGrid(permission.Edit);
+            }
+
+        }
+    };
+</script>
+

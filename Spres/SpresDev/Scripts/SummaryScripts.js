@@ -1,0 +1,1 @@
+﻿function getFiscalYearSummary() { return $("#FiscalYearList").ejDropDownList("instance").getSelectedValue(); }

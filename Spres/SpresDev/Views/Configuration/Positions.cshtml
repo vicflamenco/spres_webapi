@@ -1,0 +1,287 @@
+﻿@{
+    ViewBag.Title = "Position";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    .company{
+            
+            display: flex;
+    }
+
+    .companyDropDown{
+        width:200px;
+        margin-left: 20px;
+    }
+
+    .buttonBack{
+        margin-top: 23em;
+        margin-left: 21em;
+    }
+     #countEquipment{
+        display: inline-block;
+        float: right;
+        margin-right: 5px;
+    }
+
+     #assigned{
+        margin-top: -30px;
+        margin-left: 371px;
+     }
+    
+     #gridPosition {
+         margin-top: 15px;
+     }
+</style>
+<div id="positionList">
+    <div class="company">
+        <h5><strong>Región</strong></h5>
+        <div class="companyDropDown"><input type="text" id="companyList" /></div>
+    </div>
+    <div id="gridPosition"></div>
+
+</div>
+
+<div id="equipment" style="display:none">
+    <div class="control">
+        <div class="ctrllabel" id="equ">Equipo de protección para: <strong id="positionSelected"></strong>
+            <br />
+        <p>(Seleccione un equipo disponible y arrástrelo hacia equipos asignados)</p>
+         </div>
+        <br />
+        <p id="available">Equipos disponibles</p>
+        <p id="assigned">Equipos asignados</p>
+        <div class="control1" style="float: left;">
+            <ul id="selectEquipment"></ul>
+        </div>
+        <div id="" class="control2" style="float: right;">
+            <ul id="selectedEquipment"></ul>
+        </div>
+    </div>
+    <div id="countEquipment"></div>
+    <div class="buttonBack"><input class="btn btn-primary" type="button" value="Regresar" onclick="back()" /></div>
+    <input id="idGridCurrent"value="" disabled hidden/>
+</div>
+
+<script type="text/javascript">
+
+    var urlPositions = getUrl("/api/Positions");
+    var dataManager = ej.DataManager({
+        url: urlPositions,
+        adaptor: new ej.WebApiAdaptor()
+    });   
+
+    function rebindPositions(id) {
+        $("#gridPosition").ejGrid("instance").option("query", new ej.Query().addParams("companyId", id));
+        $("#gridPosition").ejGrid("instance").option("dataSource", dataManager);
+    };
+
+    function companiesListChange(sender) {
+        rebindPositions(sender.value);
+        $("#gridPosition").ejGrid("refreshContent", true);
+    };
+    
+    $(function () {
+
+        var urlCompanies = getUrl("/api/Companies");
+        var dataMangerCompany = ej.DataManager({
+            url: urlCompanies,
+            adaptor: new ej.WebApiAdaptor(),            
+        });
+
+        $('#companyList').ejDropDownList({
+            dataSource: dataMangerCompany,
+            fields: { text: "Name", value: "Id" },
+            watermarkText: "Seleccione región",
+            change: companiesListChange,
+            width: "600"
+        });
+
+        viewPositionPermissions();
+
+        $('#selectedEquipment').ejListBox({
+            dataSource: [],
+            fields: { text: "Name" },
+            allowDragAndDrop: true,
+            width: "300",
+            height:"300",
+            itemDrop: function (args) {
+                var idPosition = $('#idGridCurrent').val();
+                var idEquitment = args.items.data.Id;
+
+                var urlPositionEquipments = getUrl("/api/PositionEquipments/" + idPosition + "/" + idEquitment);
+                $.ajax({
+                    method: "PUT",
+                    url: urlPositionEquipments
+                }).done(function () {
+                    countEquipment();
+                }).fail(function (e) {
+                    if (e.responseJSON.ExceptionType == "System.InvalidOperationException") {
+                        alert(e);
+                    } else {
+                        alert('Error:' + e.responseText);
+                    }
+                });
+            }
+        });
+
+        $('#selectEquipment').ejListBox({
+            allowDragAndDrop: true,
+            dataSource: [],
+            fields: { text: "Name" },
+            width: "300",
+            height:"300",
+            itemDrop: function (args) {
+
+                var idPosition = $('#idGridCurrent').val();
+                var idEquitment = args.items.data.Id;
+                var urlPositionEquipments = getUrl("/api/PositionEquipments/" + idPosition + "/" + idEquitment);
+                $.ajax({
+                    method: "POST",
+                    url: urlPositionEquipments
+                }).done(function () {
+                    countEquipment();
+                }).fail(function (e) {
+                    if (e.responseJSON.ExceptionType == "System.InvalidOperationException") {
+                        alert(e);
+                    } else {
+                        alert('Error:' + e.responseText);
+                    }
+                });
+            }
+        });
+    
+    });
+
+    function countEquipment() {
+        var urlPositionEquipment = getUrl("/api/PositionEquipments?positionId=" + $('#idGridCurrent').val() + "&attached=true");
+        var dataMangerEquipmentassociated = ej.DataManager({
+            url: urlPositionEquipment,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        dataMangerEquipmentassociated.executeQuery(ej.Query()).done(function (e) {
+            $('#selectedEquipment').ejListBox("instance").option("dataSource", e.result);
+            $('#countEquipment').empty();
+            $('#countEquipment').append('<strong>' + e.result.length + ' equipo(s) asignado(s)<strong>');
+        });
+    };
+
+    function equipmentClick() {
+        $('#positionSelected').empty();
+        
+        var grid = $('#gridPosition').ejGrid("instance");
+        var index = this.element.closest("tr").index();
+        var record = grid.getCurrentViewData()[index];
+
+        $('#idGridCurrent').val(record.Id);
+        $('#positionSelected').append(record.Name);
+
+        var urlPositionEquipments = getUrl("/api/PositionEquipments?positionId=" + $('#idGridCurrent').val() + "&attached=false");
+        var dataMangerEquipment = ej.DataManager({
+            url: urlPositionEquipments,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        dataMangerEquipment.executeQuery(ej.Query()).done(function (e) {
+            $('#selectEquipment').ejListBox("instance").option("dataSource", e.result);
+
+        });
+
+        var urlPositionEquipment = getUrl("/api/PositionEquipments?positionId=" + $('#idGridCurrent').val() + "&attached=true");
+        var dataMangerEquipmentassociated = ej.DataManager({
+            url: urlPositionEquipment,
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        dataMangerEquipmentassociated.executeQuery(ej.Query()).done(function (e) {
+            $('#selectedEquipment').ejListBox("instance").option("dataSource", e.result);
+            $('#countEquipment').empty();
+            $('#countEquipment').append('<strong>' + e.result.length + ' equipo(s) asignado(s)<strong>');
+
+            $('#equipment').show();
+            $('#positionList').hide();
+        });
+    };
+
+    function back() {
+        $('#equipment').hide();
+        $('#positionList').show();
+    };
+
+    function createPositionGrid(editPermission) {
+        
+
+        var columnsPositionPopUp = [
+                    { field: "Id", isPrimaryKey: true, visible: false },
+                    { field: "Name", headerText: 'Nombre', validationRules: { required: true, minlength: 5 }, width: 150 },
+                    { field: "CompanyId", visible: false, },
+
+        ];
+
+        var editPositionButtons = {
+            headerText: "",
+            commands: [
+                { type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                { type: ej.Grid.UnboundType.Delete, buttonOptions: { contentType: "imageonly", prefixIcon: "e-delete" } },
+                { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } },
+                { type: "Equipment", buttonOptions: { contentType: "imageonly", prefixIcon: "glyphicon glyphicon-briefcase", click: "equipmentClick", htmlAttributes: { class: "equipmentCommandButton" } } },
+            ],
+            isUnbound: true, width: 100
+        };
+
+
+        var positionToolItems = [ej.Grid.ToolBarItems.Search];
+        if (editPermission) {
+            columnsPositionPopUp.push(editPositionButtons);
+            positionToolItems = [ej.Grid.ToolBarItems.Add, ej.Grid.ToolBarItems.Search];
+        }
+
+
+        $("#gridPosition").ejGrid({
+            dataSource: [],
+            allowPaging: true,
+            allowSearching: true,
+            editSettings: { allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: true, showConfirmDialog: true },
+            pageSettings: { pageSize: 6 },
+            toolbarSettings: { showToolbar: true, toolbarItems: positionToolItems },
+            allowScrolling: true,
+            actionBegin: function (args) {
+                switch (args.requestType) {
+                    case "save":
+                        var dataItem = args.data;
+                        dataItem.companyId = $('#companyList').ejDropDownList("instance").getSelectedValue();
+                        break;
+
+                    case "delete":
+                        if (!confirm("¿Desea eliminar la posición seleccionada?")) {
+                            args.cancel = true;
+                        }
+                        break;
+                }
+
+            },
+            actionFailure: function (args) {
+                alert(args.error.responseJSON.Message);
+            },
+            endAdd: function () {
+                this.refreshContent();
+            },
+            columns: columnsPositionPopUp
+        });
+
+    };
+
+    function viewPositionPermissions() {
+        var permissions = JSON.parse(sessionStorage.permissions);
+
+        for (var i = 0; i < permissions.length; i++) {
+
+            var permission = permissions[i];
+            if (permission.Option == "Catalogs") {
+                createPositionGrid(permission.Edit);
+            }
+
+        }
+    };
+</script>
+

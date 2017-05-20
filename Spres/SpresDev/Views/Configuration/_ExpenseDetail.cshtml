@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "_ExpenseDetail";
+}
+
+<style type="text/css">
+    table, th, td {
+    /*border: 1px solid black;*/
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+
+#premiseDescription{
+    font-weight: bold;
+}
+
+    .btn-primary:hover {
+        color: rgb(0, 48, 135) !important;
+        background-color: rgb(192, 223, 22) !important;
+        border-color: rgb(192, 223, 22) !important;
+    }
+
+    .btn-primary {
+            background-color: rgb(196, 214, 0)!important;
+            border-color: rgb(196, 214, 0)!important;
+            color: rgb(0, 48, 135)!important;
+        }
+
+    .btn:hover{
+            color: rgb(0, 48, 135);
+            background-color: rgb(192, 223, 22);
+            border-color: rgb(192, 223, 22);
+        }
+    .btn{
+            background-color: rgb(196, 214, 0);
+            border-color: rgb(196, 214, 0);
+            color: rgb(0, 48, 135);
+    }
+</style>
+
+<div id="DetailContainer">
+    <div id="Detail">
+    </div>
+    <br />
+    <div id="ButtonGroup" style="margin-left: 75px;" class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="button" class="btn btn-primary" id="btnSave" value="Agregar Línea" parentLineId="0" />
+            <input type="button" class="btn btn-primary" id="btnClosePremiseDialog" value="Cancelar" />
+        </div>
+    </div>
+</div>
+
+<div id="ResultContainer" style="display:none;">
+    <br />
+    <p id="ResultText">
+
+    </p>
+    <br />
+    <div class="col-sm-offset-2 col-sm-10">
+        <input type="button" class="btn btn-primary" id="btnStartBudgetingPremise" value="Comenzar a presupuestar" />
+        <input type="button" class="btn btn-primary" id="btnClosePremiseDialog2" value="Cerrar" />
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function closePremiseDialog() {
+        var premiseDialog = $("#premiseDialog").data("ejDialog");
+        if (premiseDialog) premiseDialog.close();
+    };
+
+    $("#btnClosePremiseDialog").click(function () {
+        closePremiseDialog();
+    });
+    $("#btnClosePremiseDialog2").click(function () {
+        closePremiseDialog();
+        loadBudgetSheets();
+    });
+
+    $("#btnStartBudgetingPremise").click(function () {
+        closePremiseDialog();
+        openEditPremiseLineDialog();
+    });
+
+    $("#btnSave").click(function () {
+        var parentLineId = $(this).attr("parentLineId");
+        var premise = $("#PremiseList").ejDropDownList("instance");
+        var source = $("#Source");
+        var description = "";
+        var selectedSource = "";
+        var selectedPremise = premise.getSelectedValue();
+
+        if (source.length > 0) {
+            description = source.ejDropDownList("instance").selectedTextValue + " (" + premise.selectedTextValue + ")";
+            selectedSource = source.ejDropDownList("instance").getSelectedValue();
+        } else {
+            description = premise.selectedTextValue;
+        }
+        if (source.length > 0 && selectedSource == "") {
+            alert("Seleccione un Origen");
+        } else if (selectedPremise == "") {
+            alert("Seleccione una premisa");
+        } else {
+            var urlPostLine = getUrl("/api/BudgetLines/PostEmptyLine/" + parentLineId + "/" + premise.getSelectedValue() + "?description=" + description);
+            $.ajax({
+                method: "POST",
+                url: urlPostLine
+            }).done(function (data) {
+                sessionStorage.subLineId = data;
+                $("#DetailContainer").hide();
+                $("#ResultText").html("La línea de presupuestación <strong>" + description + "</strong> fue creada con éxito.");
+                $("#ResultContainer").show();
+            });
+        }
+    });
+
+    $(function () {
+
+        var parentLineId = "@ViewBag.parentLineId";
+        var url = getUrl("/api/RenderDetail/" + parentLineId + "/" + "@ViewBag.Year" + "/" + "@ViewBag.CostCenter" + "/" + "@ViewBag.CompanyId");
+        $.ajax({
+            method: "GET",
+            url: url
+        }).done(function (html) {
+
+            var detail = $("#Detail");
+            detail.empty();
+            detail.append(html);
+            var element = "DynamicFormDetail" + parentLineId;
+            var vm = {};
+            ko.applyBindings(vm, document.getElementById(element));
+
+            var premise = $("#PremiseList").data("ejDropDownList").model.dataSource;
+            var source = $("#Source").data("ejDropDownList").model.dataSource;
+
+            console.log(source);
+
+            if (premise.length == 0) {
+                alert("Aún no se han creado premisas para la cuenta contable seleccionada.");
+                closePremiseDialog();
+            } else if (source.length == 0) {
+                alert("Aún no se han configurado empleados activos para la región seleccionada.");
+                closePremiseDialog();
+            }
+
+        });
+        $("#btnSave").attr("parentLineId", parentLineId);
+    });
+</script>
+

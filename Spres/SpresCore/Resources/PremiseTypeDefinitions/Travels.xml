@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Definition VariableKey="Country" PremiseType="Travels" Constraint="false">
+    <Variables>
+        <Variable Name="Country" Display="Destino" Type="Option" Source="Countries" Quantifiable="false" />
+        <Variable Name="Breakfast" Type="Money" Quantifiable="true" Display="Desayuno" />
+        <Variable Name="Lunch" Type="Money" Quantifiable="true" Display="Almuerzo" />
+        <Variable Name="Dinner" Type="Money" Quantifiable="true" Display="Cena" />
+        <Variable Name="Hotel" Type="Money" Quantifiable="true" Display="Hotel" />
+        <Variable Name="Others" Type="Money" Quantifiable="true" Display="Otros" />
+    </Variables>
+</Definition>

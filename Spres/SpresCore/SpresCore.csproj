@@ -1,0 +1,588 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4F9813F3-5297-45F4-A7E1-5A35AC0F3050}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spres</RootNamespace>
+    <AssemblyName>SpresCore</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.1.1\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.1\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.1.1\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.1\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Infrastructure\Audit\Event.cs" />
+    <Compile Include="Infrastructure\Audit\AuditExtensions.cs" />
+    <Compile Include="Infrastructure\Audit\EventType.cs" />
+    <Compile Include="Infrastructure\CollectionExtensions.cs" />
+    <Compile Include="Infrastructure\DataResult.cs" />
+    <Compile Include="Infrastructure\EmailHelper.cs" />
+    <Compile Include="Infrastructure\ErrorLog\ErrorLog.cs" />
+    <Compile Include="Infrastructure\ErrorLog\ExceptionHandlingAttribute.cs" />
+    <Compile Include="Infrastructure\Security\ApplicationRefreshTokenProvider.cs" />
+    <Compile Include="Infrastructure\Security\RoleManager.cs" />
+    <Compile Include="Infrastructure\Security\SecurityManager.cs" />
+    <Compile Include="Infrastructure\Security\SignInManager.cs" />
+    <Compile Include="Infrastructure\Security\SpresAuthorizeAttribute.cs" />
+    <Compile Include="Infrastructure\Security\SpresIdentityDbContext.cs" />
+    <Compile Include="Infrastructure\Security\SpresIdentityDbInitializer.cs" />
+    <Compile Include="Infrastructure\Security\StoreAuthProvider.cs" />
+    <Compile Include="Infrastructure\Security\UserManager.cs" />
+    <Compile Include="Infrastructure\SpresContext.cs" />
+    <Compile Include="Infrastructure\SpresFilter.cs" />
+    <Compile Include="Infrastructure\SpresSecurityAttribute.cs" />
+    <Compile Include="Mapping\AccountBudgetSource.cs" />
+    <Compile Include="Mapping\AccountMap.cs" />
+    <Compile Include="Mapping\BenefitMap.cs" />
+    <Compile Include="Mapping\BudgetAuthorizationMap.cs" />
+    <Compile Include="Mapping\BudgetLineMap.cs" />
+    <Compile Include="Mapping\BudgetMap.cs" />
+    <Compile Include="Mapping\BudgetMonthHistoryMap.cs" />
+    <Compile Include="Mapping\BudgetMonthDetailMap.cs" />
+    <Compile Include="Mapping\BudgetSheetMap.cs" />
+    <Compile Include="Mapping\CompanyAuthorizerMap.cs" />
+    <Compile Include="Mapping\CountryMap.cs" />
+    <Compile Include="Mapping\CurrencyMap.cs" />
+    <Compile Include="Mapping\EmailTemplateMap.cs" />
+    <Compile Include="Mapping\EventMap.cs" />
+    <Compile Include="Mapping\ExchangeRateMap.cs" />
+    <Compile Include="Mapping\ForecastProgrammingMap.cs" />
+    <Compile Include="Mapping\ProgrammingMap.cs" />
+    <Compile Include="Mapping\CompanyMap.cs" />
+    <Compile Include="Mapping\CostCenterMap.cs" />
+    <Compile Include="Mapping\EmployeeMap.cs" />
+    <Compile Include="Mapping\PackageMap.cs" />
+    <Compile Include="Mapping\PositionMap.cs" />
+    <Compile Include="Mapping\PremiseMap.cs" />
+    <Compile Include="Mapping\PremiseTypeMap.cs" />
+    <Compile Include="Mapping\EquipmentMap.cs" />
+    <Compile Include="Mapping\PermissionsMap.cs" />
+    <Compile Include="Mapping\ProviderTypeMap.cs" />
+    <Compile Include="Mapping\ProviderMap.cs" />
+    <Compile Include="Mapping\RoleMap.cs" />
+    <Compile Include="Mapping\UserMap.cs" />
+    <Compile Include="Migrations\201511092135380_CarlosPortillo.cs" />
+    <Compile Include="Migrations\201511092135380_CarlosPortillo.Designer.cs">
+      <DependentUpon>201511092135380_CarlosPortillo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511092151067_CarlosPortillo1.cs" />
+    <Compile Include="Migrations\201511092151067_CarlosPortillo1.Designer.cs">
+      <DependentUpon>201511092151067_CarlosPortillo1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511092158370_CarlosPortillo2.cs" />
+    <Compile Include="Migrations\201511092158370_CarlosPortillo2.Designer.cs">
+      <DependentUpon>201511092158370_CarlosPortillo2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511101541005_VictorFlamenco.cs" />
+    <Compile Include="Migrations\201511101541005_VictorFlamenco.Designer.cs">
+      <DependentUpon>201511101541005_VictorFlamenco.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511111436330_CarlosPortillo3.cs" />
+    <Compile Include="Migrations\201511111436330_CarlosPortillo3.Designer.cs">
+      <DependentUpon>201511111436330_CarlosPortillo3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511111751062_GustavoRauda.cs" />
+    <Compile Include="Migrations\201511111751062_GustavoRauda.Designer.cs">
+      <DependentUpon>201511111751062_GustavoRauda.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511111904437_VictorFlamenc0.cs" />
+    <Compile Include="Migrations\201511111904437_VictorFlamenc0.Designer.cs">
+      <DependentUpon>201511111904437_VictorFlamenc0.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511111913592_VictorFlamenco1.cs" />
+    <Compile Include="Migrations\201511111913592_VictorFlamenco1.Designer.cs">
+      <DependentUpon>201511111913592_VictorFlamenco1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511112052053_CarlosPortillo4.cs" />
+    <Compile Include="Migrations\201511112052053_CarlosPortillo4.Designer.cs">
+      <DependentUpon>201511112052053_CarlosPortillo4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511121800347_VictorFlamenco2.cs" />
+    <Compile Include="Migrations\201511121800347_VictorFlamenco2.Designer.cs">
+      <DependentUpon>201511121800347_VictorFlamenco2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511122207296_GustavoRauda1.cs" />
+    <Compile Include="Migrations\201511122207296_GustavoRauda1.Designer.cs">
+      <DependentUpon>201511122207296_GustavoRauda1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511131609118_GustavoRauda2.cs" />
+    <Compile Include="Migrations\201511131609118_GustavoRauda2.Designer.cs">
+      <DependentUpon>201511131609118_GustavoRauda2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511131625146_VictorFlamenco3.cs" />
+    <Compile Include="Migrations\201511131625146_VictorFlamenco3.Designer.cs">
+      <DependentUpon>201511131625146_VictorFlamenco3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511172019060_GustavoRauda3.cs" />
+    <Compile Include="Migrations\201511172019060_GustavoRauda3.Designer.cs">
+      <DependentUpon>201511172019060_GustavoRauda3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511172235227_GustavoRauda4.cs" />
+    <Compile Include="Migrations\201511172235227_GustavoRauda4.Designer.cs">
+      <DependentUpon>201511172235227_GustavoRauda4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511181636592_VictorFlamenco4.cs" />
+    <Compile Include="Migrations\201511181636592_VictorFlamenco4.Designer.cs">
+      <DependentUpon>201511181636592_VictorFlamenco4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511242241157_GustavoRauda5.cs" />
+    <Compile Include="Migrations\201511242241157_GustavoRauda5.Designer.cs">
+      <DependentUpon>201511242241157_GustavoRauda5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511302058024_VictorFlamenco5.cs" />
+    <Compile Include="Migrations\201511302058024_VictorFlamenco5.Designer.cs">
+      <DependentUpon>201511302058024_VictorFlamenco5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512072150478_VictorFlamenco6.cs" />
+    <Compile Include="Migrations\201512072150478_VictorFlamenco6.Designer.cs">
+      <DependentUpon>201512072150478_VictorFlamenco6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512091620273_VictorFlamenco7.cs" />
+    <Compile Include="Migrations\201512091620273_VictorFlamenco7.Designer.cs">
+      <DependentUpon>201512091620273_VictorFlamenco7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512101650557_VictorFlamenco8.cs" />
+    <Compile Include="Migrations\201512101650557_VictorFlamenco8.Designer.cs">
+      <DependentUpon>201512101650557_VictorFlamenco8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512121525459_WaldemarMezquita.cs" />
+    <Compile Include="Migrations\201512121525459_WaldemarMezquita.Designer.cs">
+      <DependentUpon>201512121525459_WaldemarMezquita.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512121626272_WaldemarMezquita1.cs" />
+    <Compile Include="Migrations\201512121626272_WaldemarMezquita1.Designer.cs">
+      <DependentUpon>201512121626272_WaldemarMezquita1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512291740114_GustavoRauda6.cs" />
+    <Compile Include="Migrations\201512291740114_GustavoRauda6.Designer.cs">
+      <DependentUpon>201512291740114_GustavoRauda6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512291957431_GustavoRauda7.cs" />
+    <Compile Include="Migrations\201512291957431_GustavoRauda7.Designer.cs">
+      <DependentUpon>201512291957431_GustavoRauda7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601112207413_VictorFlamenco9.cs" />
+    <Compile Include="Migrations\201601112207413_VictorFlamenco9.Designer.cs">
+      <DependentUpon>201601112207413_VictorFlamenco9.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601122121353_VictorFlamenco10.cs" />
+    <Compile Include="Migrations\201601122121353_VictorFlamenco10.Designer.cs">
+      <DependentUpon>201601122121353_VictorFlamenco10.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601131517207_VictorFlamenco11.cs" />
+    <Compile Include="Migrations\201601131517207_VictorFlamenco11.Designer.cs">
+      <DependentUpon>201601131517207_VictorFlamenco11.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601141609529_VictorFlamenco12.cs" />
+    <Compile Include="Migrations\201601141609529_VictorFlamenco12.Designer.cs">
+      <DependentUpon>201601141609529_VictorFlamenco12.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601190440298_GustavoRauda8.cs" />
+    <Compile Include="Migrations\201601190440298_GustavoRauda8.Designer.cs">
+      <DependentUpon>201601190440298_GustavoRauda8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601191536420_GustavoRauda9.cs" />
+    <Compile Include="Migrations\201601191536420_GustavoRauda9.Designer.cs">
+      <DependentUpon>201601191536420_GustavoRauda9.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601191609381_VictorFlamenco13.cs" />
+    <Compile Include="Migrations\201601191609381_VictorFlamenco13.Designer.cs">
+      <DependentUpon>201601191609381_VictorFlamenco13.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601192048538_VictorFlamenco14.cs" />
+    <Compile Include="Migrations\201601192048538_VictorFlamenco14.Designer.cs">
+      <DependentUpon>201601192048538_VictorFlamenco14.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601202144222_VictorFlamenco15.cs" />
+    <Compile Include="Migrations\201601202144222_VictorFlamenco15.Designer.cs">
+      <DependentUpon>201601202144222_VictorFlamenco15.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601211650492_WaldemarMezquita2.cs" />
+    <Compile Include="Migrations\201601211650492_WaldemarMezquita2.Designer.cs">
+      <DependentUpon>201601211650492_WaldemarMezquita2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601212051383_WaldemarMezquita3.cs" />
+    <Compile Include="Migrations\201601212051383_WaldemarMezquita3.Designer.cs">
+      <DependentUpon>201601212051383_WaldemarMezquita3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601221435430_VictorFlamenco17.cs" />
+    <Compile Include="Migrations\201601221435430_VictorFlamenco17.Designer.cs">
+      <DependentUpon>201601221435430_VictorFlamenco17.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601221743179_WaldemarMezquita4.cs" />
+    <Compile Include="Migrations\201601221743179_WaldemarMezquita4.Designer.cs">
+      <DependentUpon>201601221743179_WaldemarMezquita4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601222049119_VictorFlamenco18.cs" />
+    <Compile Include="Migrations\201601222049119_VictorFlamenco18.Designer.cs">
+      <DependentUpon>201601222049119_VictorFlamenco18.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602081641248_VictorFlamenco16.cs" />
+    <Compile Include="Migrations\201602081641248_VictorFlamenco16.Designer.cs">
+      <DependentUpon>201602081641248_VictorFlamenco16.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602092128453_VictorFlamenco19.cs" />
+    <Compile Include="Migrations\201602092128453_VictorFlamenco19.Designer.cs">
+      <DependentUpon>201602092128453_VictorFlamenco19.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602181515448_VictorFlamenco20.cs" />
+    <Compile Include="Migrations\201602181515448_VictorFlamenco20.Designer.cs">
+      <DependentUpon>201602181515448_VictorFlamenco20.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602242028438_VictorFlamenco21.cs" />
+    <Compile Include="Migrations\201602242028438_VictorFlamenco21.Designer.cs">
+      <DependentUpon>201602242028438_VictorFlamenco21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605201709362_VictorFlamenco22.cs" />
+    <Compile Include="Migrations\201605201709362_VictorFlamenco22.Designer.cs">
+      <DependentUpon>201605201709362_VictorFlamenco22.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\AccountBudgetSource.cs" />
+    <Compile Include="Models\AuthorizationStatus.cs" />
+    <Compile Include="Models\Benefit.cs" />
+    <Compile Include="Models\BenefitTargetType.cs" />
+    <Compile Include="Models\Budget.cs" />
+    <Compile Include="Models\BudgetLine.cs" />
+    <Compile Include="Models\BudgetMonthHistory.cs" />
+    <Compile Include="Models\BudgetMonthHistoryReasons.cs" />
+    <Compile Include="Models\BudgetSourceType.cs" />
+    <Compile Include="Models\BudgetMonthDetail.cs" />
+    <Compile Include="Models\BudgetSheet.cs" />
+    <Compile Include="Models\BudgetAuthorization.cs" />
+    <Compile Include="Models\BudgetStatus.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\CompanyAuthorizer.cs" />
+    <Compile Include="Models\CostCenter.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\EmailTemplate.cs" />
+    <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Equipment.cs" />
+    <Compile Include="Models\ExchangeRates.cs" />
+    <Compile Include="Models\ForecastProgramming.cs" />
+    <Compile Include="Models\UserStatus.cs" />
+    <Compile Include="Models\Options.cs" />
+    <Compile Include="Models\Package.cs" />
+    <Compile Include="Models\PeriodsBudgetCalculationResult.cs" />
+    <Compile Include="Models\Position.cs" />
+    <Compile Include="Models\Premise.cs" />
+    <Compile Include="Models\PremiseType.cs" />
+    <Compile Include="Infrastructure\Security\Role.cs" />
+    <Compile Include="Infrastructure\Security\User.cs" />
+    <Compile Include="Models\Programming.cs" />
+    <Compile Include="Models\Permissions.cs" />
+    <Compile Include="Models\Provider.cs" />
+    <Compile Include="Models\ProviderType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Infrastructure\UtilExtensions.cs" />
+    <Compile Include="Utilities\Forms\DataType.cs" />
+    <Compile Include="Utilities\Forms\Form.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Resources\Schemas\PremiseTypeDefinition.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\Schemas\PremiseExpensesConfiguration.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\Schemas\PremiseBudgetDetail.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\PremiseTypeDefinitions\Equipment.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\PremiseTypeDefinitions\Travels.xml" />
+    <Content Include="Resources\TransactScripts\Database.sql" />
+    <Content Include="Resources\TransactScripts\FullMigration_Part3.sql" />
+    <Content Include="Resources\TransactScripts\FullMigration_Part2.sql" />
+    <Content Include="Resources\TransactScripts\People.sql" />
+    <Content Include="Resources\TransactScripts\Initials.sql" />
+    <Content Include="Resources\TransactScripts\FullMigration_Part1.sql" />
+    <Content Include="Resources\TransactScripts\Script.sql" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511092135380_CarlosPortillo.resx">
+      <DependentUpon>201511092135380_CarlosPortillo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511092151067_CarlosPortillo1.resx">
+      <DependentUpon>201511092151067_CarlosPortillo1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511092158370_CarlosPortillo2.resx">
+      <DependentUpon>201511092158370_CarlosPortillo2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511101541005_VictorFlamenco.resx">
+      <DependentUpon>201511101541005_VictorFlamenco.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511111436330_CarlosPortillo3.resx">
+      <DependentUpon>201511111436330_CarlosPortillo3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511111751062_GustavoRauda.resx">
+      <DependentUpon>201511111751062_GustavoRauda.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511111904437_VictorFlamenc0.resx">
+      <DependentUpon>201511111904437_VictorFlamenc0.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511111913592_VictorFlamenco1.resx">
+      <DependentUpon>201511111913592_VictorFlamenco1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511112052053_CarlosPortillo4.resx">
+      <DependentUpon>201511112052053_CarlosPortillo4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511121800347_VictorFlamenco2.resx">
+      <DependentUpon>201511121800347_VictorFlamenco2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511122207296_GustavoRauda1.resx">
+      <DependentUpon>201511122207296_GustavoRauda1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511131609118_GustavoRauda2.resx">
+      <DependentUpon>201511131609118_GustavoRauda2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511131625146_VictorFlamenco3.resx">
+      <DependentUpon>201511131625146_VictorFlamenco3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511172019060_GustavoRauda3.resx">
+      <DependentUpon>201511172019060_GustavoRauda3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511172235227_GustavoRauda4.resx">
+      <DependentUpon>201511172235227_GustavoRauda4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511181636592_VictorFlamenco4.resx">
+      <DependentUpon>201511181636592_VictorFlamenco4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511242241157_GustavoRauda5.resx">
+      <DependentUpon>201511242241157_GustavoRauda5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511302058024_VictorFlamenco5.resx">
+      <DependentUpon>201511302058024_VictorFlamenco5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512072150478_VictorFlamenco6.resx">
+      <DependentUpon>201512072150478_VictorFlamenco6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512091620273_VictorFlamenco7.resx">
+      <DependentUpon>201512091620273_VictorFlamenco7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512101650557_VictorFlamenco8.resx">
+      <DependentUpon>201512101650557_VictorFlamenco8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512121525459_WaldemarMezquita.resx">
+      <DependentUpon>201512121525459_WaldemarMezquita.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512121626272_WaldemarMezquita1.resx">
+      <DependentUpon>201512121626272_WaldemarMezquita1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512291740114_GustavoRauda6.resx">
+      <DependentUpon>201512291740114_GustavoRauda6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512291957431_GustavoRauda7.resx">
+      <DependentUpon>201512291957431_GustavoRauda7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601112207413_VictorFlamenco9.resx">
+      <DependentUpon>201601112207413_VictorFlamenco9.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601122121353_VictorFlamenco10.resx">
+      <DependentUpon>201601122121353_VictorFlamenco10.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601131517207_VictorFlamenco11.resx">
+      <DependentUpon>201601131517207_VictorFlamenco11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601141609529_VictorFlamenco12.resx">
+      <DependentUpon>201601141609529_VictorFlamenco12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601190440298_GustavoRauda8.resx">
+      <DependentUpon>201601190440298_GustavoRauda8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601191536420_GustavoRauda9.resx">
+      <DependentUpon>201601191536420_GustavoRauda9.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601191609381_VictorFlamenco13.resx">
+      <DependentUpon>201601191609381_VictorFlamenco13.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601192048538_VictorFlamenco14.resx">
+      <DependentUpon>201601192048538_VictorFlamenco14.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601202144222_VictorFlamenco15.resx">
+      <DependentUpon>201601202144222_VictorFlamenco15.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601211650492_WaldemarMezquita2.resx">
+      <DependentUpon>201601211650492_WaldemarMezquita2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601212051383_WaldemarMezquita3.resx">
+      <DependentUpon>201601212051383_WaldemarMezquita3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601221435430_VictorFlamenco17.resx">
+      <DependentUpon>201601221435430_VictorFlamenco17.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601221743179_WaldemarMezquita4.resx">
+      <DependentUpon>201601221743179_WaldemarMezquita4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601222049119_VictorFlamenco18.resx">
+      <DependentUpon>201601222049119_VictorFlamenco18.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602081641248_VictorFlamenco16.resx">
+      <DependentUpon>201602081641248_VictorFlamenco16.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602092128453_VictorFlamenco19.resx">
+      <DependentUpon>201602092128453_VictorFlamenco19.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602181515448_VictorFlamenco20.resx">
+      <DependentUpon>201602181515448_VictorFlamenco20.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602242028438_VictorFlamenco21.resx">
+      <DependentUpon>201602242028438_VictorFlamenco21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605201709362_VictorFlamenco22.resx">
+      <DependentUpon>201605201709362_VictorFlamenco22.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="'$(SQLDBExtensionsRefPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="'$(SQLDBExtensionsRefPath)' == ''" />
+  <PropertyGroup>
+    <SsdtUnitTestVersion>2.0</SsdtUnitTestVersion>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

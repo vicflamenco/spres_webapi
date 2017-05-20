@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Benefits";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<style>
+    #gridBenefits{
+        margin-top: 20px;
+    }
+</style>
+
+<div id="gridBenefits"></div>
+
+<script type="text/javascript">
+
+    function TranslateType(name) {
+        switch (name) {
+            case "LawBenefit": return "Beneficio de Ley";
+            case "FixedBenefit": return "Beneficio Fijo";
+            case "PositionBenefit": return "Beneficio por Cargo";
+            default: return "";
+        }
+    }
+        $(function () {
+            var dataManager = ej.DataManager({
+                url: getUrl("/api/Benefits"),
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+        var dataManagerTarget = ej.DataManager({
+            url: getUrl("/api/Benefits/BenefitTargetTypes"),
+            adaptor: new ej.WebApiAdaptor()
+        });
+
+        var dataTarget = [];
+        dataManagerTarget.executeQuery(ej.Query()).done(function (e) {
+            
+            for (var i = 0; i < e.result.length; i++) {                
+                dataTarget.push({
+                    BenefitId: e.result[i].Id,
+                    Name: TranslateType(e.result[i].Name)
+                });
+            }
+        });
+
+        var columnsBenefitsPopUp = [{ field: "Id", isPrimaryKey: true, visible: false },
+                   { field: "Name", headerText: 'Nombre', validationRules: { required: true, minlength: 3 } },
+                   {
+                       field: "Target", headerText: 'Tipo', editType: ej.Grid.EditingType.Dropdown, dataSource: dataTarget,
+                       foreignKeyValue: "Name", foreignKeyField: "BenefitId", validationRules: { required: true }
+                   },
+                        
+        ];
+
+        var editBenefitsButtons = {
+            headerText: "",
+            commands: [{ type: ej.Grid.UnboundType.Edit, buttonOptions: { contentType: "imageonly", prefixIcon: "e-edit" } },
+                       { type: ej.Grid.UnboundType.Delete, buttonOptions: { contentType: "imageonly", prefixIcon: "e-delete" } },
+                       { type: ej.Grid.UnboundType.Save, buttonOptions: { contentType: "imageonly", prefixIcon: "e-save" } },
+                       { type: ej.Grid.UnboundType.Cancel, buttonOptions: { contentType: "imageonly", prefixIcon: "e-cancel" } }
+            ],
+            isUnbound: true,
+            width: 150
+        };
+
+        var permissions = JSON.parse(sessionStorage.permissions);
+        var benefitsToolItems = [ej.Grid.ToolBarItems.Search];
+        for (var be = 0; be < permissions.length; be++) {
+
+            var permission = permissions[be];
+            if (permission.Option == "Catalogs") {
+                if (permission.Edit) {
+                    columnsBenefitsPopUp.push(editBenefitsButtons);
+                    benefitsToolItems = [ej.Grid.ToolBarItems.Add, ej.Grid.ToolBarItems.Search];
+                }
+            }
+
+        }
+
+        $("#gridBenefits").ejGrid({            
+            dataSource: dataManager,
+            allowScrolling: true,
+            allowPaging: true,
+            allowSearching: true,
+            pageSettings: {pageSize: 6 },
+            editSettings: {allowEditOnDblClick: false, allowEditing: true, allowAdding: true, allowDeleting: true },
+            toolbarSettings: { showToolbar: true, toolbarItems: benefitsToolItems },
+            actionBegin: function (args) {
+                if (args.requestType == "delete") {
+                    if (!confirm("¿Desea eliminar el Beneficio seleccionado?")) {
+                        args.cancel = true;
+                    }
+                }
+            },
+            actionComplete: function(args){
+                if (args.requestType == "save") {
+                    this.refreshContent();
+                }
+            },
+            columns: columnsBenefitsPopUp,
+            endAdd: function () {
+                this.refreshContent();
+            }
+        });
+
+       
+
+        });
+</script>

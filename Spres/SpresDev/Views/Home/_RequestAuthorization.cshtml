@@ -1,0 +1,65 @@
+﻿<div>
+    <div id="requestAuthorizationContent">
+        <p>
+            Se enviará una solicitud de aprobación por correo electrónico a los responsables de autorización del presupuesto. ¿Desea continuar?
+        </p>
+        <p>
+            <input id="btnOkRequestAuthorization" type="button" class="btn" value="Aceptar" />
+            <input id="btnCancelRequestAuthorization" type="button" class="btn" value="Cancelar" />
+        </p>
+    </div>
+    <div id="requestAuthorizationResult">
+        <p id="requestAuthorizationResultText">
+
+        </p>
+        <input id="btnCloseRequestAuthorization" type="button" class="btn" value="Cerrar" />
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#requestAuthorizationResult").hide();
+    });
+
+    function closeDialog() {
+        var dialog = $("#requestAuthorizationDialog").data("ejDialog");
+        dialog.close();
+    };
+
+    function toggleRequestAuthorizationButtons(disable) {
+        $("#btnOkRequestAuthorization").prop("disabled", disable);
+        $("#btnCancelRequestAuthorization").prop("disabled", disable);
+    };
+
+    $("#btnOkRequestAuthorization").click(function () {
+
+        toggleRequestAuthorizationButtons(true);
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: getUrl("/api/Budgets/RequestAuthorization/" + getCompanyId() + "/" + getFiscalYear() + "/" + getCostCenterId()),
+            method: "POST"
+        }).done(function () {
+            showResult("Los correos electrónicos fueron enviados satisfactoriamente");
+        }).fail(function (jqXHR, textStatus, errThrown) {
+            console.log(jqXHR);
+            if (jqXHR.status == 404) {
+                showResult("El presupuesto del centro de costo aún no ha sido creado.");
+            } else {
+                showResult("No fue posible enviar los correos electrónicos debido a que aún no se han definido los responsables de autorización de los presupuestos para su región.");
+            }
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    });
+
+    function showResult(text) {
+        $("#requestAuthorizationResultText").text(text);
+        $("#requestAuthorizationResult").show();
+        $("#requestAuthorizationContent").hide();
+    };
+
+    $("#btnCancelRequestAuthorization").click(closeDialog);
+    $("#btnCloseRequestAuthorization").click(closeDialog);
+
+</script>

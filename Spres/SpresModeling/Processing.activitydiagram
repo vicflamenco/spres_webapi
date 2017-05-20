@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<activityRootModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/dsltools/LogicalClassDesigner" xmlns:dm10="http://schemas.microsoft.com/dsltools/SimpleShapesModel" dslVersion="1.0.0.0" Id="ee3e60a2-f8c9-4723-8232-a96a16ce34cc" name="Proceso de presupuestación anual" linkedPackageId="c79ba1aa-82f8-4e58-a85d-a1e987f5d15d" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ActivityDesigner">
+  <appliedStereotypesInternal>
+    <stereotypeInstance Id="d09fc2d1-469b-41d7-8c11-785ee7c99069" name="namespace" profile="CSharpProfile">
+      <elementDefinition Id="d984857c-ef98-4692-a576-b8824dbf7520" />
+      <propertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="3113c76a-4962-48a6-a5ac-57f4152068fe">
+          <propertyInstance Id="e332ce73-8859-4dac-b1cd-d1ab27d72b88" name="BaseName">
+            <elementDefinition Id="84511006-fdde-47fc-9c19-8948f96a6036" />
+          </propertyInstance>
+          <elementDefinition Id="ffae5f1d-ea76-4aa4-af57-616f73b018d5" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="993988c0-3260-433b-8994-a7e61f2f5560">
+          <propertyInstance Id="99168b6e-bdb8-4548-b913-9044f355d8ea" name="ClrAttributes">
+            <elementDefinition Id="02dc29b9-b5a4-4931-8850-565882a7e5d1" />
+          </propertyInstance>
+          <elementDefinition Id="46b10534-e0e7-4e61-a4f7-f86687736e7d" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="4b9cc0df-d03c-4051-af49-042afe302d31">
+          <propertyInstance Id="74063f8f-5219-4cd6-97c3-f168c102f132" name="Usings">
+            <elementDefinition Id="8f0b4bdc-1632-4269-91ad-8e7427988c2f" />
+          </propertyInstance>
+          <elementDefinition Id="a66e9510-2dea-480e-a918-f4aa31bd45ab" />
+        </stereotypeInstanceHasPropertyInstances>
+      </propertyInstances>
+    </stereotypeInstance>
+    <stereotypeInstance Id="3a8f8d3a-24a4-41a3-9f35-7c176ddaeabf" name="TextTemplateBindings" profile="TextTemplateBindings">
+      <elementDefinition Id="b369bb33-1d33-4b4e-91dd-673269746937" />
+      <propertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="0cc58e88-47bb-47b1-9fd7-b08c459c8e3e">
+          <propertyInstance Id="84572a69-71cc-4de5-ba49-c46999d53697" name="Alias" value="ClassTemplate|EnumTemplate|InterfaceTemplate|StructTemplate">
+            <elementDefinition Id="630b4711-2a4c-44f4-8404-5e6ab8f5cd29" />
+          </propertyInstance>
+          <elementDefinition Id="9fa25398-a223-47ac-a409-8a555fadee78" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="02768fac-ba45-4ae9-84bf-0db4865737d4">
+          <propertyInstance Id="15a87579-1340-4c19-8567-ad98c3d8b6c2" name="TemplateFilePath" value="ClassTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4|EnumTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\EnumTemplate.t4|InterfaceTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4|StructTemplate=C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4">
+            <elementDefinition Id="348cb439-18b6-4042-ade2-890c67674429" />
+          </propertyInstance>
+          <elementDefinition Id="3a54c967-6ac0-4903-860f-c5c69e21a4d1" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="6b5e784f-f075-4551-aed5-101d3732ef6d">
+          <propertyInstance Id="e19fdeff-1675-4e22-978a-8a8110254d50" name="ProjectPath" value="ClassTemplate=..\SpresModelingLib\SpresModelingLib.csproj|EnumTemplate=..\SpresModelingLib\SpresModelingLib.csproj|InterfaceTemplate=..\SpresModelingLib\SpresModelingLib.csproj|StructTemplate=..\SpresModelingLib\SpresModelingLib.csproj">
+            <elementDefinition Id="e37b5537-b3fb-45d3-bc8b-a6ff788c4d60" />
+          </propertyInstance>
+          <elementDefinition Id="c9161f57-4103-43bf-bed7-3597ad60cf1e" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="df25c170-f75a-4ec6-b333-7fa901c50ede">
+          <propertyInstance Id="a34e9389-4d80-4589-8bd8-90caadac33c4" name="TargetDirectory" value="ClassTemplate=GeneratedCode\{PackageStructure}|EnumTemplate=GeneratedCode\{PackageStructure}|InterfaceTemplate=GeneratedCode\{PackageStructure}|StructTemplate=GeneratedCode\{PackageStructure}">
+            <elementDefinition Id="2f76adc3-ed8c-46ea-ab59-1a5f244621eb" />
+          </propertyInstance>
+          <elementDefinition Id="f1cfd122-c783-402a-abba-f29df1ca1b57" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="3de382c3-51cb-4022-99dc-e4cef7ed2b4d">
+          <propertyInstance Id="73ac75e1-ea12-47c0-b44f-57a8b90af2f5" name="TargetName" value="ClassTemplate={Name}|EnumTemplate={Name}|InterfaceTemplate={Name}|StructTemplate={Name}">
+            <elementDefinition Id="bad8ea9e-5ef4-4c5a-959a-af6e2932f786" />
+          </propertyInstance>
+          <elementDefinition Id="fd325a3f-6038-42bc-8384-d73118e20697" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="1eb91e0a-c4c3-403e-8f1a-4cd6bfa23f20">
+          <propertyInstance Id="a9640ff6-2f39-46a3-9c32-8f9685178042" name="Overwrite" value="ClassTemplate=True|EnumTemplate=True|InterfaceTemplate=True|StructTemplate=True">
+            <elementDefinition Id="9df555e5-5d44-4984-aa56-9ac51060aa7c" />
+          </propertyInstance>
+          <elementDefinition Id="f7022e07-bd88-4e35-910d-0e10b654de27" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances Id="f9fd16fb-2fc3-4e15-9f24-39c79cc6a02b">
+          <propertyInstance Id="69f5605e-a469-4aeb-a5ac-8106fe261b69" name="Parameters">
+            <elementDefinition Id="356f1017-1d3e-4f65-9840-11e723df0cef" />
+          </propertyInstance>
+          <elementDefinition Id="8a4ba4eb-5275-40ba-885e-8b6b2bff46f3" />
+        </stereotypeInstanceHasPropertyInstances>
+      </propertyInstances>
+    </stereotypeInstance>
+  </appliedStereotypesInternal>
+  <profileInstances>
+    <packageHasProfileInstances Id="d68e46a1-d7f5-45ea-9f10-65cc11f827a6">
+      <profileInstance Id="0c87028b-4107-47c9-9528-aad5d3271f3d" name="CSharpProfile">
+        <elementDefinition Id="61aaf588-2cd7-49d5-b797-ec8ed5735872" />
+      </profileInstance>
+      <elementDefinition Id="17591a6d-a127-4e71-ad50-c87112f0207a" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="98abe1a8-281f-45a7-a6d5-e6da4adac64a">
+      <profileInstance Id="e19030f3-7c5f-4cd0-8e15-52ecde9a2520" name="TextTemplateBindings">
+        <elementDefinition Id="94b9379e-18e5-4c39-ac4e-0c68a981bf94" />
+      </profileInstance>
+      <elementDefinition Id="6603fe77-15a9-4604-826e-4943e6848c94" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <activityRootModelHasActivity>
+      <activity Id="e97bc56e-2c55-4fe7-9b4e-8a0354c990b0" name="Proceso de presupuestación anual" isAbstract="false" isLeaf="false" isActiveClass="false" isReentrant="false" isReadOnly="false" isSingleExecution="false">
+        <elementDefinition Id="c608ab2b-c3c6-433b-9445-27dee149608d" />
+        <nodes>
+          <initialNode Id="3f1615dc-4465-4805-8447-d5948755e6ac" name="Initial1" isLeaf="false">
+            <elementDefinition Id="46340f9b-19d8-4586-baee-529ddde66dd9" />
+            <flowNodeTargets>
+              <controlFlow Id="6f4bde0c-c172-40ad-a3fb-c3b69fadeec9" isLeaf="false">
+                <opaqueActionMoniker Id="fec75d1d-8f46-4836-8a53-b398b80ac00a" LastKnownName="Ingresa presupuesto" />
+                <elementDefinition Id="7f7cb11c-2b3e-4d16-bf30-dc0b502fcd91" />
+              </controlFlow>
+            </flowNodeTargets>
+          </initialNode>
+          <opaqueAction Id="fec75d1d-8f46-4836-8a53-b398b80ac00a" name="Ingresa presupuesto" isLeaf="false">
+            <elementDefinition Id="d5c1a21e-03bb-44ae-a6df-94726dd255f2" />
+            <flowNodeTargets>
+              <controlFlow Id="79fd07bf-7234-4256-b1d3-ed2bed88d41b" isLeaf="false">
+                <opaqueActionMoniker Id="f721ffa3-c067-4fba-b567-46a7a714583c" LastKnownName="Verifica tipo de gastos" />
+                <elementDefinition Id="59ed4cdd-3967-49d2-89b9-ed69ced789e8" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <decisionNode Id="2fb89a76-9f97-44f7-b934-187aa005e8d1" name="Decision1" isLeaf="false">
+            <elementDefinition Id="b9c7ee25-9e51-4268-ae4c-95699173b903" />
+            <flowNodeTargets>
+              <controlFlow Id="53505335-da05-402b-a482-0c739bac1cfd" guard="Sí" isLeaf="false">
+                <opaqueActionMoniker Id="7927891d-cda9-4872-bc79-19b73d264a50" LastKnownName="Verifica premisas" />
+                <elementDefinition Id="eaaf4212-1360-4e08-a4ff-9388853d129b" />
+              </controlFlow>
+              <controlFlow Id="73dbb5e6-5e8d-4678-ac71-bed0fab380fd" guard="No" isLeaf="false">
+                <opaqueActionMoniker Id="da21b951-04cc-4a1e-9ecd-fd4861f22aa0" LastKnownName="Verificación del presupuesto" />
+                <elementDefinition Id="377943ce-7afd-44d3-97f7-4d901145e2a1" />
+              </controlFlow>
+            </flowNodeTargets>
+          </decisionNode>
+          <opaqueAction Id="7927891d-cda9-4872-bc79-19b73d264a50" name="Verifica premisas" isLeaf="false">
+            <elementDefinition Id="f67c6c71-3196-4603-9983-67c6d34dc4dc" />
+            <flowNodeTargets>
+              <controlFlow Id="9a92bffc-e365-4475-818a-5af3757e18f7" guard="Cumple premisas" isLeaf="false">
+                <decisionNodeMoniker Id="b1fd9957-6ee7-45b1-b472-c29388200bcb" LastKnownName="Decision2" />
+                <elementDefinition Id="c1164ca3-f31a-42a2-8c56-06941eb25498" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <decisionNode Id="b1fd9957-6ee7-45b1-b472-c29388200bcb" name="Decision2" isLeaf="false">
+            <elementDefinition Id="be87fe4c-a4c1-4d9a-83dd-a2301503db56" />
+            <flowNodeTargets>
+              <controlFlow Id="ec6c1aa8-be8a-4e38-9c6e-b0faeb2aabeb" guard="No" isLeaf="false">
+                <opaqueActionMoniker Id="80d67ece-1a31-4fd0-967e-e83e0089f840" LastKnownName="Modifica presupuesto" />
+                <elementDefinition Id="a518f893-4da6-40dd-925f-982bd769621f" />
+              </controlFlow>
+              <controlFlow Id="673e5f15-e02d-4267-8dbb-97e6b3a1eef4" guard="Sí" isLeaf="false">
+                <opaqueActionMoniker Id="da21b951-04cc-4a1e-9ecd-fd4861f22aa0" LastKnownName="Verificación del presupuesto" />
+                <elementDefinition Id="f5ec74e1-87d5-4c6a-b6bf-ed30e8327caa" />
+              </controlFlow>
+            </flowNodeTargets>
+          </decisionNode>
+          <opaqueAction Id="80d67ece-1a31-4fd0-967e-e83e0089f840" name="Modifica presupuesto" isLeaf="false">
+            <elementDefinition Id="395a42a1-9201-4249-9c24-6cb1ff054af3" />
+            <flowNodeTargets>
+              <controlFlow Id="cd90584a-9d9e-46e4-a676-7037a97ce36b" isLeaf="false">
+                <opaqueActionMoniker Id="f721ffa3-c067-4fba-b567-46a7a714583c" LastKnownName="Verifica tipo de gastos" />
+                <elementDefinition Id="65215799-db43-4424-936b-03c74d26c283" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction Id="da21b951-04cc-4a1e-9ecd-fd4861f22aa0" name="Verificación del presupuesto" isLeaf="false">
+            <elementDefinition Id="16094526-da83-4b97-806b-b8d812ddae04" />
+            <flowNodeTargets>
+              <controlFlow Id="c16ece2b-649e-4859-bcec-9feaec44ed48" guard="Existen observaciones" isLeaf="false">
+                <decisionNodeMoniker Id="8cceabdd-0dc4-43c4-a2f9-19fc831a4828" LastKnownName="Decision3" />
+                <elementDefinition Id="aa213888-fade-4e16-bc56-0d0c9f6f9f1d" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <decisionNode Id="8cceabdd-0dc4-43c4-a2f9-19fc831a4828" name="Decision3" isLeaf="false">
+            <elementDefinition Id="c0a936b7-e5a5-4481-9098-7c5e05c72793" />
+            <flowNodeTargets>
+              <controlFlow Id="18a59fd5-46f8-4624-b056-93ab184e2858" guard="Sí" isLeaf="false">
+                <opaqueActionMoniker Id="80d67ece-1a31-4fd0-967e-e83e0089f840" LastKnownName="Modifica presupuesto" />
+                <elementDefinition Id="fdc8518d-a8d4-4fde-8a03-d2cfb0ac6e3c" />
+              </controlFlow>
+              <controlFlow Id="447b40a4-8817-4047-b6aa-d7eb87972690" guard="No" isLeaf="false">
+                <opaqueActionMoniker Id="9d43edfc-3e2f-4a0b-9b20-6ed649902e3a" LastKnownName="Aprobación de presupuesto" />
+                <elementDefinition Id="076b9d67-792e-4025-bd14-af70307ffc0a" />
+              </controlFlow>
+            </flowNodeTargets>
+          </decisionNode>
+          <opaqueAction Id="f721ffa3-c067-4fba-b567-46a7a714583c" name="Verifica tipo de gastos" isLeaf="false">
+            <elementDefinition Id="4ca1fc48-82fd-4366-8f1c-28de133905e5" />
+            <flowNodeTargets>
+              <controlFlow Id="0c722a67-9be5-4d4e-b241-1a3150cd0abb" guard="Gastos variables" isLeaf="false">
+                <decisionNodeMoniker Id="2fb89a76-9f97-44f7-b934-187aa005e8d1" LastKnownName="Decision1" />
+                <elementDefinition Id="a82fdbc0-a425-4149-accc-3d3beebaf4f8" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction Id="9d43edfc-3e2f-4a0b-9b20-6ed649902e3a" name="Aprobación de presupuesto" isLeaf="false">
+            <elementDefinition Id="df24391c-162a-4d07-9295-c9860f9e3edf" />
+            <flowNodeTargets>
+              <controlFlow Id="dc2df88b-a6fd-42bf-aedf-7cb27d049bfb" isLeaf="false">
+                <opaqueActionMoniker Id="bbbfaf39-a632-4f5d-86c2-f9604d17ecc5" LastKnownName="Consolidación de presupuestos" />
+                <elementDefinition Id="06623afa-fa37-4f3a-ba7f-26b1097caffb" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction Id="bbbfaf39-a632-4f5d-86c2-f9604d17ecc5" name="Consolidación de presupuestos" isLeaf="false">
+            <elementDefinition Id="d68b343e-00d9-4608-9836-e2bf3df38176" />
+            <flowNodeTargets>
+              <controlFlow Id="46b0cf86-011a-473d-9fb3-26a911b216b7" isLeaf="false">
+                <opaqueActionMoniker Id="86fd71e5-80e2-40cc-b3e5-4e333206ccf6" LastKnownName="Exportación a SAP" />
+                <elementDefinition Id="22e99603-31fd-442a-b261-0e8972b7e9f5" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <opaqueAction Id="86fd71e5-80e2-40cc-b3e5-4e333206ccf6" name="Exportación a SAP" isLeaf="false">
+            <elementDefinition Id="0462f47f-00c1-4e1b-b61f-edcccc503f35" />
+            <flowNodeTargets>
+              <controlFlow Id="2c6d3fec-5142-48c8-afec-5ef415bf63fa" isLeaf="false">
+                <activityFinalNodeMoniker Id="8d587d1a-2784-44b5-8eb7-9981eebe08ee" LastKnownName="ActivityFinal1" />
+                <elementDefinition Id="eafc0087-2814-4a8a-8cc1-fd23a89247ef" />
+              </controlFlow>
+            </flowNodeTargets>
+          </opaqueAction>
+          <activityFinalNode Id="8d587d1a-2784-44b5-8eb7-9981eebe08ee" name="ActivityFinal1" isLeaf="false">
+            <elementDefinition Id="eb7d5ca0-eb5d-4367-9b9c-2cf2688e9c52" />
+          </activityFinalNode>
+        </nodes>
+      </activity>
+    </activityRootModelHasActivity>
+  </packagedElements>
+  <package Id="c79ba1aa-82f8-4e58-a85d-a1e987f5d15d" name="SpresModeling">
+    <elementDefinition Id="0904205e-27c9-4a80-8a94-ba8f0c6a0d93" />
+    <profileInstances>
+      <packageHasProfileInstances Id="53728cbe-1b83-4c77-b238-c0f6408fc74e">
+        <profileInstance Id="e9c959c3-47b7-41f3-96e9-95be0aedc01e" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="fa8d33bd-bff5-4f91-aac0-5487613ee2e2">
+        <profileInstance Id="bb63efdd-139f-4715-8974-b55ee5e702fb" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+    </profileInstances>
+  </package>
+</activityRootModel>

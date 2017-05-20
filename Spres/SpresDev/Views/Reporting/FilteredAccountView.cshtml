@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "FilteredAccountView";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+<div id="treeViewAcc" class="expanded"></div>
+
+<script type="text/javascript">
+    $(function () {
+        var filteredAccounts = [];
+
+        ej.WaitingPopup.showDefault();
+        $.ajax({
+            url: getUrl("/api/Accounts/GetParentAccounts"),
+            method: "GET"
+        }).done(function (data) {
+
+            //console.log(data);
+
+            //for (var i = 0; i < data.length; i++) {
+            //    if (!data[i].Id) data[i].Id = 999999;
+            //    if (!data[i].ParentId === null) delete data[i].ParentId;
+            //    //if (!data[i].hasChild) delete data[i].hasChild;
+            //}
+            
+            $("#treeViewAcc").ejTreeView(
+            {
+                height: 440,
+                fields: { id: "Id", parentId: "ParentId", text: "Name", hasChild: "hasChild", dataSource: data },
+                showCheckbox: true,
+                nodeCheck: function (args) {
+                    var idCtas = args.id
+
+                    if (args.id == 9999999) {
+                        filteredAccounts = [];
+                        sessionStorage.removeItem("filteredAccounts");
+                        sessionStorage.setItem("filteredAccounts", filteredAccounts);
+                        //console.log(sessionStorage.getItem("filteredAccounts"));
+                    } else {
+                        filteredAccounts.push(idCtas);
+                        //console.log("array: " + filteredAccounts);
+                        sessionStorage.setItem("filteredAccounts", filteredAccounts);
+                        //console.log("arrays---->" + sessionStorage.getItem("filteredAccounts"));
+                        //console.log("------Session Storage------");
+                    }
+                },
+                nodeUncheck: function (args) {
+                    console.log(filteredAccounts.length);
+                    var nodeChecked = $("#treeViewAcc").ejTreeView("getCheckedNodes");
+                    
+                    console.log(nodeChecked);
+                    for (var nc = 0; nc < nodeChecked.length; nc++) {
+                        $("#treeViewAcc").ejTreeView("checkNode", nodeChecked[nc]);
+                        sessionStorage.setItem("filteredAccounts", filteredAccounts); 
+                    }
+
+                    //console.log("array: " + filteredAccounts);
+                    //console.log("arrays---->" + sessionStorage.getItem("filteredAccounts"));
+                    for (var nu = 0; nu <= filteredAccounts.length; nu++) {
+
+                        if (args.id == filteredAccounts[nu]) {
+                            delete filteredAccounts[nu];
+                            filteredAccounts.splice(nu, 1);
+                            sessionStorage.removeItem("filteredAccounts");
+                            sessionStorage.setItem("filteredAccounts", filteredAccounts);
+                        }
+                    }
+                    console.log(filteredAccounts);
+                }
+            }
+            );
+            
+            
+            var sessionIdAccounts = sessionStorage.getItem("filteredAccounts");
+            //console.log("session: " + sessionIdAccounts);
+            if (sessionIdAccounts == "" || sessionIdAccounts == null) {
+                $("#treeViewAcc").ejTreeView("checkNode", 9999999);
+            } else {
+                var idAcc = sessionStorage.getItem("filteredAccounts").toString().split(",")
+                for (var seAcc = 0; seAcc < idAcc.length; seAcc++) {
+                    if (idAcc[seAcc] != " " && idAcc[seAcc] != ",") {
+                        $("#treeViewAcc").ejTreeView("checkNode", idAcc[seAcc]);
+                    }
+                    //console.log(idAcc[seAcc]);
+                }
+            }
+        }).fail(function (jqXHR, textStatus, errThrown) {
+            alert("Error");
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+ 
+    });
+</script>
+
+

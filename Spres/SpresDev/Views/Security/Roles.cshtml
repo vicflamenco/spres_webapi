@@ -1,0 +1,407 @@
+﻿
+@{
+    ViewBag.Title = "Roles";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+
+
+<div>
+    <div>
+        <div><label>Roles</label></div>
+        <div><input type="text" id="rolesList" /></div>
+
+        <input type="text" id="newRole" hidden placeholder="Nombre del nuevo rol" />
+        <div id="btnsEditRole" class="btn-group">
+            <button id="addRole" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <button id="edtRole" style="" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
+            </button>
+            <button id="dltRole" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div id="btnsaddRole" class="btn-group" style="display:none">
+            <button id="confirmRole" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </button>
+            <button id="confirmedtRole" type="button" class="btn btn-default" aria-label="Left Align" style="display:none">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </button>
+            <button id="cancelRole" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+            <button id="canceledtRole" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div>
+
+            <span id="UserSpan">Usuarios asociados</span>
+            <div class="control">
+                <input type="text" id="userList" />
+            </div>
+            <br />
+            <div id="Grid"></div>
+        </div>
+    </div>
+</div>
+
+<input value="" id="packageId" disabled hidden />
+
+<style>
+    #btnsEditRole {
+        margin-top: -3.8em;
+        margin-left: 15em;
+    }
+
+    #newRole {
+        width: 13em;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function rebindUsers(id) {
+        var urlUserRolesTrue = getUrl("/api/UserRoles/" + id + "?attacheds=true");
+        var dataManager = ej.DataManager({
+            url: urlUserRolesTrue,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        ej.WaitingPopup.showDefault();
+        dataManager.executeQuery(ej.Query()).done(function (e) {
+            $("#Grid").ejGrid("instance").option("dataSource", e.result);
+        }).always(function () {
+            ej.WaitingPopup.hideDefault();
+        });
+    };
+
+    function rebindAccounts(roleId) {
+        var urlUserRolesFalse = getUrl("/api/UserRoles/" + roleId + "?attacheds=false");
+        var dataMangerPackagesFiltered = ej.DataManager({
+            url: urlUserRolesFalse,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        dataMangerPackagesFiltered.executeQuery(ej.Query()).done(function (e) {
+            $("#userList").ejAutocomplete("instance").option("dataSource", e.result);
+        });
+    };
+
+    $(function () {
+        document.getElementById("edtRole").disabled = true;
+        document.getElementById("dltRole").disabled = true;
+        $('#userList').ejAutocomplete({ enabled: false });
+
+
+        var columnsRolesPopUp = [
+                { field: "RoleId", isPrimaryKey: true, visible: false },
+                { field: "UserName", headerText: "Usuario", width: 100, textAlign: ej.TextAlign.Left },
+        ];
+        var editRolesButtons ={
+            headerText: "Desvincular",
+            commands: [
+                {
+                    type: "details",
+                    buttonOptions: {
+                        contentType: "imageonly",
+                        prefixIcon: "e-cancel",
+                        width: "50",
+                        click: "onClickDesasociar"
+                    }
+                }
+            ],
+            isUnbound: true,
+            textAlign: ej.TextAlign.Center,
+            width: 50
+        } ;
+
+        var permissions = JSON.parse(sessionStorage.permissions);
+        for (be = 0; be < permissions.length; be++) {
+
+            var permission = permissions[be];
+            if (permission.Option == "Security") {
+                if (permission.Edit) {
+                    columnsRolesPopUp.push(editRolesButtons);
+                    
+                } else {
+                    $('#btnsEditRole').hide();
+                    $('#btnsaddRole').hide();
+                    $('#userList_wrapper').hide();
+                    $('#UserSpan').hide();
+                    console.log(permission.Edit);
+                }
+            }
+
+        }
+
+        $("#Grid").ejGrid({
+            dataSource: [],
+            allowScrolling: true,
+            allowSearching: true,
+            scrollSettings: { width: 665, height: 180 },
+            allowPaging: true,
+            pageSettings: { pageSize: 10},
+            toolbarSettings: { showToolbar: true, toolbarItems: [ej.Grid.ToolBarItems.Search] },
+            minWidth: 700,
+            columns: columnsRolesPopUp
+        });
+
+        $('#addRole').click(function () {
+            $('#btnsEditRole').hide();
+            $('#rolesList_wrapper').hide();
+            $('#btnsaddRole').show();
+            $('#confirmRole').show();
+            $('#confirmedtRole').hide();
+            $('#newRole').show();
+            $('#newRole').val("");
+            $('#canceledtRole').show();
+            $('#cancelRole').hide();
+            $('#userList').ejAutocomplete({ enabled: false });
+            $("#Grid").ejGrid({
+                dataSource: []
+            });
+        });
+
+        $('#cancelRole').click(function () {
+            $('#btnsEditRole').show();
+            $('#rolesList_wrapper').show();
+            $('#btnsaddRole').hide();
+            $('#newRole').hide();
+            $('#userList').ejAutocomplete({ enabled: true });
+            var DropDownListObj = $("#rolesList").data("ejDropDownList");
+        });
+
+        $('#confirmRole').click(function () {
+            var pkgName = document.getElementById('newRole').value;
+            var newId;
+            if ($('#newRole').val() == "") {
+                alert('Ingrese un nombre para el nuevo rol')
+            } else {
+                var urlRolesPost = getUrl("/api/Roles/");
+                $.ajax({
+                    method: "POST",
+                    url: urlRolesPost,
+                    data: {
+                        Id: "0",
+                        Name: pkgName
+                    }
+
+                }).done(function (e) {
+                    newId = e.Id;
+                    $('#btnsEditRole').show();
+                    $('#rolesList_wrapper').show();
+                    $('#btnsaddRole').hide();
+                    $('#newRole').hide();
+                    
+                    var urlRoles = getUrl("/api/Roles");
+                    var dataMangerPackages = ej.DataManager({
+                        url: urlRoles,
+                        adaptor: new ej.WebApiAdaptor()
+                    });
+                    dataMangerPackages.executeQuery(ej.Query()).done(function (e) {
+                       $("#rolesList").ejDropDownList("instance").setModel({ dataSource: e.result });
+                       $('#newRole').hide();
+                       $('#rolesList').show();
+                       $('#btnsEditRole').show();
+                       $('#btnsaddRole').hide();
+                       $('#rolesList_wrapper').show();
+                       $("#rolesList").ejDropDownList("instance").selectItemByValue(newId);
+                    });
+                }).fail(function (jHXR, textStatus, err) {
+                    alert('Error:' + jHXR.responseText);
+                });
+            }
+        });
+
+        $('#edtRole').click(function () {
+            $('#newRole').val($("#rolesList").ejDropDownList("instance").getValue());
+            $('#btnsEditRole').hide();
+            $('#rolesList_wrapper').hide();
+            $('#btnsaddRole').show();
+            $('#newRole').show();
+            $('#confirmedtRole').show();
+            $('#confirmRole').hide();
+            $('#canceledtRole').hide();
+            $('#cancelRole').show();
+        });
+
+        $('#confirmedtRole').click(function () {
+            var pkgNameEdited = $('#newRole').val();
+            var pkgValEdited = $("#rolesList").ejDropDownList("instance").getSelectedValue();
+            var urlRolesPut = getUrl("/api/Roles/" + pkgValEdited);
+            $.ajax({
+                method: "PUT",
+                url: urlRolesPut,
+                data: {
+                    Id: pkgValEdited,
+                    Name: pkgNameEdited
+                },
+                success: function () {
+                    var dataMangerPackages = ej.DataManager({
+                        url:getUrl("/api/Roles"),
+                        adaptor: new ej.WebApiAdaptor()
+                    });
+                   dataMangerPackages.executeQuery(ej.Query()).done(function (e) {
+                   $("#rolesList").ejDropDownList("instance").setModel({ dataSource: e.result });
+                   $('#newRole').hide();
+                   $('#rolesList').show();
+                   $('#btnsEditRole').show();
+                   $('#btnsaddRole').hide();
+                   $('#rolesList_wrapper').show();
+                   $("#rolesList").ejDropDownList("instance").setSelectedValue(pkgValEdited)
+               });
+                },
+                error: function (jHXR, textStatus, err) {
+                    alert('Error: ' + jHXR.responseText);
+                }
+            })
+
+        });
+
+
+        $('#canceledtRole').click(function () {
+            $('#btnsEditRole').show();
+            $('#rolesList_wrapper').show();
+            $('#btnsaddRole').hide();
+            $('#newRole').hide();
+            $('#userList').ejAutocomplete({ disabled: true });
+            var DropDownListObj = $("#rolesList").data("ejDropDownList");
+            DropDownListObj.clearText();
+            document.getElementById("edtRole").disabled = true;
+            document.getElementById("dltRole").disabled = true;
+
+        });
+
+        $('#dltRole').click(function () {
+            var pkgVal = $("#rolesList").ejDropDownList("instance").getSelectedValue();
+
+            if (pkgVal != undefined && pkgVal != "") {
+                if (confirm("¿Desea eliminar el rol seleccionado?")) {
+                    $.ajax({
+                        method: "DELETE",
+                        url: getUrl("/api/Roles/" + pkgVal)
+                    }).done(function () {
+                        var dataMangerPackages = ej.DataManager({
+                            url: getUrl("/api/Roles"),
+                            adaptor: new ej.WebApiAdaptor()
+                        });
+                        dataMangerPackages.executeQuery(ej.Query())
+                   .done(function (e) {
+                       $("#rolesList").ejDropDownList("instance").setModel({ dataSource: e.result });
+                       $("#rolesList").ejDropDownList("instance").setSelectedValue("")
+                   });
+                    }).fail(function (jqXHR, textStatus, errThrown) {
+
+                        if (jqXHR.status == 400) {
+                            alert("No se pudo eliminar el rol seleccionado debido a que tiene usuarios asignados.");
+                        }
+                    });
+                }
+            } else {
+                alert("Seleccione un rol en el listado de roles.");
+            }
+
+            
+        });
+
+        $('#userList').ejAutocomplete({
+            dataSource: [],
+            fields: { text: "UserName", key: "Id" },
+            filterType: ej.filterType.Contains,
+            width: 665,
+            watermarkText: "Seleccione usuario a asignar",
+            select: "onSelectAccount",
+
+        });
+
+    });
+
+    var dataMangerPackages = ej.DataManager({
+        url: getUrl("/api/Roles/"),
+        adaptor: new ej.WebApiAdaptor()
+    });
+
+    $('#rolesList').ejDropDownList({
+        dataSource: dataMangerPackages,
+        fields: { text: "Name", value: "Id" },
+        watermarkText: "Seleccione un rol",
+        change: packageListChange,
+        width: 200
+    });
+
+    function packageListChange(sender) {
+        rebindUsers(sender.value);
+        document.getElementById("edtRole").disabled = false;
+        document.getElementById("dltRole").disabled = false;
+        $('#userList').ejAutocomplete({ enabled: true });
+        $('#packageId').val(sender.value);
+
+        var urlUserRolesFalse = getUrl("/api/UserRoles/" + $('#packageId').val() + "?attacheds=false");
+        var dataMangerPackagesFiltered = ej.DataManager({
+            url: urlUserRolesFalse,
+            adaptor: new ej.WebApiAdaptor()
+        });
+        dataMangerPackagesFiltered.executeQuery(ej.Query()).done(function (e) {
+
+            $("#userList").ejAutocomplete("instance").option("dataSource", e.result);
+
+        });
+    };
+
+    function onClickDesasociar(args) {
+        var roleVal = $("#rolesList").ejDropDownList("instance").getSelectedValue();
+        var grid = $("#Grid").ejGrid("instance");
+        var index = this.element.closest("tr").index();
+        var record = grid.getCurrentViewData()[index];
+        if (confirm("¿Quiere desvincular este usuario del rol seleccionado?")) {
+
+            var urlUserRolesPut = getUrl("/api/UserRoles/" + record.Id + "/" + roleVal);
+
+            $.ajax({
+                method: "DELETE",
+                url: urlUserRolesPut
+            }).done(function (data) {
+                rebindUsers($("#rolesList").ejDropDownList("instance").getSelectedValue());
+                rebindAccounts($("#rolesList").ejDropDownList("instance").getSelectedValue());
+            }).fail(function (jqXHR, textStatus, errThrown) {
+                console.log(jqXHR.responseJSON);
+            });
+        }
+    };
+
+    function onSelectAccount(args) {
+        var roleVal = $("#rolesList").ejDropDownList("instance").getValue();
+        var userVal = args.key;
+
+        var RoleId = $("#rolesList").ejDropDownList("instance").getSelectedValue();
+        var userRolesPost = getUrl("/api/UserRoles/" + userVal + "/" + roleVal);
+        $.ajax({
+            method: "POST",
+            url: userRolesPost
+        }).done(function () {
+            rebindUsers(RoleId);
+            rebindAccounts(RoleId);
+            $('#userList').val("");
+        }).fail(function (jHXR, textStatus, err) {
+            console.log('Error: ' + jHXR.responseText);
+        });
+
+    };
+
+    function onSelectManager(args) {
+        var pkgVal = $("#rolesList").ejDropDownList("instance").getSelectedValue();
+        var managerVal = args.value;
+        var urlRolesPut = getUrl("/api/Roles/" + pkgVal + "?managerId=" + managerVal);
+        $.ajax({
+            method: "PUT",
+            url: urlRolesPut
+        }).done(function () {
+
+        }).fail(function (jHXR, textStatus, err) {
+            console.loog(jHXR.responseJSON);
+        });
+
+    };
+
+</script>
